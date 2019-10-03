@@ -7,7 +7,6 @@ declare(strict_types=1);
 namespace webignition\BasilCompilationSource\Tests\Unit;
 
 use webignition\BasilCompilationSource\ClassDependency;
-use webignition\BasilCompilationSource\VariablePlaceholder;
 
 class ClassDependencyTest extends \PHPUnit\Framework\TestCase
 {
