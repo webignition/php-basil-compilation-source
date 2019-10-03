@@ -159,7 +159,8 @@ class CompilationMetadataTest extends \PHPUnit\Framework\TestCase
         $compilationMetadata4 = (new CompilationMetadata())
             ->withClassDependencies(new ClassDependencyCollection([
                 new ClassDependency('class2'),
-            ]))->withVariableDependencies(VariablePlaceholderCollection::createCollection(['variableDependency2']))
+            ]))
+            ->withVariableDependencies(VariablePlaceholderCollection::createCollection(['variableDependency2']))
             ->withVariableExports(VariablePlaceholderCollection::createCollection(['variableExport2']));
 
         $compilationMetadata = $compilationMetadata->merge([$compilationMetadata1]);
@@ -176,7 +177,8 @@ class CompilationMetadataTest extends \PHPUnit\Framework\TestCase
             (new CompilationMetadata())
                 ->withClassDependencies(new ClassDependencyCollection([
                     new ClassDependency('class1'),
-                ]))->withVariableDependencies(VariablePlaceholderCollection::createCollection(['variableDependency1'])),
+                ]))
+                ->withVariableDependencies(VariablePlaceholderCollection::createCollection(['variableDependency1'])),
             $compilationMetadata
         );
 
@@ -185,7 +187,8 @@ class CompilationMetadataTest extends \PHPUnit\Framework\TestCase
             (new CompilationMetadata())
                 ->withClassDependencies(new ClassDependencyCollection([
                     new ClassDependency('class1'),
-                ]))->withVariableDependencies(VariablePlaceholderCollection::createCollection(['variableDependency1']))
+                ]))
+                ->withVariableDependencies(VariablePlaceholderCollection::createCollection(['variableDependency1']))
                 ->withVariableExports(VariablePlaceholderCollection::createCollection(['variableExport1'])),
             $compilationMetadata
         );
@@ -196,7 +199,8 @@ class CompilationMetadataTest extends \PHPUnit\Framework\TestCase
                 ->withClassDependencies(new ClassDependencyCollection([
                     new ClassDependency('class1'),
                     new ClassDependency('class2'),
-                ]))->withVariableDependencies(VariablePlaceholderCollection::createCollection([
+                ]))
+                ->withVariableDependencies(VariablePlaceholderCollection::createCollection([
                     'variableDependency1',
                     'variableDependency2',
                 ]))
