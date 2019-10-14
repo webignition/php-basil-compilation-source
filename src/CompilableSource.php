@@ -16,11 +16,21 @@ class CompilableSource implements CompilableSourceInterface
 
     private $compilationMetadata;
 
-    public function __construct(array $statements = [], ?CompilationMetadataInterface $compilationMetadata = null)
-    {
-        $this->predecessors = [];
+    public function __construct(
+        array $statements = [],
+        array $predecessors = [],
+        ?CompilationMetadataInterface $compilationMetadata = null
+    ) {
         $this->statements = $statements;
         $this->compilationMetadata = $compilationMetadata ?? new CompilationMetadata();
+
+        $this->predecessors = [];
+
+        foreach ($predecessors as $predecessor) {
+            if ($predecessor instanceof CompilableSourceInterface) {
+                $this->addPredecessor($predecessor);
+            }
+        }
     }
 
     public function addPredecessor(CompilableSourceInterface $predecessor)
