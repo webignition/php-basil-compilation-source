@@ -4,6 +4,8 @@ namespace webignition\BasilCompilationSource;
 
 interface CompilableSourceInterface
 {
+    public function addPredecessor(CompilableSourceInterface $predecessor);
+
     /**
      * @return string[]
      */
