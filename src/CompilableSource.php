@@ -5,16 +5,31 @@ namespace webignition\BasilCompilationSource;
 class CompilableSource implements CompilableSourceInterface
 {
     /**
+     * @var CompilableSourceInterface[]
+     */
+    private $predecessors;
+
+    /**
      * @var string[]
      */
     private $statements;
 
     private $compilationMetadata;
 
-    public function __construct(array $statements, ?CompilationMetadataInterface $compilationMetadata = null)
+    public function __construct(array $statements = [], ?CompilationMetadataInterface $compilationMetadata = null)
     {
+        $this->predecessors = [];
         $this->statements = $statements;
         $this->compilationMetadata = $compilationMetadata ?? new CompilationMetadata();
+    }
+
+    public function addPredecessor(CompilableSourceInterface $predecessor)
+    {
+        $this->predecessors[] = $predecessor;
+
+        $this->compilationMetadata = $this->compilationMetadata->merge([
+            $predecessor->getCompilationMetadata()
+        ]);
     }
 
     /**
@@ -22,7 +37,13 @@ class CompilableSource implements CompilableSourceInterface
      */
     public function getStatements(): array
     {
-        return $this->statements;
+        $statements = [];
+
+        foreach ($this->predecessors as $predecessor) {
+            $statements = array_merge($statements, $predecessor->getStatements());
+        }
+
+        return array_merge($statements, $this->statements);
     }
 
     public function getCompilationMetadata(): CompilationMetadataInterface
