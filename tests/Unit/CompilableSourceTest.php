@@ -21,13 +21,13 @@ class CompilableSourceTest extends \PHPUnit\Framework\TestCase
      * @dataProvider constructDataProvider
      */
     public function testConstruct(
-        array $statements,
         array $predecessors,
+        array $statements,
         ?CompilationMetadataInterface $compilationMetadata,
         array $expectedStatements,
         CompilationMetadataInterface $expectedCompilationMetadata
     ) {
-        $compilableSource = new CompilableSource($statements, $predecessors, $compilationMetadata);
+        $compilableSource = new CompilableSource($predecessors, $statements, $compilationMetadata);
 
         $this->assertSame($expectedStatements, $compilableSource->getStatements());
         $this->assertEquals($expectedCompilationMetadata, $compilableSource->getCompilationMetadata());
@@ -37,10 +37,10 @@ class CompilableSourceTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'statements only' => [
+                'predecessors' => [],
                 'statements' => [
                     'statement1',
                 ],
-                'predecessors' => [],
                 'compilationMetadata' => null,
                 'expectedStatements' => [
                     'statement1',
@@ -48,10 +48,10 @@ class CompilableSourceTest extends \PHPUnit\Framework\TestCase
                 'expectedCompilationMetadata' => new CompilationMetadata(),
             ],
             'statements and compilation metadata' => [
+                'predecessors' => [],
                 'statements' => [
                     'statement1',
                 ],
-                'predecessors' => [],
                 'compilationMetadata' => (new CompilationMetadata())
                     ->withVariableDependencies(VariablePlaceholderCollection::createCollection(['1'])),
                 'expectedStatements' => [
@@ -61,16 +61,17 @@ class CompilableSourceTest extends \PHPUnit\Framework\TestCase
                     ->withVariableDependencies(VariablePlaceholderCollection::createCollection(['1'])),
             ],
             'statements, predecessors and compilation metadata' => [
-                'statements' => [
-                    'statement1',
-                ],
                 'predecessors' => [
                     new CompilableSource(
+                        [],
                         [
                             'statement2',
                             'statement3',
                         ]
                     )
+                ],
+                'statements' => [
+                    'statement1',
                 ],
                 'compilationMetadata' => (new CompilationMetadata())
                     ->withVariableDependencies(VariablePlaceholderCollection::createCollection(['1'])),
@@ -116,7 +117,7 @@ class CompilableSourceTest extends \PHPUnit\Framework\TestCase
             ->withVariableDependencies(VariablePlaceholderCollection::createCollection(['variableDependency1']))
             ->withVariableExports(VariablePlaceholderCollection::createCollection(['variableExport1']));
 
-        $compilableSource = new CompilableSource([]);
+        $compilableSource = new CompilableSource();
         $this->assertEquals($emptyCompilationMetadata, $compilableSource->getCompilationMetadata());
 
         $compilableSource = $compilableSource->mergeCompilationData([
@@ -138,11 +139,11 @@ class CompilableSourceTest extends \PHPUnit\Framework\TestCase
 
     public function testToString()
     {
-        $this->assertEquals('', (string) new CompilableSource([]));
-        $this->assertEquals('statement1', (string) new CompilableSource(['statement1']));
+        $this->assertEquals('', (string) new CompilableSource());
+        $this->assertEquals('statement1', (string) new CompilableSource([], ['statement1']));
         $this->assertEquals(
             'statement1' . "\n" . 'statement2',
-            (string) new CompilableSource(['statement1', 'statement2'])
+            (string) new CompilableSource([], ['statement1', 'statement2'])
         );
     }
 
@@ -175,10 +176,10 @@ class CompilableSourceTest extends \PHPUnit\Framework\TestCase
             ],
             'non-empty, no predecessors' => [
                 'compilableSource' => new CompilableSource(
+                    [],
                     [
                         'statement1',
                     ],
-                    [],
                     (new CompilationMetadata())
                         ->withVariableDependencies(
                             new VariablePlaceholderCollection([
@@ -188,10 +189,10 @@ class CompilableSourceTest extends \PHPUnit\Framework\TestCase
                 ),
                 'predecessors' => [],
                 'expectedCompilableSource' => new CompilableSource(
+                    [],
                     [
                         'statement1',
                     ],
-                    [],
                     (new CompilationMetadata())
                         ->withVariableDependencies(
                             new VariablePlaceholderCollection([
@@ -204,10 +205,10 @@ class CompilableSourceTest extends \PHPUnit\Framework\TestCase
                 'compilableSource' => new CompilableSource(),
                 'predecessors' => [
                     new CompilableSource(
+                        [],
                         [
                             'statement1',
                         ],
-                        [],
                         (new CompilationMetadata())
                             ->withVariableDependencies(
                                 new VariablePlaceholderCollection([
@@ -217,10 +218,10 @@ class CompilableSourceTest extends \PHPUnit\Framework\TestCase
                     ),
                 ],
                 'expectedCompilableSource' => new CompilableSource(
+                    [],
                     [
                         'statement1',
                     ],
-                    [],
                     (new CompilationMetadata())
                         ->withVariableDependencies(
                             new VariablePlaceholderCollection([
@@ -231,10 +232,10 @@ class CompilableSourceTest extends \PHPUnit\Framework\TestCase
             ],
             'non-empty, with predecessors' => [
                 'compilableSource' => new CompilableSource(
+                    [],
                     [
                         'statement1',
                     ],
-                    [],
                     (new CompilationMetadata())
                         ->withVariableDependencies(
                             new VariablePlaceholderCollection([
@@ -244,10 +245,10 @@ class CompilableSourceTest extends \PHPUnit\Framework\TestCase
                 ),
                 'predecessors' => [
                     new CompilableSource(
+                        [],
                         [
                             'statement2',
                         ],
-                        [],
                         (new CompilationMetadata())
                             ->withVariableDependencies(
                                 new VariablePlaceholderCollection([
@@ -256,10 +257,10 @@ class CompilableSourceTest extends \PHPUnit\Framework\TestCase
                             )
                     ),
                     new CompilableSource(
+                        [],
                         [
                             'statement3',
                         ],
-                        [],
                         (new CompilationMetadata())
                             ->withVariableExports(
                                 new VariablePlaceholderCollection([
@@ -269,12 +270,12 @@ class CompilableSourceTest extends \PHPUnit\Framework\TestCase
                     ),
                 ],
                 'expectedCompilableSource' => new CompilableSource(
+                    [],
                     [
                         'statement2',
                         'statement3',
                         'statement1',
                     ],
-                    [],
                     (new CompilationMetadata())
                         ->withVariableDependencies(
                             new VariablePlaceholderCollection([
