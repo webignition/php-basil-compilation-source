@@ -17,8 +17,8 @@ class CompilableSource implements CompilableSourceInterface
     private $compilationMetadata;
 
     public function __construct(
-        array $statements = [],
         array $predecessors = [],
+        array $statements = [],
         ?CompilationMetadataInterface $compilationMetadata = null
     ) {
         $this->statements = $statements;
