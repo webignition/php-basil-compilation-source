@@ -59,6 +59,14 @@ class CompilableSource implements CompilableSourceInterface
     }
 
     /**
+     * @return CompilableSourceInterface[]
+     */
+    public function getPredecessors(): array
+    {
+        return $this->predecessors;
+    }
+
+    /**
      * @param CompilableSourceInterface[] $predecessors
      *
      * @return CompilableSourceInterface
