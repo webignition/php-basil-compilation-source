@@ -14,6 +14,11 @@ interface CompilableSourceInterface
     public function getCompilationMetadata(): Metadata;
 
     /**
+     * @return CompilableSourceInterface[]
+     */
+    public function getPredecessors(): array;
+
+    /**
      * @param CompilableSourceInterface[] $predecessors
      *
      * @return CompilableSourceInterface

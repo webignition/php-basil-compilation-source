@@ -20,6 +20,7 @@ class CompilableSourceTest extends \PHPUnit\Framework\TestCase
         $compilableSource = new CompilableSource();
 
         $this->assertSame([], $compilableSource->getStatements());
+        $this->assertEquals([], $compilableSource->getPredecessors());
         $this->assertEquals(new CompilationMetadata(), $compilableSource->getCompilationMetadata());
     }
 
