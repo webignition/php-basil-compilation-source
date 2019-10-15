@@ -104,6 +104,19 @@ class CompilableSource implements CompilableSourceInterface
         return $new;
     }
 
+    public function appendStatement(int $index, string $content)
+    {
+        if ($index < 0) {
+            $index = count($this->statements) + $index;
+        }
+
+        $statement = $this->statements[$index] ?? null;
+
+        if (null !== $statement) {
+            $this->statements[$index] = $statement . $content;
+        }
+    }
+
     public function __toString(): string
     {
         return implode("\n", $this->statements);

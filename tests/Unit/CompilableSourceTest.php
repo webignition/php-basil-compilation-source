@@ -219,6 +219,60 @@ class CompilableSourceTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @dataProvider appendStatementDataProvider
+     */
+    public function testAppendStatement(
+        CompilableSourceInterface $source,
+        int $index,
+        string $content,
+        CompilableSourceInterface $expectedSource
+    ) {
+        $source->appendStatement($index, $content);
+
+        $this->assertEquals($expectedSource, $source);
+    }
+
+    public function appendStatementDataProvider(): array
+    {
+        return [
+            'append first of one' => [
+                'source' => (new CompilableSource())->withStatements(['statement']),
+                'index' => 0,
+                'content' => ' appended',
+                'expectedSource' => (new CompilableSource())->withStatements(['statement appended']),
+            ],
+            'append first of two' => [
+                'source' => (new CompilableSource())->withStatements(['statement1', 'statement2']),
+                'index' => 0,
+                'content' => ' appended',
+                'expectedSource' => (new CompilableSource())->withStatements(['statement1 appended', 'statement2']),
+            ],
+            'append last of one' => [
+                'source' => (new CompilableSource())->withStatements(['statement']),
+                'index' => -1,
+                'content' => ' appended',
+                'expectedSource' => (new CompilableSource())->withStatements(['statement appended']),
+            ],
+            'append last of two' => [
+                'source' => (new CompilableSource())->withStatements(['statement1', 'statement2']),
+                'index' => -1,
+                'content' => ' appended',
+                'expectedSource' => (new CompilableSource())->withStatements(['statement1', 'statement2 appended']),
+            ],
+            'append last of three' => [
+                'source' => (new CompilableSource())->withStatements(['statement1', 'statement2', 'statement3']),
+                'index' => -1,
+                'content' => ' appended',
+                'expectedSource' => (new CompilableSource())->withStatements([
+                    'statement1',
+                    'statement2',
+                    'statement3 appended'
+                ]),
+            ],
+        ];
+    }
+
     public function testToString()
     {
         $this->assertEquals('', (string) new CompilableSource());
