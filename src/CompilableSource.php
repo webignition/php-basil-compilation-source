@@ -58,14 +58,6 @@ class CompilableSource implements CompilableSourceInterface
         return $compilationMetadata;
     }
 
-    public function mergeCompilationData(array $compilationDataCollection): CompilableSourceInterface
-    {
-        $new = clone $this;
-        $new->compilationMetadata = $new->compilationMetadata->merge($compilationDataCollection);
-
-        return $new;
-    }
-
     /**
      * @param CompilableSourceInterface[] $predecessors
      *

@@ -13,8 +13,6 @@ interface CompilableSourceInterface
 
     public function getCompilationMetadata(): Metadata;
 
-    public function mergeCompilationData(array $compilationDataCollection): CompilableSourceInterface;
-
     /**
      * @param CompilableSourceInterface[] $predecessors
      *
