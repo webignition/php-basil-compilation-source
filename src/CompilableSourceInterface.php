@@ -31,5 +31,7 @@ interface CompilableSourceInterface
 
     public function withCompilationMetadata(Metadata $compilationMetadata): CompilableSourceInterface;
 
+    public function appendStatement(int $index, string $content);
+
     public function __toString(): string;
 }
