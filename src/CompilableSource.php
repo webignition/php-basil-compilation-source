@@ -16,6 +16,9 @@ class CompilableSource implements CompilableSourceInterface
      */
     private $statements;
 
+    /**
+     * @var CompilationMetadataInterface
+     */
     private $compilationMetadata;
 
     public function __construct()
@@ -105,5 +108,4 @@ class CompilableSource implements CompilableSourceInterface
     {
         return implode("\n", $this->statements);
     }
-
 }
