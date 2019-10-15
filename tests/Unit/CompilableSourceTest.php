@@ -184,41 +184,6 @@ class CompilableSourceTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($emptyCompilationMetadata, $compilableSource->getCompilationMetadata());
     }
 
-    public function testMergeCompilationData()
-    {
-        $emptyCompilationMetadata = new CompilationMetadata();
-        $compilationMetadata1 = (new CompilationMetadata())
-            ->withClassDependencies(new ClassDependencyCollection([
-                new ClassDependency('class1'),
-            ]));
-
-        $compilationMetadata2 = (new CompilationMetadata())
-            ->withClassDependencies(new ClassDependencyCollection([
-                new ClassDependency('class2'),
-            ]))
-            ->withVariableDependencies(VariablePlaceholderCollection::createCollection(['variableDependency1']))
-            ->withVariableExports(VariablePlaceholderCollection::createCollection(['variableExport1']));
-
-        $compilableSource = new CompilableSource();
-        $this->assertEquals($emptyCompilationMetadata, $compilableSource->getCompilationMetadata());
-
-        $compilableSource = $compilableSource->mergeCompilationData([
-            $compilationMetadata1,
-            $compilationMetadata2,
-        ]);
-
-        $this->assertEquals(
-            (new CompilationMetadata())
-                ->withClassDependencies(new ClassDependencyCollection([
-                    new ClassDependency('class1'),
-                    new ClassDependency('class2'),
-                ]))
-                ->withVariableDependencies(VariablePlaceholderCollection::createCollection(['variableDependency1']))
-                ->withVariableExports(VariablePlaceholderCollection::createCollection(['variableExport1'])),
-            $compilableSource->getCompilationMetadata()
-        );
-    }
-
     /**
      * @dataProvider appendStatementDataProvider
      */
