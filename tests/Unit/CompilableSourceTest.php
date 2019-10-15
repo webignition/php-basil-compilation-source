@@ -11,79 +11,161 @@ use webignition\BasilCompilationSource\ClassDependencyCollection;
 use webignition\BasilCompilationSource\CompilableSource;
 use webignition\BasilCompilationSource\CompilableSourceInterface;
 use webignition\BasilCompilationSource\CompilationMetadata;
-use webignition\BasilCompilationSource\CompilationMetadataInterface;
-use webignition\BasilCompilationSource\VariablePlaceholder;
 use webignition\BasilCompilationSource\VariablePlaceholderCollection;
 
 class CompilableSourceTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @dataProvider constructDataProvider
-     */
-    public function testConstruct(
-        array $predecessors,
-        array $statements,
-        ?CompilationMetadataInterface $compilationMetadata,
-        array $expectedStatements,
-        CompilationMetadataInterface $expectedCompilationMetadata
-    ) {
-        $compilableSource = new CompilableSource($predecessors, $statements, $compilationMetadata);
+    public function testConstruct()
+    {
+        $compilableSource = new CompilableSource();
 
-        $this->assertSame($expectedStatements, $compilableSource->getStatements());
-        $this->assertEquals($expectedCompilationMetadata, $compilableSource->getCompilationMetadata());
+        $this->assertSame([], $compilableSource->getStatements());
+        $this->assertEquals(new CompilationMetadata(), $compilableSource->getCompilationMetadata());
     }
 
-    public function constructDataProvider(): array
+    /**
+     * @dataProvider withPredecessorsDataProvider
+     */
+    public function testWithPredecessors(
+        CompilableSourceInterface $compilableSource,
+        array $predecessors,
+        CompilableSourceInterface $expectedCompilableSource
+    ) {
+        $mutatedCompilableSource = $compilableSource->withPredecessors($predecessors);
+
+        $this->assertEquals($expectedCompilableSource->getStatements(), $mutatedCompilableSource->getStatements());
+        $this->assertEquals(
+            $expectedCompilableSource->getCompilationMetadata(),
+            $mutatedCompilableSource->getCompilationMetadata()
+        );
+    }
+
+    public function withPredecessorsDataProvider(): array
     {
         return [
-            'statements only' => [
+            'empty, no predecessors' => [
+                'compilableSource' => new CompilableSource(),
                 'predecessors' => [],
-                'statements' => [
-                    'statement1',
-                ],
-                'compilationMetadata' => null,
-                'expectedStatements' => [
-                    'statement1',
-                ],
-                'expectedCompilationMetadata' => new CompilationMetadata(),
+                'expectedCompilableSource' => new CompilableSource(),
             ],
-            'statements and compilation metadata' => [
+            'has statements, no predecessors' => [
+                'compilableSource' => (new CompilableSource())
+                    ->withStatements([
+                        'statement1',
+                    ]),
                 'predecessors' => [],
-                'statements' => [
-                    'statement1',
-                ],
-                'compilationMetadata' => (new CompilationMetadata())
-                    ->withVariableDependencies(VariablePlaceholderCollection::createCollection(['1'])),
-                'expectedStatements' => [
-                    'statement1',
-                ],
-                'expectedCompilationMetadata' => (new CompilationMetadata())
-                    ->withVariableDependencies(VariablePlaceholderCollection::createCollection(['1'])),
+                'expectedCompilableSource' => (new CompilableSource())
+                    ->withStatements([
+                        'statement1',
+                    ]),
             ],
-            'statements, predecessors and compilation metadata' => [
+            'has metadata, no predecessors' => [
+                'compilableSource' => (new CompilableSource())
+                    ->withCompilationMetadata(
+                        (new CompilationMetadata())
+                            ->withVariableDependencies(VariablePlaceholderCollection::createCollection([
+                                'DEPENDENCY_ONE',
+                            ]))
+                            ->withVariableExports(VariablePlaceholderCollection::createCollection([
+                                'EXPORT_ONE',
+                            ]))
+                            ->withClassDependencies(new ClassDependencyCollection([
+                                new ClassDependency('CLASS_ONE'),
+                            ]))
+                    ),
+                'predecessors' => [],
+                'expectedCompilableSource' => (new CompilableSource())
+                    ->withCompilationMetadata(
+                        (new CompilationMetadata())
+                            ->withVariableDependencies(VariablePlaceholderCollection::createCollection([
+                                'DEPENDENCY_ONE',
+                            ]))
+                            ->withVariableExports(VariablePlaceholderCollection::createCollection([
+                                'EXPORT_ONE',
+                            ]))
+                            ->withClassDependencies(new ClassDependencyCollection([
+                                new ClassDependency('CLASS_ONE'),
+                            ]))
+                    ),
+            ],
+            'has statements, has metadata, has predecessors' => [
+                'compilableSource' => (new CompilableSource())
+                    ->withStatements([
+                        'statement1',
+                    ])
+                    ->withCompilationMetadata(
+                        (new CompilationMetadata())
+                            ->withVariableDependencies(VariablePlaceholderCollection::createCollection([
+                                'DEPENDENCY_ONE',
+                            ]))
+                            ->withVariableExports(VariablePlaceholderCollection::createCollection([
+                                'EXPORT_ONE',
+                            ]))
+                            ->withClassDependencies(new ClassDependencyCollection([
+                                new ClassDependency('CLASS_ONE'),
+                            ]))
+                    ),
                 'predecessors' => [
-                    new CompilableSource(
-                        [],
-                        [
+                    (new CompilableSource())
+                        ->withStatements([
                             'statement2',
+                        ]),
+                    (new CompilableSource())
+                        ->withStatements([
                             'statement3',
-                        ]
-                    )
+                        ])
+                        ->withCompilationMetadata(
+                            (new CompilationMetadata())
+                                ->withVariableDependencies(VariablePlaceholderCollection::createCollection([
+                                    'DEPENDENCY_TWO',
+                                ]))
+                                ->withVariableExports(VariablePlaceholderCollection::createCollection([
+                                    'EXPORT_TWO',
+                                ]))
+                                ->withClassDependencies(new ClassDependencyCollection([
+                                    new ClassDependency('CLASS_TWO'),
+                                ]))
+                        ),
                 ],
-                'statements' => [
-                    'statement1',
-                ],
-                'compilationMetadata' => (new CompilationMetadata())
-                    ->withVariableDependencies(VariablePlaceholderCollection::createCollection(['1'])),
-                'expectedStatements' => [
-                    'statement2',
-                    'statement3',
-                    'statement1',
-                ],
-                'expectedCompilationMetadata' => (new CompilationMetadata())
-                    ->withVariableDependencies(VariablePlaceholderCollection::createCollection(['1'])),
+                'expectedCompilableSource' => (new CompilableSource())
+                    ->withStatements([
+                        'statement2',
+                        'statement3',
+                        'statement1',
+                    ])
+                    ->withCompilationMetadata(
+                        (new CompilationMetadata())
+                            ->withVariableDependencies(VariablePlaceholderCollection::createCollection([
+                                'DEPENDENCY_ONE',
+                                'DEPENDENCY_TWO',
+                            ]))
+                            ->withVariableExports(VariablePlaceholderCollection::createCollection([
+                                'EXPORT_ONE',
+                                'EXPORT_TWO',
+                            ]))
+                            ->withClassDependencies(new ClassDependencyCollection([
+                                new ClassDependency('CLASS_ONE'),
+                                new ClassDependency('CLASS_TWO'),
+                            ]))
+                    ),
             ],
         ];
+    }
+
+    public function testWithStatements()
+    {
+        $compilableSource = new CompilableSource();
+        $this->assertSame([], $compilableSource->getStatements());
+
+        $statements = [
+            'statement1',
+        ];
+
+        $compilableSource = $compilableSource->withStatements($statements);
+        $this->assertSame($statements, $compilableSource->getStatements());
+
+        $compilableSource = $compilableSource->withStatements([]);
+        $this->assertSame([], $compilableSource->getStatements());
     }
 
     public function testWithCompilationMetadata()
@@ -92,11 +174,11 @@ class CompilableSourceTest extends \PHPUnit\Framework\TestCase
         $compilationMetadata = (new CompilationMetadata())
             ->withVariableDependencies(VariablePlaceholderCollection::createCollection(['1']));
 
-        $compilableSource = new CompilableSource([]);
+        $compilableSource = new CompilableSource();
         $this->assertEquals($emptyCompilationMetadata, $compilableSource->getCompilationMetadata());
 
         $compilableSource = $compilableSource->withCompilationMetadata($compilationMetadata);
-        $this->assertSame($compilationMetadata, $compilableSource->getCompilationMetadata());
+        $this->assertEquals($compilationMetadata, $compilableSource->getCompilationMetadata());
 
         $compilableSource = $compilableSource->withCompilationMetadata($emptyCompilationMetadata);
         $this->assertEquals($emptyCompilationMetadata, $compilableSource->getCompilationMetadata());
@@ -140,155 +222,15 @@ class CompilableSourceTest extends \PHPUnit\Framework\TestCase
     public function testToString()
     {
         $this->assertEquals('', (string) new CompilableSource());
-        $this->assertEquals('statement1', (string) new CompilableSource([], ['statement1']));
+
+        $this->assertEquals(
+            'statement1',
+            (string) (new CompilableSource())->withStatements(['statement1'])
+        );
+
         $this->assertEquals(
             'statement1' . "\n" . 'statement2',
-            (string) new CompilableSource([], ['statement1', 'statement2'])
+            (string) (new CompilableSource())->withStatements(['statement1', 'statement2'])
         );
-    }
-
-    /**
-     * @dataProvider addPredecessorDataProvider
-     */
-    public function testAddPredecessor(
-        CompilableSourceInterface $compilableSource,
-        array $predecessors,
-        CompilableSourceInterface $expectedCompilableSource
-    ) {
-        foreach ($predecessors as $predecessor) {
-            $compilableSource->addPredecessor($predecessor);
-        }
-
-        $this->assertEquals($expectedCompilableSource->getStatements(), $compilableSource->getStatements());
-        $this->assertEquals(
-            $expectedCompilableSource->getCompilationMetadata(),
-            $compilableSource->getCompilationMetadata()
-        );
-    }
-
-    public function addPredecessorDataProvider(): array
-    {
-        return [
-            'empty, no predecessors' => [
-                'compilableSource' => new CompilableSource(),
-                'predecessors' => [],
-                'expectedCompilableSource' => new CompilableSource(),
-            ],
-            'non-empty, no predecessors' => [
-                'compilableSource' => new CompilableSource(
-                    [],
-                    [
-                        'statement1',
-                    ],
-                    (new CompilationMetadata())
-                        ->withVariableDependencies(
-                            new VariablePlaceholderCollection([
-                                new VariablePlaceholder('DEPENDENCY_ONE')
-                            ])
-                        )
-                ),
-                'predecessors' => [],
-                'expectedCompilableSource' => new CompilableSource(
-                    [],
-                    [
-                        'statement1',
-                    ],
-                    (new CompilationMetadata())
-                        ->withVariableDependencies(
-                            new VariablePlaceholderCollection([
-                                new VariablePlaceholder('DEPENDENCY_ONE')
-                            ])
-                        )
-                ),
-            ],
-            'empty, with predecessors' => [
-                'compilableSource' => new CompilableSource(),
-                'predecessors' => [
-                    new CompilableSource(
-                        [],
-                        [
-                            'statement1',
-                        ],
-                        (new CompilationMetadata())
-                            ->withVariableDependencies(
-                                new VariablePlaceholderCollection([
-                                    new VariablePlaceholder('DEPENDENCY_ONE')
-                                ])
-                            )
-                    ),
-                ],
-                'expectedCompilableSource' => new CompilableSource(
-                    [],
-                    [
-                        'statement1',
-                    ],
-                    (new CompilationMetadata())
-                        ->withVariableDependencies(
-                            new VariablePlaceholderCollection([
-                                new VariablePlaceholder('DEPENDENCY_ONE')
-                            ])
-                        )
-                ),
-            ],
-            'non-empty, with predecessors' => [
-                'compilableSource' => new CompilableSource(
-                    [],
-                    [
-                        'statement1',
-                    ],
-                    (new CompilationMetadata())
-                        ->withVariableDependencies(
-                            new VariablePlaceholderCollection([
-                                new VariablePlaceholder('DEPENDENCY_ONE')
-                            ])
-                        )
-                ),
-                'predecessors' => [
-                    new CompilableSource(
-                        [],
-                        [
-                            'statement2',
-                        ],
-                        (new CompilationMetadata())
-                            ->withVariableDependencies(
-                                new VariablePlaceholderCollection([
-                                    new VariablePlaceholder('DEPENDENCY_TWO')
-                                ])
-                            )
-                    ),
-                    new CompilableSource(
-                        [],
-                        [
-                            'statement3',
-                        ],
-                        (new CompilationMetadata())
-                            ->withVariableExports(
-                                new VariablePlaceholderCollection([
-                                    new VariablePlaceholder('EXPORT_ONE')
-                                ])
-                            )
-                    ),
-                ],
-                'expectedCompilableSource' => new CompilableSource(
-                    [],
-                    [
-                        'statement2',
-                        'statement3',
-                        'statement1',
-                    ],
-                    (new CompilationMetadata())
-                        ->withVariableDependencies(
-                            new VariablePlaceholderCollection([
-                                new VariablePlaceholder('DEPENDENCY_ONE'),
-                                new VariablePlaceholder('DEPENDENCY_TWO')
-                            ])
-                        )->withVariableExports(
-                            new VariablePlaceholderCollection([
-                                new VariablePlaceholder('EXPORT_ONE')
-                            ])
-                        )
-                ),
-            ],
-        ];
     }
 }
