@@ -2,6 +2,8 @@
 
 namespace webignition\BasilCompilationSource;
 
+use webignition\BasilCompilationSource\CompilationMetadataInterface as Metadata;
+
 class CompilableSource implements CompilableSourceInterface
 {
     /**
@@ -14,32 +16,16 @@ class CompilableSource implements CompilableSourceInterface
      */
     private $statements;
 
+    /**
+     * @var CompilationMetadataInterface
+     */
     private $compilationMetadata;
 
-    public function __construct(
-        array $predecessors = [],
-        array $statements = [],
-        ?CompilationMetadataInterface $compilationMetadata = null
-    ) {
-        $this->statements = $statements;
-        $this->compilationMetadata = $compilationMetadata ?? new CompilationMetadata();
-
-        $this->predecessors = [];
-
-        foreach ($predecessors as $predecessor) {
-            if ($predecessor instanceof CompilableSourceInterface) {
-                $this->addPredecessor($predecessor);
-            }
-        }
-    }
-
-    public function addPredecessor(CompilableSourceInterface $predecessor)
+    public function __construct()
     {
-        $this->predecessors[] = $predecessor;
-
-        $this->compilationMetadata = $this->compilationMetadata->merge([
-            $predecessor->getCompilationMetadata()
-        ]);
+        $this->predecessors = [];
+        $this->statements = [];
+        $this->compilationMetadata = new CompilationMetadata();
     }
 
     /**
@@ -50,30 +36,70 @@ class CompilableSource implements CompilableSourceInterface
         $statements = [];
 
         foreach ($this->predecessors as $predecessor) {
-            $statements = array_merge($statements, $predecessor->getStatements());
+            if ($predecessor instanceof CompilableSourceInterface) {
+                $statements = array_merge($statements, $predecessor->getStatements());
+            }
         }
 
         return array_merge($statements, $this->statements);
     }
 
-    public function getCompilationMetadata(): CompilationMetadataInterface
+    public function getCompilationMetadata(): Metadata
     {
-        return $this->compilationMetadata;
-    }
+        $compilationMetadata = new CompilationMetadata();
+        $compilationMetadata = $compilationMetadata->merge([$this->compilationMetadata]);
 
-    public function withCompilationMetadata(
-        CompilationMetadataInterface $compilationMetadata
-    ): CompilableSourceInterface {
-        $new = clone $this;
-        $new->compilationMetadata = $compilationMetadata;
+        foreach ($this->predecessors as $predecessor) {
+            if ($predecessor instanceof CompilableSourceInterface) {
+                $compilationMetadata = $compilationMetadata->merge([$predecessor->getCompilationMetadata()]);
+            }
+        }
 
-        return $new;
+        return $compilationMetadata;
     }
 
     public function mergeCompilationData(array $compilationDataCollection): CompilableSourceInterface
     {
         $new = clone $this;
         $new->compilationMetadata = $new->compilationMetadata->merge($compilationDataCollection);
+
+        return $new;
+    }
+
+    /**
+     * @param CompilableSourceInterface[] $predecessors
+     *
+     * @return CompilableSourceInterface
+     */
+    public function withPredecessors(array $predecessors): CompilableSourceInterface
+    {
+        $predecessors = array_filter($predecessors, function ($predecessor) {
+            return $predecessor instanceof CompilableSourceInterface;
+        });
+
+        $new = clone $this;
+        $new->predecessors = $predecessors;
+
+        return $new;
+    }
+
+    /**
+     * @param string[] $statements
+     *
+     * @return CompilableSourceInterface
+     */
+    public function withStatements(array $statements): CompilableSourceInterface
+    {
+        $new = clone $this;
+        $new->statements = $statements;
+
+        return $new;
+    }
+
+    public function withCompilationMetadata(Metadata $compilationMetadata): CompilableSourceInterface
+    {
+        $new = clone $this;
+        $new->compilationMetadata = $compilationMetadata;
 
         return $new;
     }
