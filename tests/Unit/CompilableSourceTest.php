@@ -186,6 +186,60 @@ class CompilableSourceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @dataProvider prependStatementDataProvider
+     */
+    public function testPrependStatement(
+        CompilableSourceInterface $source,
+        int $index,
+        string $content,
+        CompilableSourceInterface $expectedSource
+    ) {
+        $source->prependStatement($index, $content);
+
+        $this->assertEquals($expectedSource, $source);
+    }
+
+    public function prependStatementDataProvider(): array
+    {
+        return [
+            'prepend first of one' => [
+                'source' => (new CompilableSource())->withStatements(['statement']),
+                'index' => 0,
+                'content' => 'prepended ',
+                'expectedSource' => (new CompilableSource())->withStatements(['prepended statement']),
+            ],
+            'prepend first of two' => [
+                'source' => (new CompilableSource())->withStatements(['statement1', 'statement2']),
+                'index' => 0,
+                'content' => 'prepended ',
+                'expectedSource' => (new CompilableSource())->withStatements(['prepended statement1', 'statement2']),
+            ],
+            'prepend last of one' => [
+                'source' => (new CompilableSource())->withStatements(['statement']),
+                'index' => -1,
+                'content' => 'prepended ',
+                'expectedSource' => (new CompilableSource())->withStatements(['prepended statement']),
+            ],
+            'prepend last of two' => [
+                'source' => (new CompilableSource())->withStatements(['statement1', 'statement2']),
+                'index' => -1,
+                'content' => 'prepended ',
+                'expectedSource' => (new CompilableSource())->withStatements(['statement1', 'prepended statement2']),
+            ],
+            'prepend last of three' => [
+                'source' => (new CompilableSource())->withStatements(['statement1', 'statement2', 'statement3']),
+                'index' => -1,
+                'content' => 'prepended ',
+                'expectedSource' => (new CompilableSource())->withStatements([
+                    'statement1',
+                    'statement2',
+                    'prepended statement3'
+                ]),
+            ],
+        ];
+    }
+
+    /**
      * @dataProvider appendStatementDataProvider
      */
     public function testAppendStatement(
