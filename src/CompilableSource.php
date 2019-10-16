@@ -104,7 +104,26 @@ class CompilableSource implements CompilableSourceInterface
         return $new;
     }
 
+    public function prependStatement(int $index, string $content)
+    {
+        $this->mutateStatement($index, function (string $statement) use ($content) {
+            return $content . $statement;
+        });
+    }
+
     public function appendStatement(int $index, string $content)
+    {
+        $this->mutateStatement($index, function (string $statement) use ($content) {
+            return $statement . $content;
+        });
+    }
+
+    public function __toString(): string
+    {
+        return implode("\n", $this->statements);
+    }
+
+    private function mutateStatement(int $index, callable $mutator)
     {
         if ($index < 0) {
             $index = count($this->statements) + $index;
@@ -113,12 +132,7 @@ class CompilableSource implements CompilableSourceInterface
         $statement = $this->statements[$index] ?? null;
 
         if (null !== $statement) {
-            $this->statements[$index] = $statement . $content;
+            $this->statements[$index] = $mutator($statement);
         }
-    }
-
-    public function __toString(): string
-    {
-        return implode("\n", $this->statements);
     }
 }
