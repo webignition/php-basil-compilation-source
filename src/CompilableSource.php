@@ -123,16 +123,30 @@ class CompilableSource implements CompilableSourceInterface
         return implode("\n", $this->statements);
     }
 
-    private function mutateStatement(int $index, callable $mutator)
+    public function mutateStatement(int $index, callable $mutator)
     {
+        $statements = $this->getStatements();
+
         if ($index < 0) {
-            $index = count($this->statements) + $index;
+            $index = count($statements) + $index;
         }
 
-        $statement = $this->statements[$index] ?? null;
+        $statementIndex = 0;
 
-        if (null !== $statement) {
-            $this->statements[$index] = $mutator($statement);
+        foreach ($this->predecessors as $predecessor) {
+            foreach ($predecessor->getStatements() as $predecessorStatementIndex => $predecessorStatement) {
+                if ($statementIndex === $index) {
+                    $predecessor->mutateStatement($predecessorStatementIndex, $mutator);
+
+                    return;
+                }
+
+                $statementIndex++;
+            }
+        }
+
+        if (array_key_exists($index, $statements)) {
+            $this->statements[$index] = $mutator($statements[$index]);
         }
     }
 }
