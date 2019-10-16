@@ -36,6 +36,7 @@ interface CompilableSourceInterface
 
     public function prependStatement(int $index, string $content);
     public function appendStatement(int $index, string $content);
+    public function mutateStatement(int $index, callable $mutator);
 
     public function __toString(): string;
 }

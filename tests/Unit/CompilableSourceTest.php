@@ -192,11 +192,11 @@ class CompilableSourceTest extends \PHPUnit\Framework\TestCase
         CompilableSourceInterface $source,
         int $index,
         string $content,
-        CompilableSourceInterface $expectedSource
+        array $expectedStatements
     ) {
         $source->prependStatement($index, $content);
 
-        $this->assertEquals($expectedSource, $source);
+        $this->assertEquals($expectedStatements, $source->getStatements());
     }
 
     public function prependStatementDataProvider(): array
@@ -206,35 +206,40 @@ class CompilableSourceTest extends \PHPUnit\Framework\TestCase
                 'source' => (new CompilableSource())->withStatements(['statement']),
                 'index' => 0,
                 'content' => 'prepended ',
-                'expectedSource' => (new CompilableSource())->withStatements(['prepended statement']),
+                'expectedStatements' => ['prepended statement'],
             ],
             'prepend first of two' => [
                 'source' => (new CompilableSource())->withStatements(['statement1', 'statement2']),
                 'index' => 0,
                 'content' => 'prepended ',
-                'expectedSource' => (new CompilableSource())->withStatements(['prepended statement1', 'statement2']),
+                'expectedStatements' => ['prepended statement1', 'statement2'],
             ],
             'prepend last of one' => [
                 'source' => (new CompilableSource())->withStatements(['statement']),
                 'index' => -1,
                 'content' => 'prepended ',
-                'expectedSource' => (new CompilableSource())->withStatements(['prepended statement']),
+                'expectedStatements' => ['prepended statement'],
             ],
             'prepend last of two' => [
                 'source' => (new CompilableSource())->withStatements(['statement1', 'statement2']),
                 'index' => -1,
                 'content' => 'prepended ',
-                'expectedSource' => (new CompilableSource())->withStatements(['statement1', 'prepended statement2']),
+                'expectedStatements' => ['statement1', 'prepended statement2'],
             ],
             'prepend last of three' => [
                 'source' => (new CompilableSource())->withStatements(['statement1', 'statement2', 'statement3']),
                 'index' => -1,
                 'content' => 'prepended ',
-                'expectedSource' => (new CompilableSource())->withStatements([
-                    'statement1',
-                    'statement2',
-                    'prepended statement3'
-                ]),
+                'expectedStatements' => ['statement1', 'statement2', 'prepended statement3'],
+            ],
+            'prepend last of three, all in predecessor' => [
+                'source' => (new CompilableSource())
+                    ->withPredecessors([
+                        (new CompilableSource())->withStatements(['statement1', 'statement2', 'statement3'])
+                    ]),
+                'index' => -1,
+                'content' => 'prepended ',
+                'expectedStatements' => ['statement1', 'statement2', 'prepended statement3'],
             ],
         ];
     }
@@ -246,11 +251,11 @@ class CompilableSourceTest extends \PHPUnit\Framework\TestCase
         CompilableSourceInterface $source,
         int $index,
         string $content,
-        CompilableSourceInterface $expectedSource
+        array $expectedStatements
     ) {
         $source->appendStatement($index, $content);
 
-        $this->assertEquals($expectedSource, $source);
+        $this->assertEquals($expectedStatements, $source->getStatements());
     }
 
     public function appendStatementDataProvider(): array
@@ -260,35 +265,40 @@ class CompilableSourceTest extends \PHPUnit\Framework\TestCase
                 'source' => (new CompilableSource())->withStatements(['statement']),
                 'index' => 0,
                 'content' => ' appended',
-                'expectedSource' => (new CompilableSource())->withStatements(['statement appended']),
+                'expectedStatements' => ['statement appended'],
             ],
             'append first of two' => [
                 'source' => (new CompilableSource())->withStatements(['statement1', 'statement2']),
                 'index' => 0,
                 'content' => ' appended',
-                'expectedSource' => (new CompilableSource())->withStatements(['statement1 appended', 'statement2']),
+                'expectedStatements' => ['statement1 appended', 'statement2'],
             ],
             'append last of one' => [
                 'source' => (new CompilableSource())->withStatements(['statement']),
                 'index' => -1,
                 'content' => ' appended',
-                'expectedSource' => (new CompilableSource())->withStatements(['statement appended']),
+                'expectedStatements' => ['statement appended'],
             ],
             'append last of two' => [
                 'source' => (new CompilableSource())->withStatements(['statement1', 'statement2']),
                 'index' => -1,
                 'content' => ' appended',
-                'expectedSource' => (new CompilableSource())->withStatements(['statement1', 'statement2 appended']),
+                'expectedStatements' => ['statement1', 'statement2 appended'],
             ],
             'append last of three' => [
                 'source' => (new CompilableSource())->withStatements(['statement1', 'statement2', 'statement3']),
                 'index' => -1,
                 'content' => ' appended',
-                'expectedSource' => (new CompilableSource())->withStatements([
-                    'statement1',
-                    'statement2',
-                    'statement3 appended'
-                ]),
+                'expectedStatements' => ['statement1', 'statement2', 'statement3 appended'],
+            ],
+            'append last of three, all in predecessor' => [
+                'source' => (new CompilableSource())
+                    ->withPredecessors([
+                        (new CompilableSource())->withStatements(['statement1', 'statement2', 'statement3'])
+                    ]),
+                'index' => -1,
+                'content' => ' appended',
+                'expectedStatements' => ['statement1', 'statement2', 'statement3 appended'],
             ],
         ];
     }
