@@ -2,7 +2,7 @@
 
 namespace webignition\BasilCompilationSource;
 
-class CompilationMetadata implements CompilationMetadataInterface
+class Metadata implements MetadataInterface
 {
     private $classDependencies;
     private $variableDependencies;
@@ -30,7 +30,7 @@ class CompilationMetadata implements CompilationMetadataInterface
         return $this->variableDependencies;
     }
 
-    public function withClassDependencies(ClassDependencyCollection $classDependencies): CompilationMetadataInterface
+    public function withClassDependencies(ClassDependencyCollection $classDependencies): MetadataInterface
     {
         $new = clone $this;
         $new->classDependencies = $classDependencies;
@@ -40,14 +40,14 @@ class CompilationMetadata implements CompilationMetadataInterface
 
     public function withVariableDependencies(
         VariablePlaceholderCollection $variableDependencies
-    ): CompilationMetadataInterface {
+    ): MetadataInterface {
         $new = clone $this;
         $new->variableDependencies = $variableDependencies;
 
         return $new;
     }
 
-    public function withVariableExports(VariablePlaceholderCollection $variableExports): CompilationMetadataInterface
+    public function withVariableExports(VariablePlaceholderCollection $variableExports): MetadataInterface
     {
         $new = clone $this;
         $new->variableExports = $variableExports;
@@ -57,7 +57,7 @@ class CompilationMetadata implements CompilationMetadataInterface
 
     public function withAdditionalClassDependencies(
         ClassDependencyCollection $classDependencies
-    ): CompilationMetadataInterface {
+    ): MetadataInterface {
         $new = clone $this;
         $new->classDependencies = $new->classDependencies->merge([$classDependencies]);
 
@@ -66,7 +66,7 @@ class CompilationMetadata implements CompilationMetadataInterface
 
     public function withAdditionalVariableDependencies(
         VariablePlaceholderCollection $variableDependencies
-    ): CompilationMetadataInterface {
+    ): MetadataInterface {
         $new = clone $this;
         $new->variableDependencies = $new->variableDependencies->merge([$variableDependencies]);
 
@@ -76,7 +76,7 @@ class CompilationMetadata implements CompilationMetadataInterface
 
     public function withAdditionalVariableExports(
         VariablePlaceholderCollection $variableExports
-    ): CompilationMetadataInterface {
+    ): MetadataInterface {
         $new = clone $this;
         $new->variableExports = $new->variableExports->merge([$variableExports]);
 
@@ -84,17 +84,17 @@ class CompilationMetadata implements CompilationMetadataInterface
     }
 
     /**
-     * @param CompilationMetadataInterface[] $compilationMetadataCollection
+     * @param MetadataInterface[] $metadataCollection
      *
-     * @return CompilationMetadataInterface
+     * @return MetadataInterface
      */
-    public function merge(array $compilationMetadataCollection): CompilationMetadataInterface
+    public function merge(array $metadataCollection): MetadataInterface
     {
         $classDependencies = new ClassDependencyCollection();
         $variableDependencies = new VariablePlaceholderCollection();
         $variableExports = new VariablePlaceholderCollection();
 
-        foreach ($compilationMetadataCollection as $metadata) {
+        foreach ($metadataCollection as $metadata) {
             $classDependencies = $classDependencies->merge([$metadata->getClassDependencies()]);
             $variableDependencies = $variableDependencies->merge([$metadata->getVariableDependencies()]);
             $variableExports = $variableExports->merge([$metadata->getVariableExports()]);

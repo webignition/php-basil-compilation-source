@@ -8,14 +8,14 @@ namespace webignition\BasilCompilationSource\Tests\Unit;
 
 use webignition\BasilCompilationSource\ClassDependency;
 use webignition\BasilCompilationSource\ClassDependencyCollection;
-use webignition\BasilCompilationSource\CompilationMetadata;
+use webignition\BasilCompilationSource\Metadata;
 use webignition\BasilCompilationSource\VariablePlaceholderCollection;
 
-class CompilationMetadataTest extends \PHPUnit\Framework\TestCase
+class MetadataTest extends \PHPUnit\Framework\TestCase
 {
     public function testConstruct()
     {
-        $compilationMetadata = new CompilationMetadata();
+        $compilationMetadata = new Metadata();
 
         $this->assertEquals(new ClassDependencyCollection(), $compilationMetadata->getClassDependencies());
         $this->assertEquals(new VariablePlaceholderCollection(), $compilationMetadata->getVariableDependencies());
@@ -29,7 +29,7 @@ class CompilationMetadataTest extends \PHPUnit\Framework\TestCase
             new ClassDependency('1'),
         ]);
 
-        $compilationMetadata = new CompilationMetadata();
+        $compilationMetadata = new Metadata();
         $this->assertEquals($emptyClassDependencies, $compilationMetadata->getClassDependencies());
 
         $compilationMetadata = $compilationMetadata->withClassDependencies($classDependencies);
@@ -44,7 +44,7 @@ class CompilationMetadataTest extends \PHPUnit\Framework\TestCase
         $emptyVariableDependencies = new VariablePlaceholderCollection();
         $variableDependencies = VariablePlaceholderCollection::createCollection(['1']);
 
-        $compilationMetadata = new CompilationMetadata();
+        $compilationMetadata = new Metadata();
         $this->assertEquals($emptyVariableDependencies, $compilationMetadata->getVariableDependencies());
 
         $compilationMetadata = $compilationMetadata->withVariableDependencies($variableDependencies);
@@ -59,7 +59,7 @@ class CompilationMetadataTest extends \PHPUnit\Framework\TestCase
         $emptyVariableExports = new VariablePlaceholderCollection();
         $variableExports = VariablePlaceholderCollection::createCollection(['1']);
 
-        $compilationMetadata = new CompilationMetadata();
+        $compilationMetadata = new Metadata();
         $this->assertEquals($emptyVariableExports, $compilationMetadata->getVariableExports());
 
         $compilationMetadata = $compilationMetadata->withVariableExports($variableExports);
@@ -79,7 +79,7 @@ class CompilationMetadataTest extends \PHPUnit\Framework\TestCase
             new ClassDependency('2'),
         ]);
 
-        $compilationMetadata = new CompilationMetadata();
+        $compilationMetadata = new Metadata();
         $this->assertEquals(new ClassDependencyCollection(), $compilationMetadata->getClassDependencies());
 
         $compilationMetadata = $compilationMetadata->withAdditionalClassDependencies($classDependencies1);
@@ -105,7 +105,7 @@ class CompilationMetadataTest extends \PHPUnit\Framework\TestCase
         $variableDependencies1 = VariablePlaceholderCollection::createCollection(['1']);
         $variableDependencies2 = VariablePlaceholderCollection::createCollection(['2']);
 
-        $compilationMetadata = new CompilationMetadata();
+        $compilationMetadata = new Metadata();
         $this->assertEquals(new VariablePlaceholderCollection(), $compilationMetadata->getVariableDependencies());
 
         $compilationMetadata = $compilationMetadata->withAdditionalVariableDependencies($variableDependencies1);
@@ -126,7 +126,7 @@ class CompilationMetadataTest extends \PHPUnit\Framework\TestCase
         $variableExports1 = VariablePlaceholderCollection::createCollection(['1']);
         $variableExports2 = VariablePlaceholderCollection::createCollection(['2']);
 
-        $compilationMetadata = new CompilationMetadata();
+        $compilationMetadata = new Metadata();
         $this->assertEquals(new VariablePlaceholderCollection(), $compilationMetadata->getVariableExports());
 
         $compilationMetadata = $compilationMetadata->withAdditionalVariableExports($variableExports1);
@@ -144,19 +144,19 @@ class CompilationMetadataTest extends \PHPUnit\Framework\TestCase
 
     public function testMerge()
     {
-        $compilationMetadata = new CompilationMetadata();
-        $compilationMetadata1 = (new CompilationMetadata())
+        $compilationMetadata = new Metadata();
+        $compilationMetadata1 = (new Metadata())
             ->withClassDependencies(new ClassDependencyCollection([
                 new ClassDependency('class1'),
             ]));
 
-        $compilationMetadata2 = (new CompilationMetadata())
+        $compilationMetadata2 = (new Metadata())
             ->withVariableDependencies(VariablePlaceholderCollection::createCollection(['variableDependency1']));
 
-        $compilationMetadata3 = (new CompilationMetadata())
+        $compilationMetadata3 = (new Metadata())
             ->withVariableExports(VariablePlaceholderCollection::createCollection(['variableExport1']));
 
-        $compilationMetadata4 = (new CompilationMetadata())
+        $compilationMetadata4 = (new Metadata())
             ->withClassDependencies(new ClassDependencyCollection([
                 new ClassDependency('class2'),
             ]))
@@ -165,7 +165,7 @@ class CompilationMetadataTest extends \PHPUnit\Framework\TestCase
 
         $compilationMetadata = $compilationMetadata->merge([$compilationMetadata1]);
         $this->assertEquals(
-            (new CompilationMetadata())
+            (new Metadata())
                 ->withClassDependencies(new ClassDependencyCollection([
                     new ClassDependency('class1'),
                 ])),
@@ -174,7 +174,7 @@ class CompilationMetadataTest extends \PHPUnit\Framework\TestCase
 
         $compilationMetadata = $compilationMetadata->merge([$compilationMetadata2]);
         $this->assertEquals(
-            (new CompilationMetadata())
+            (new Metadata())
                 ->withClassDependencies(new ClassDependencyCollection([
                     new ClassDependency('class1'),
                 ]))
@@ -184,7 +184,7 @@ class CompilationMetadataTest extends \PHPUnit\Framework\TestCase
 
         $compilationMetadata = $compilationMetadata->merge([$compilationMetadata3]);
         $this->assertEquals(
-            (new CompilationMetadata())
+            (new Metadata())
                 ->withClassDependencies(new ClassDependencyCollection([
                     new ClassDependency('class1'),
                 ]))
@@ -195,7 +195,7 @@ class CompilationMetadataTest extends \PHPUnit\Framework\TestCase
 
         $compilationMetadata = $compilationMetadata->merge([$compilationMetadata4]);
         $this->assertEquals(
-            (new CompilationMetadata())
+            (new Metadata())
                 ->withClassDependencies(new ClassDependencyCollection([
                     new ClassDependency('class1'),
                     new ClassDependency('class2'),

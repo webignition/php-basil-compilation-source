@@ -2,12 +2,10 @@
 
 namespace webignition\BasilCompilationSource;
 
-use webignition\BasilCompilationSource\CompilationMetadataInterface as Metadata;
-
-class CompilableSource implements CompilableSourceInterface
+class Source implements SourceInterface
 {
     /**
-     * @var CompilableSourceInterface[]
+     * @var SourceInterface[]
      */
     private $predecessors;
 
@@ -17,15 +15,15 @@ class CompilableSource implements CompilableSourceInterface
     private $statements;
 
     /**
-     * @var CompilationMetadataInterface
+     * @var MetadataInterface
      */
-    private $compilationMetadata;
+    private $metadata;
 
     public function __construct()
     {
         $this->predecessors = [];
         $this->statements = [];
-        $this->compilationMetadata = new CompilationMetadata();
+        $this->metadata = new Metadata();
     }
 
     /**
@@ -36,7 +34,7 @@ class CompilableSource implements CompilableSourceInterface
         $statements = [];
 
         foreach ($this->predecessors as $predecessor) {
-            if ($predecessor instanceof CompilableSourceInterface) {
+            if ($predecessor instanceof SourceInterface) {
                 $statements = array_merge($statements, $predecessor->getStatements());
             }
         }
@@ -44,22 +42,22 @@ class CompilableSource implements CompilableSourceInterface
         return array_merge($statements, $this->statements);
     }
 
-    public function getCompilationMetadata(): Metadata
+    public function getMetadata(): MetadataInterface
     {
-        $compilationMetadata = new CompilationMetadata();
-        $compilationMetadata = $compilationMetadata->merge([$this->compilationMetadata]);
+        $metadata = new Metadata();
+        $metadata = $metadata->merge([$this->metadata]);
 
         foreach ($this->predecessors as $predecessor) {
-            if ($predecessor instanceof CompilableSourceInterface) {
-                $compilationMetadata = $compilationMetadata->merge([$predecessor->getCompilationMetadata()]);
+            if ($predecessor instanceof SourceInterface) {
+                $metadata = $metadata->merge([$predecessor->getMetadata()]);
             }
         }
 
-        return $compilationMetadata;
+        return $metadata;
     }
 
     /**
-     * @return CompilableSourceInterface[]
+     * @return SourceInterface[]
      */
     public function getPredecessors(): array
     {
@@ -67,14 +65,14 @@ class CompilableSource implements CompilableSourceInterface
     }
 
     /**
-     * @param CompilableSourceInterface[] $predecessors
+     * @param SourceInterface[] $predecessors
      *
-     * @return CompilableSourceInterface
+     * @return SourceInterface
      */
-    public function withPredecessors(array $predecessors): CompilableSourceInterface
+    public function withPredecessors(array $predecessors): SourceInterface
     {
         $predecessors = array_filter($predecessors, function ($predecessor) {
-            return $predecessor instanceof CompilableSourceInterface;
+            return $predecessor instanceof SourceInterface;
         });
 
         $new = clone $this;
@@ -86,9 +84,9 @@ class CompilableSource implements CompilableSourceInterface
     /**
      * @param string[] $statements
      *
-     * @return CompilableSourceInterface
+     * @return SourceInterface
      */
-    public function withStatements(array $statements): CompilableSourceInterface
+    public function withStatements(array $statements): SourceInterface
     {
         $new = clone $this;
         $new->statements = $statements;
@@ -96,10 +94,10 @@ class CompilableSource implements CompilableSourceInterface
         return $new;
     }
 
-    public function withCompilationMetadata(Metadata $compilationMetadata): CompilableSourceInterface
+    public function withMetadata(MetadataInterface $metadata): SourceInterface
     {
         $new = clone $this;
-        $new->compilationMetadata = $compilationMetadata;
+        $new->metadata = $metadata;
 
         return $new;
     }
