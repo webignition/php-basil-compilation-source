@@ -2,34 +2,34 @@
 
 namespace webignition\BasilCompilationSource;
 
-interface CompilationMetadataInterface
+interface MetadataInterface
 {
     public function getClassDependencies(): ClassDependencyCollection;
     public function getVariableExports(): VariablePlaceholderCollection;
     public function getVariableDependencies(): VariablePlaceholderCollection;
 
-    public function withClassDependencies(ClassDependencyCollection $classDependencies): CompilationMetadataInterface;
+    public function withClassDependencies(ClassDependencyCollection $classDependencies): MetadataInterface;
     public function withVariableDependencies(
         VariablePlaceholderCollection $variableDependencies
-    ): CompilationMetadataInterface;
-    public function withVariableExports(VariablePlaceholderCollection $variableExports): CompilationMetadataInterface;
+    ): MetadataInterface;
+    public function withVariableExports(VariablePlaceholderCollection $variableExports): MetadataInterface;
 
     public function withAdditionalClassDependencies(
         ClassDependencyCollection $classDependencies
-    ): CompilationMetadataInterface;
+    ): MetadataInterface;
 
     public function withAdditionalVariableDependencies(
         VariablePlaceholderCollection $variableDependencies
-    ): CompilationMetadataInterface;
+    ): MetadataInterface;
 
     public function withAdditionalVariableExports(
         VariablePlaceholderCollection $variableExports
-    ): CompilationMetadataInterface;
+    ): MetadataInterface;
 
     /**
-     * @param CompilationMetadataInterface[] $compilationMetadataCollection
+     * @param MetadataInterface[] $metadataCollection
      *
-     * @return CompilationMetadataInterface
+     * @return MetadataInterface
      */
-    public function merge(array $compilationMetadataCollection): CompilationMetadataInterface;
+    public function merge(array $metadataCollection): MetadataInterface;
 }

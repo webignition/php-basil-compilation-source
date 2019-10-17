@@ -8,36 +8,36 @@ namespace webignition\BasilCompilationSource\Tests\Unit;
 
 use webignition\BasilCompilationSource\ClassDependency;
 use webignition\BasilCompilationSource\ClassDependencyCollection;
-use webignition\BasilCompilationSource\CompilableSource;
-use webignition\BasilCompilationSource\CompilableSourceInterface;
-use webignition\BasilCompilationSource\CompilationMetadata;
+use webignition\BasilCompilationSource\Source;
+use webignition\BasilCompilationSource\SourceInterface;
+use webignition\BasilCompilationSource\Metadata;
 use webignition\BasilCompilationSource\VariablePlaceholderCollection;
 
-class CompilableSourceTest extends \PHPUnit\Framework\TestCase
+class SourceTest extends \PHPUnit\Framework\TestCase
 {
     public function testConstruct()
     {
-        $compilableSource = new CompilableSource();
+        $compilableSource = new Source();
 
         $this->assertSame([], $compilableSource->getStatements());
         $this->assertEquals([], $compilableSource->getPredecessors());
-        $this->assertEquals(new CompilationMetadata(), $compilableSource->getCompilationMetadata());
+        $this->assertEquals(new Metadata(), $compilableSource->getMetadata());
     }
 
     /**
      * @dataProvider withPredecessorsDataProvider
      */
     public function testWithPredecessors(
-        CompilableSourceInterface $compilableSource,
+        SourceInterface $compilableSource,
         array $predecessors,
-        CompilableSourceInterface $expectedCompilableSource
+        SourceInterface $expectedCompilableSource
     ) {
         $mutatedCompilableSource = $compilableSource->withPredecessors($predecessors);
 
         $this->assertEquals($expectedCompilableSource->getStatements(), $mutatedCompilableSource->getStatements());
         $this->assertEquals(
-            $expectedCompilableSource->getCompilationMetadata(),
-            $mutatedCompilableSource->getCompilationMetadata()
+            $expectedCompilableSource->getMetadata(),
+            $mutatedCompilableSource->getMetadata()
         );
     }
 
@@ -45,25 +45,25 @@ class CompilableSourceTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'empty, no predecessors' => [
-                'compilableSource' => new CompilableSource(),
+                'compilableSource' => new Source(),
                 'predecessors' => [],
-                'expectedCompilableSource' => new CompilableSource(),
+                'expectedCompilableSource' => new Source(),
             ],
             'has statements, no predecessors' => [
-                'compilableSource' => (new CompilableSource())
+                'compilableSource' => (new Source())
                     ->withStatements([
                         'statement1',
                     ]),
                 'predecessors' => [],
-                'expectedCompilableSource' => (new CompilableSource())
+                'expectedCompilableSource' => (new Source())
                     ->withStatements([
                         'statement1',
                     ]),
             ],
             'has metadata, no predecessors' => [
-                'compilableSource' => (new CompilableSource())
-                    ->withCompilationMetadata(
-                        (new CompilationMetadata())
+                'compilableSource' => (new Source())
+                    ->withMetadata(
+                        (new Metadata())
                             ->withVariableDependencies(VariablePlaceholderCollection::createCollection([
                                 'DEPENDENCY_ONE',
                             ]))
@@ -75,9 +75,9 @@ class CompilableSourceTest extends \PHPUnit\Framework\TestCase
                             ]))
                     ),
                 'predecessors' => [],
-                'expectedCompilableSource' => (new CompilableSource())
-                    ->withCompilationMetadata(
-                        (new CompilationMetadata())
+                'expectedCompilableSource' => (new Source())
+                    ->withMetadata(
+                        (new Metadata())
                             ->withVariableDependencies(VariablePlaceholderCollection::createCollection([
                                 'DEPENDENCY_ONE',
                             ]))
@@ -90,12 +90,12 @@ class CompilableSourceTest extends \PHPUnit\Framework\TestCase
                     ),
             ],
             'has statements, has metadata, has predecessors' => [
-                'compilableSource' => (new CompilableSource())
+                'compilableSource' => (new Source())
                     ->withStatements([
                         'statement1',
                     ])
-                    ->withCompilationMetadata(
-                        (new CompilationMetadata())
+                    ->withMetadata(
+                        (new Metadata())
                             ->withVariableDependencies(VariablePlaceholderCollection::createCollection([
                                 'DEPENDENCY_ONE',
                             ]))
@@ -107,16 +107,16 @@ class CompilableSourceTest extends \PHPUnit\Framework\TestCase
                             ]))
                     ),
                 'predecessors' => [
-                    (new CompilableSource())
+                    (new Source())
                         ->withStatements([
                             'statement2',
                         ]),
-                    (new CompilableSource())
+                    (new Source())
                         ->withStatements([
                             'statement3',
                         ])
-                        ->withCompilationMetadata(
-                            (new CompilationMetadata())
+                        ->withMetadata(
+                            (new Metadata())
                                 ->withVariableDependencies(VariablePlaceholderCollection::createCollection([
                                     'DEPENDENCY_TWO',
                                 ]))
@@ -128,14 +128,14 @@ class CompilableSourceTest extends \PHPUnit\Framework\TestCase
                                 ]))
                         ),
                 ],
-                'expectedCompilableSource' => (new CompilableSource())
+                'expectedCompilableSource' => (new Source())
                     ->withStatements([
                         'statement2',
                         'statement3',
                         'statement1',
                     ])
-                    ->withCompilationMetadata(
-                        (new CompilationMetadata())
+                    ->withMetadata(
+                        (new Metadata())
                             ->withVariableDependencies(VariablePlaceholderCollection::createCollection([
                                 'DEPENDENCY_ONE',
                                 'DEPENDENCY_TWO',
@@ -155,7 +155,7 @@ class CompilableSourceTest extends \PHPUnit\Framework\TestCase
 
     public function testWithStatements()
     {
-        $compilableSource = new CompilableSource();
+        $compilableSource = new Source();
         $this->assertSame([], $compilableSource->getStatements());
 
         $statements = [
@@ -171,25 +171,25 @@ class CompilableSourceTest extends \PHPUnit\Framework\TestCase
 
     public function testWithCompilationMetadata()
     {
-        $emptyCompilationMetadata = new CompilationMetadata();
-        $compilationMetadata = (new CompilationMetadata())
+        $emptyCompilationMetadata = new Metadata();
+        $compilationMetadata = (new Metadata())
             ->withVariableDependencies(VariablePlaceholderCollection::createCollection(['1']));
 
-        $compilableSource = new CompilableSource();
-        $this->assertEquals($emptyCompilationMetadata, $compilableSource->getCompilationMetadata());
+        $compilableSource = new Source();
+        $this->assertEquals($emptyCompilationMetadata, $compilableSource->getMetadata());
 
-        $compilableSource = $compilableSource->withCompilationMetadata($compilationMetadata);
-        $this->assertEquals($compilationMetadata, $compilableSource->getCompilationMetadata());
+        $compilableSource = $compilableSource->withMetadata($compilationMetadata);
+        $this->assertEquals($compilationMetadata, $compilableSource->getMetadata());
 
-        $compilableSource = $compilableSource->withCompilationMetadata($emptyCompilationMetadata);
-        $this->assertEquals($emptyCompilationMetadata, $compilableSource->getCompilationMetadata());
+        $compilableSource = $compilableSource->withMetadata($emptyCompilationMetadata);
+        $this->assertEquals($emptyCompilationMetadata, $compilableSource->getMetadata());
     }
 
     /**
      * @dataProvider prependStatementDataProvider
      */
     public function testPrependStatement(
-        CompilableSourceInterface $source,
+        SourceInterface $source,
         int $index,
         string $content,
         array $expectedStatements
@@ -203,39 +203,39 @@ class CompilableSourceTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'prepend first of one' => [
-                'source' => (new CompilableSource())->withStatements(['statement']),
+                'source' => (new Source())->withStatements(['statement']),
                 'index' => 0,
                 'content' => 'prepended ',
                 'expectedStatements' => ['prepended statement'],
             ],
             'prepend first of two' => [
-                'source' => (new CompilableSource())->withStatements(['statement1', 'statement2']),
+                'source' => (new Source())->withStatements(['statement1', 'statement2']),
                 'index' => 0,
                 'content' => 'prepended ',
                 'expectedStatements' => ['prepended statement1', 'statement2'],
             ],
             'prepend last of one' => [
-                'source' => (new CompilableSource())->withStatements(['statement']),
+                'source' => (new Source())->withStatements(['statement']),
                 'index' => -1,
                 'content' => 'prepended ',
                 'expectedStatements' => ['prepended statement'],
             ],
             'prepend last of two' => [
-                'source' => (new CompilableSource())->withStatements(['statement1', 'statement2']),
+                'source' => (new Source())->withStatements(['statement1', 'statement2']),
                 'index' => -1,
                 'content' => 'prepended ',
                 'expectedStatements' => ['statement1', 'prepended statement2'],
             ],
             'prepend last of three' => [
-                'source' => (new CompilableSource())->withStatements(['statement1', 'statement2', 'statement3']),
+                'source' => (new Source())->withStatements(['statement1', 'statement2', 'statement3']),
                 'index' => -1,
                 'content' => 'prepended ',
                 'expectedStatements' => ['statement1', 'statement2', 'prepended statement3'],
             ],
             'prepend last of three, all in predecessor' => [
-                'source' => (new CompilableSource())
+                'source' => (new Source())
                     ->withPredecessors([
-                        (new CompilableSource())->withStatements(['statement1', 'statement2', 'statement3'])
+                        (new Source())->withStatements(['statement1', 'statement2', 'statement3'])
                     ]),
                 'index' => -1,
                 'content' => 'prepended ',
@@ -248,7 +248,7 @@ class CompilableSourceTest extends \PHPUnit\Framework\TestCase
      * @dataProvider appendStatementDataProvider
      */
     public function testAppendStatement(
-        CompilableSourceInterface $source,
+        SourceInterface $source,
         int $index,
         string $content,
         array $expectedStatements
@@ -262,39 +262,39 @@ class CompilableSourceTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'append first of one' => [
-                'source' => (new CompilableSource())->withStatements(['statement']),
+                'source' => (new Source())->withStatements(['statement']),
                 'index' => 0,
                 'content' => ' appended',
                 'expectedStatements' => ['statement appended'],
             ],
             'append first of two' => [
-                'source' => (new CompilableSource())->withStatements(['statement1', 'statement2']),
+                'source' => (new Source())->withStatements(['statement1', 'statement2']),
                 'index' => 0,
                 'content' => ' appended',
                 'expectedStatements' => ['statement1 appended', 'statement2'],
             ],
             'append last of one' => [
-                'source' => (new CompilableSource())->withStatements(['statement']),
+                'source' => (new Source())->withStatements(['statement']),
                 'index' => -1,
                 'content' => ' appended',
                 'expectedStatements' => ['statement appended'],
             ],
             'append last of two' => [
-                'source' => (new CompilableSource())->withStatements(['statement1', 'statement2']),
+                'source' => (new Source())->withStatements(['statement1', 'statement2']),
                 'index' => -1,
                 'content' => ' appended',
                 'expectedStatements' => ['statement1', 'statement2 appended'],
             ],
             'append last of three' => [
-                'source' => (new CompilableSource())->withStatements(['statement1', 'statement2', 'statement3']),
+                'source' => (new Source())->withStatements(['statement1', 'statement2', 'statement3']),
                 'index' => -1,
                 'content' => ' appended',
                 'expectedStatements' => ['statement1', 'statement2', 'statement3 appended'],
             ],
             'append last of three, all in predecessor' => [
-                'source' => (new CompilableSource())
+                'source' => (new Source())
                     ->withPredecessors([
-                        (new CompilableSource())->withStatements(['statement1', 'statement2', 'statement3'])
+                        (new Source())->withStatements(['statement1', 'statement2', 'statement3'])
                     ]),
                 'index' => -1,
                 'content' => ' appended',
@@ -305,16 +305,16 @@ class CompilableSourceTest extends \PHPUnit\Framework\TestCase
 
     public function testToString()
     {
-        $this->assertEquals('', (string) new CompilableSource());
+        $this->assertEquals('', (string) new Source());
 
         $this->assertEquals(
             'statement1',
-            (string) (new CompilableSource())->withStatements(['statement1'])
+            (string) (new Source())->withStatements(['statement1'])
         );
 
         $this->assertEquals(
             'statement1' . "\n" . 'statement2',
-            (string) (new CompilableSource())->withStatements(['statement1', 'statement2'])
+            (string) (new Source())->withStatements(['statement1', 'statement2'])
         );
     }
 }
