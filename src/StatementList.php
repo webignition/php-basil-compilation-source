@@ -143,7 +143,7 @@ class StatementList implements StatementListInterface
         }
     }
 
-    public function __toString(): string
+    public function toCode(): string
     {
         $statements = $this->getStatements();
 
@@ -152,5 +152,10 @@ class StatementList implements StatementListInterface
         });
 
         return implode("\n", $statements);
+    }
+
+    public function __toString(): string
+    {
+        return implode("\n", $this->getStatements());
     }
 }
