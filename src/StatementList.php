@@ -2,10 +2,10 @@
 
 namespace webignition\BasilCompilationSource;
 
-class Source implements SourceInterface
+class StatementList implements StatementListInterface
 {
     /**
-     * @var SourceInterface[]
+     * @var StatementListInterface[]
      */
     private $predecessors;
 
@@ -34,7 +34,7 @@ class Source implements SourceInterface
         $statements = [];
 
         foreach ($this->predecessors as $predecessor) {
-            if ($predecessor instanceof SourceInterface) {
+            if ($predecessor instanceof StatementListInterface) {
                 $statements = array_merge($statements, $predecessor->getStatements());
             }
         }
@@ -48,7 +48,7 @@ class Source implements SourceInterface
         $metadata = $metadata->merge([$this->metadata]);
 
         foreach ($this->predecessors as $predecessor) {
-            if ($predecessor instanceof SourceInterface) {
+            if ($predecessor instanceof StatementListInterface) {
                 $metadata = $metadata->merge([$predecessor->getMetadata()]);
             }
         }
@@ -57,7 +57,7 @@ class Source implements SourceInterface
     }
 
     /**
-     * @return SourceInterface[]
+     * @return StatementListInterface[]
      */
     public function getPredecessors(): array
     {
@@ -65,14 +65,14 @@ class Source implements SourceInterface
     }
 
     /**
-     * @param SourceInterface[] $predecessors
+     * @param StatementListInterface[] $predecessors
      *
-     * @return SourceInterface
+     * @return StatementListInterface
      */
-    public function withPredecessors(array $predecessors): SourceInterface
+    public function withPredecessors(array $predecessors): StatementListInterface
     {
         $predecessors = array_filter($predecessors, function ($predecessor) {
-            return $predecessor instanceof SourceInterface;
+            return $predecessor instanceof StatementListInterface;
         });
 
         $new = clone $this;
@@ -84,9 +84,9 @@ class Source implements SourceInterface
     /**
      * @param string[] $statements
      *
-     * @return SourceInterface
+     * @return StatementListInterface
      */
-    public function withStatements(array $statements): SourceInterface
+    public function withStatements(array $statements): StatementListInterface
     {
         $new = clone $this;
         $new->statements = $statements;
@@ -94,7 +94,7 @@ class Source implements SourceInterface
         return $new;
     }
 
-    public function withMetadata(MetadataInterface $metadata): SourceInterface
+    public function withMetadata(MetadataInterface $metadata): StatementListInterface
     {
         $new = clone $this;
         $new->metadata = $metadata;
@@ -114,17 +114,6 @@ class Source implements SourceInterface
         $this->mutateStatement($index, function (string $statement) use ($content) {
             return $statement . $content;
         });
-    }
-
-    public function __toString(): string
-    {
-        $statements = $this->getStatements();
-
-        array_walk($statements, function (string &$statement) {
-            $statement .= ';';
-        });
-
-        return implode("\n", $statements);
     }
 
     public function mutateStatement(int $index, callable $mutator)
@@ -152,5 +141,16 @@ class Source implements SourceInterface
         if (array_key_exists($index, $statements)) {
             $this->statements[$index] = $mutator($statements[$index]);
         }
+    }
+
+    public function __toString(): string
+    {
+        $statements = $this->getStatements();
+
+        array_walk($statements, function (string &$statement) {
+            $statement .= ';';
+        });
+
+        return implode("\n", $statements);
     }
 }

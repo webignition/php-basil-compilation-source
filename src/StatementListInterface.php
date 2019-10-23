@@ -2,7 +2,7 @@
 
 namespace webignition\BasilCompilationSource;
 
-interface SourceInterface
+interface StatementListInterface
 {
     /**
      * @return string[]
@@ -12,25 +12,25 @@ interface SourceInterface
     public function getMetadata(): MetadataInterface;
 
     /**
-     * @return SourceInterface[]
+     * @return StatementListInterface[]
      */
     public function getPredecessors(): array;
 
     /**
-     * @param SourceInterface[] $predecessors
+     * @param StatementListInterface[] $predecessors
      *
-     * @return SourceInterface
+     * @return StatementListInterface
      */
-    public function withPredecessors(array $predecessors): SourceInterface;
+    public function withPredecessors(array $predecessors): StatementListInterface;
 
     /**
      * @param string[] $statements
      *
-     * @return SourceInterface
+     * @return StatementListInterface
      */
-    public function withStatements(array $statements): SourceInterface;
+    public function withStatements(array $statements): StatementListInterface;
 
-    public function withMetadata(MetadataInterface $metadata): SourceInterface;
+    public function withMetadata(MetadataInterface $metadata): StatementListInterface;
 
     public function prependStatement(int $index, string $content);
     public function appendStatement(int $index, string $content);
