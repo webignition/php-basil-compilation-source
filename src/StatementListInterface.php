@@ -36,5 +36,6 @@ interface StatementListInterface
     public function appendStatement(int $index, string $content);
     public function mutateStatement(int $index, callable $mutator);
 
+    public function toCode(): string;
     public function __toString(): string;
 }
