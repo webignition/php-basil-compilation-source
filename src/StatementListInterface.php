@@ -2,15 +2,8 @@
 
 namespace webignition\BasilCompilationSource;
 
-interface StatementListInterface
+interface StatementListInterface extends SourceInterface
 {
-    /**
-     * @return string[]
-     */
-    public function getStatements(): array;
-
-    public function getMetadata(): MetadataInterface;
-
     /**
      * @return StatementListInterface[]
      */
@@ -35,7 +28,4 @@ interface StatementListInterface
     public function prependStatement(int $index, string $content);
     public function appendStatement(int $index, string $content);
     public function mutateStatement(int $index, callable $mutator);
-
-    public function toCode(): string;
-    public function __toString(): string;
 }
