@@ -118,7 +118,13 @@ class Source implements SourceInterface
 
     public function __toString(): string
     {
-        return implode("\n", $this->statements);
+        $statements = $this->getStatements();
+
+        array_walk($statements, function (string &$statement) {
+            $statement .= ';';
+        });
+
+        return implode("\n", $statements);
     }
 
     public function mutateStatement(int $index, callable $mutator)
