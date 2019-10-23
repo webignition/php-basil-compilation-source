@@ -303,18 +303,55 @@ class SourceTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public function testToString()
+    /**
+     * @dataProvider toStringDataProvider
+     */
+    public function testToString(SourceInterface $source, string $expectedString)
     {
-        $this->assertEquals('', (string) new Source());
+        $this->assertSame($expectedString, (string) $source);
+    }
 
-        $this->assertEquals(
-            'statement1',
-            (string) (new Source())->withStatements(['statement1'])
-        );
-
-        $this->assertEquals(
-            'statement1' . "\n" . 'statement2',
-            (string) (new Source())->withStatements(['statement1', 'statement2'])
-        );
+    public function toStringDataProvider(): array
+    {
+        return [
+            'empty' => [
+                'source' => new Source(),
+                'expectedString' => '',
+            ],
+            'statements only' => [
+                'source' => (new Source())
+                    ->withStatements(['statement1', 'statement2']),
+                'expectedString' =>
+                    "statement1;\n" .
+                    "statement2;",
+            ],
+            'predecessors only' => [
+                'source' => (new Source())
+                    ->withPredecessors([
+                        (new Source())->withStatements(['statement1', 'statement2']),
+                        (new Source())->withStatements(['statement3', 'statement4']),
+                    ]),
+                'expectedString' =>
+                    "statement1;\n" .
+                    "statement2;\n" .
+                    "statement3;\n" .
+                    "statement4;",
+            ],
+            'predecessors and statements' => [
+                'source' => (new Source())
+                    ->withStatements(['statement5', 'statement6'])
+                    ->withPredecessors([
+                        (new Source())->withStatements(['statement1', 'statement2']),
+                        (new Source())->withStatements(['statement3', 'statement4']),
+                    ]),
+                'expectedString' =>
+                    "statement1;\n" .
+                    "statement2;\n" .
+                    "statement3;\n" .
+                    "statement4;\n" .
+                    "statement5;\n" .
+                    "statement6;",
+            ],
+        ];
     }
 }
