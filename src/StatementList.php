@@ -60,11 +60,21 @@ class StatementList implements StatementListInterface
         });
     }
 
+    public function prependLastStatement(string $content)
+    {
+        $this->prependStatement(self::LAST_STATEMENT_INDEX, $content);
+    }
+
     public function appendStatement(int $index, string $content)
     {
         $this->mutateStatement($index, function (StatementInterface $statement) use ($content) {
             return $statement->append($content);
         });
+    }
+
+    public function appendLastStatement(string $content)
+    {
+        $this->appendStatement(self::LAST_STATEMENT_INDEX, $content);
     }
 
     public function mutateStatement(int $index, callable $mutator)
@@ -74,6 +84,11 @@ class StatementList implements StatementListInterface
         if ($statement instanceof StatementInterface) {
             $this->replaceStatement($index, $mutator($statement));
         }
+    }
+
+    public function mutateLastStatement(callable $mutator)
+    {
+        $this->mutateStatement(self::LAST_STATEMENT_INDEX, $mutator);
     }
 
     public function replaceStatement(int $index, StatementInterface $statement)
