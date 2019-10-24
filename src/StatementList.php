@@ -86,4 +86,13 @@ class StatementList implements StatementListInterface
             $this->statements[$index] = $statement;
         }
     }
+
+    public function getStatement(int $index): ?StatementInterface
+    {
+        if ($index < 0) {
+            $index = count($this->statements) + $index;
+        }
+
+        return $this->statements[$index] ?? null;
+    }
 }
