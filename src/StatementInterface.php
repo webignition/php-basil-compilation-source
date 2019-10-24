@@ -8,4 +8,5 @@ interface StatementInterface extends SourceInterface
     public function prepend(string $content): StatementInterface;
     public function append(string $content): StatementInterface;
     public function mutate(callable $mutator): StatementInterface;
+    public function __toString(): string;
 }

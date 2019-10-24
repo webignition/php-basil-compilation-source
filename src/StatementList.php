@@ -77,9 +77,4 @@ class StatementList implements StatementListInterface
             }
         }
     }
-
-    public function __toString(): string
-    {
-        return implode("\n", $this->getStatements());
-    }
 }
