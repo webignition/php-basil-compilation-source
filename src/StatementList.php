@@ -143,17 +143,6 @@ class StatementList implements StatementListInterface
         }
     }
 
-    public function toCode(): string
-    {
-        $statements = $this->getStatements();
-
-        array_walk($statements, function (string &$statement) {
-            $statement .= ';';
-        });
-
-        return implode("\n", $statements);
-    }
-
     public function __toString(): string
     {
         return implode("\n", $this->getStatements());
