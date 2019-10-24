@@ -53,6 +53,13 @@ class StatementTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($expectedStatements, $statement->getStatements());
     }
 
+    public function testGetStatementObjects()
+    {
+        $statement = new Statement('statement');
+
+        $this->assertEquals([$statement], $statement->getStatementObjects());
+    }
+
     public function testPrepend()
     {
         $statement = new Statement('content');
