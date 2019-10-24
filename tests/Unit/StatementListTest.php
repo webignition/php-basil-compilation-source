@@ -10,6 +10,7 @@ use webignition\BasilCompilationSource\ClassDependency;
 use webignition\BasilCompilationSource\ClassDependencyCollection;
 use webignition\BasilCompilationSource\MetadataInterface;
 use webignition\BasilCompilationSource\Statement;
+use webignition\BasilCompilationSource\StatementInterface;
 use webignition\BasilCompilationSource\StatementList;
 use webignition\BasilCompilationSource\StatementListInterface;
 use webignition\BasilCompilationSource\Metadata;
@@ -333,5 +334,126 @@ class StatementListTest extends \PHPUnit\Framework\TestCase
 
         $statementList->appendLastStatement(' appended');
         $this->assertEquals(['statement1', 'statement2 appended'], $statementList->getStatements());
+    }
+
+    public function testAddClassDependencies()
+    {
+        $statement = new Statement('statement');
+        $this->assertEquals(new ClassDependencyCollection([]), $statement->getMetadata()->getClassDependencies());
+
+        $statementList = new StatementList([$statement]);
+
+        $classDependencies = new ClassDependencyCollection([
+            new ClassDependency(ClassDependency::class),
+        ]);
+
+        $statementList->addClassDependencies(0, $classDependencies);
+        $this->assertEquals($classDependencies, $statement->getMetadata()->getClassDependencies());
+    }
+
+    public function testAddClassDependenciesToLastStatement()
+    {
+        $statement = new Statement('statement2');
+        $this->assertEquals(new ClassDependencyCollection([]), $statement->getMetadata()->getClassDependencies());
+
+        $statementList = new StatementList([
+            new Statement('statement1'),
+            $statement,
+        ]);
+
+        $classDependencies = new ClassDependencyCollection([
+            new ClassDependency(ClassDependency::class),
+        ]);
+
+        $statementList->addClassDependenciesToLastStatement($classDependencies);
+        $this->assertEquals($classDependencies, $statement->getMetadata()->getClassDependencies());
+    }
+
+    public function testAddVariableDependencies()
+    {
+        $statement = new Statement('statement');
+        $this->assertEquals(
+            new VariablePlaceholderCollection([]),
+            $statement->getMetadata()->getVariableDependencies()
+        );
+
+        $statementList = new StatementList([$statement]);
+
+        $variableDependencies = VariablePlaceholderCollection::createCollection(['DEPENDENCY']);
+
+        $statementList->addVariableDependencies(0, $variableDependencies);
+        $this->assertEquals($variableDependencies, $statement->getMetadata()->getVariableDependencies());
+    }
+
+    public function testAddVariableDependenciesToLastStatement()
+    {
+        $statement = new Statement('statement2');
+        $this->assertEquals(
+            new VariablePlaceholderCollection([]),
+            $statement->getMetadata()->getVariableDependencies()
+        );
+
+        $statementList = new StatementList([
+            new Statement('statement1'),
+            $statement,
+        ]);
+
+        $variableDependencies = VariablePlaceholderCollection::createCollection(['DEPENDENCY']);
+
+        $statementList->addVariableDependenciesToLastStatement($variableDependencies);
+        $this->assertEquals($variableDependencies, $statement->getMetadata()->getVariableDependencies());
+    }
+
+    public function testAddVariableExports()
+    {
+        $statement = new Statement('statement');
+        $this->assertEquals(
+            new VariablePlaceholderCollection([]),
+            $statement->getMetadata()->getVariableExports()
+        );
+
+        $statementList = new StatementList([$statement]);
+
+        $variableExports = VariablePlaceholderCollection::createCollection(['DEPENDENCY']);
+
+        $statementList->addVariableExports(0, $variableExports);
+        $this->assertEquals($variableExports, $statement->getMetadata()->getVariableExports());
+    }
+
+    public function testAddVariableExportsToLastStatement()
+    {
+        $statement = new Statement('statement2');
+        $this->assertEquals(
+            new VariablePlaceholderCollection([]),
+            $statement->getMetadata()->getVariableExports()
+        );
+
+        $statementList = new StatementList([
+            new Statement('statement1'),
+            $statement,
+        ]);
+
+        $variableExports = VariablePlaceholderCollection::createCollection(['DEPENDENCY']);
+
+        $statementList->addVariableExportsToLastStatement($variableExports);
+        $this->assertEquals($variableExports, $statement->getMetadata()->getVariableExports());
+    }
+
+    public function testMutateLastStatement()
+    {
+        $statementList = new StatementList([
+            new Statement('statement1'),
+            new Statement('statement2'),
+        ]);
+
+        $this->assertEquals(['statement1', 'statement2'], $statementList->getStatements());
+
+        $statementList->mutateLastStatement(function (StatementInterface $statement) {
+            $statement = $statement->append('!');
+            $statement = $statement->prepend('!');
+
+            return $statement;
+        });
+        $this->assertEquals(['statement1', '!statement2!'], $statementList->getStatements());
     }
 }
