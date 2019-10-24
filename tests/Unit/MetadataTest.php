@@ -15,11 +15,11 @@ class MetadataTest extends \PHPUnit\Framework\TestCase
 {
     public function testConstruct()
     {
-        $compilationMetadata = new Metadata();
+        $metadata = new Metadata();
 
-        $this->assertEquals(new ClassDependencyCollection(), $compilationMetadata->getClassDependencies());
-        $this->assertEquals(new VariablePlaceholderCollection(), $compilationMetadata->getVariableDependencies());
-        $this->assertEquals(new VariablePlaceholderCollection(), $compilationMetadata->getVariableExports());
+        $this->assertEquals(new ClassDependencyCollection(), $metadata->getClassDependencies());
+        $this->assertEquals(new VariablePlaceholderCollection(), $metadata->getVariableDependencies());
+        $this->assertEquals(new VariablePlaceholderCollection(), $metadata->getVariableExports());
     }
 
     public function testWithClassDependencies()
@@ -29,14 +29,14 @@ class MetadataTest extends \PHPUnit\Framework\TestCase
             new ClassDependency('1'),
         ]);
 
-        $compilationMetadata = new Metadata();
-        $this->assertEquals($emptyClassDependencies, $compilationMetadata->getClassDependencies());
+        $metadata = new Metadata();
+        $this->assertEquals($emptyClassDependencies, $metadata->getClassDependencies());
 
-        $compilationMetadata = $compilationMetadata->withClassDependencies($classDependencies);
-        $this->assertEquals($classDependencies, $compilationMetadata->getClassDependencies());
+        $metadata = $metadata->withClassDependencies($classDependencies);
+        $this->assertEquals($classDependencies, $metadata->getClassDependencies());
 
-        $compilationMetadata = $compilationMetadata->withClassDependencies($emptyClassDependencies);
-        $this->assertEquals($emptyClassDependencies, $compilationMetadata->getClassDependencies());
+        $metadata = $metadata->withClassDependencies($emptyClassDependencies);
+        $this->assertEquals($emptyClassDependencies, $metadata->getClassDependencies());
     }
 
     public function testWithVariableDependencies()
@@ -44,14 +44,14 @@ class MetadataTest extends \PHPUnit\Framework\TestCase
         $emptyVariableDependencies = new VariablePlaceholderCollection();
         $variableDependencies = VariablePlaceholderCollection::createCollection(['1']);
 
-        $compilationMetadata = new Metadata();
-        $this->assertEquals($emptyVariableDependencies, $compilationMetadata->getVariableDependencies());
+        $metadata = new Metadata();
+        $this->assertEquals($emptyVariableDependencies, $metadata->getVariableDependencies());
 
-        $compilationMetadata = $compilationMetadata->withVariableDependencies($variableDependencies);
-        $this->assertEquals($variableDependencies, $compilationMetadata->getVariableDependencies());
+        $metadata = $metadata->withVariableDependencies($variableDependencies);
+        $this->assertEquals($variableDependencies, $metadata->getVariableDependencies());
 
-        $compilationMetadata = $compilationMetadata->withVariableDependencies($emptyVariableDependencies);
-        $this->assertEquals($emptyVariableDependencies, $compilationMetadata->getVariableDependencies());
+        $metadata = $metadata->withVariableDependencies($emptyVariableDependencies);
+        $this->assertEquals($emptyVariableDependencies, $metadata->getVariableDependencies());
     }
 
     public function testWithVariableExports()
@@ -59,17 +59,17 @@ class MetadataTest extends \PHPUnit\Framework\TestCase
         $emptyVariableExports = new VariablePlaceholderCollection();
         $variableExports = VariablePlaceholderCollection::createCollection(['1']);
 
-        $compilationMetadata = new Metadata();
-        $this->assertEquals($emptyVariableExports, $compilationMetadata->getVariableExports());
+        $metadata = new Metadata();
+        $this->assertEquals($emptyVariableExports, $metadata->getVariableExports());
 
-        $compilationMetadata = $compilationMetadata->withVariableExports($variableExports);
-        $this->assertEquals($variableExports, $compilationMetadata->getVariableExports());
+        $metadata = $metadata->withVariableExports($variableExports);
+        $this->assertEquals($variableExports, $metadata->getVariableExports());
 
-        $compilationMetadata = $compilationMetadata->withVariableExports($emptyVariableExports);
-        $this->assertEquals($emptyVariableExports, $compilationMetadata->getVariableExports());
+        $metadata = $metadata->withVariableExports($emptyVariableExports);
+        $this->assertEquals($emptyVariableExports, $metadata->getVariableExports());
     }
 
-    public function testWithAdditionalClassDependencies()
+    public function testAddClassDependencies()
     {
         $classDependencies1 = new ClassDependencyCollection([
             new ClassDependency('1'),
@@ -79,72 +79,72 @@ class MetadataTest extends \PHPUnit\Framework\TestCase
             new ClassDependency('2'),
         ]);
 
-        $compilationMetadata = new Metadata();
-        $this->assertEquals(new ClassDependencyCollection(), $compilationMetadata->getClassDependencies());
+        $metadata = new Metadata();
+        $this->assertEquals(new ClassDependencyCollection(), $metadata->getClassDependencies());
 
-        $compilationMetadata = $compilationMetadata->withAdditionalClassDependencies($classDependencies1);
+        $metadata->addClassDependencies($classDependencies1);
         $this->assertEquals(
             new ClassDependencyCollection([
                 new ClassDependency('1'),
             ]),
-            $compilationMetadata->getClassDependencies()
+            $metadata->getClassDependencies()
         );
 
-        $compilationMetadata = $compilationMetadata->withAdditionalClassDependencies($classDependencies2);
+        $metadata->addClassDependencies($classDependencies2);
         $this->assertEquals(
             new ClassDependencyCollection([
                 new ClassDependency('1'),
                 new ClassDependency('2'),
             ]),
-            $compilationMetadata->getClassDependencies()
+            $metadata->getClassDependencies()
         );
     }
 
-    public function testWithAdditionalVariableDependencies()
+    public function testAddVariableDependencies()
     {
         $variableDependencies1 = VariablePlaceholderCollection::createCollection(['1']);
         $variableDependencies2 = VariablePlaceholderCollection::createCollection(['2']);
 
-        $compilationMetadata = new Metadata();
-        $this->assertEquals(new VariablePlaceholderCollection(), $compilationMetadata->getVariableDependencies());
+        $metadata = new Metadata();
+        $this->assertEquals(new VariablePlaceholderCollection(), $metadata->getVariableDependencies());
 
-        $compilationMetadata = $compilationMetadata->withAdditionalVariableDependencies($variableDependencies1);
+        $metadata->addVariableDependencies($variableDependencies1);
         $this->assertEquals(
             VariablePlaceholderCollection::createCollection(['1']),
-            $compilationMetadata->getVariableDependencies()
+            $metadata->getVariableDependencies()
         );
 
-        $compilationMetadata = $compilationMetadata->withAdditionalVariableDependencies($variableDependencies2);
+        $metadata->addVariableDependencies($variableDependencies2);
         $this->assertEquals(
             VariablePlaceholderCollection::createCollection(['1', '2']),
-            $compilationMetadata->getVariableDependencies()
+            $metadata->getVariableDependencies()
         );
     }
 
-    public function testWithAdditionalVariableExports()
+    public function testAddlVariableExports()
     {
         $variableExports1 = VariablePlaceholderCollection::createCollection(['1']);
         $variableExports2 = VariablePlaceholderCollection::createCollection(['2']);
 
-        $compilationMetadata = new Metadata();
-        $this->assertEquals(new VariablePlaceholderCollection(), $compilationMetadata->getVariableExports());
+        $metadata = new Metadata();
+        $this->assertEquals(new VariablePlaceholderCollection(), $metadata->getVariableExports());
 
-        $compilationMetadata = $compilationMetadata->withAdditionalVariableExports($variableExports1);
+        $metadata->addVariableExports($variableExports1);
         $this->assertEquals(
             VariablePlaceholderCollection::createCollection(['1']),
-            $compilationMetadata->getVariableExports()
+            $metadata->getVariableExports()
         );
 
-        $compilationMetadata = $compilationMetadata->withAdditionalVariableExports($variableExports2);
+        $metadata->addVariableExports($variableExports2);
         $this->assertEquals(
             VariablePlaceholderCollection::createCollection(['1', '2']),
-            $compilationMetadata->getVariableExports()
+            $metadata->getVariableExports()
         );
     }
 
     public function testMerge()
     {
-        $compilationMetadata = new Metadata();
+        $metadata = new Metadata();
         $compilationMetadata1 = (new Metadata())
             ->withClassDependencies(new ClassDependencyCollection([
                 new ClassDependency('class1'),
@@ -163,26 +163,26 @@ class MetadataTest extends \PHPUnit\Framework\TestCase
             ->withVariableDependencies(VariablePlaceholderCollection::createCollection(['variableDependency2']))
             ->withVariableExports(VariablePlaceholderCollection::createCollection(['variableExport2']));
 
-        $compilationMetadata = $compilationMetadata->merge([$compilationMetadata1]);
+        $metadata = $metadata->merge([$compilationMetadata1]);
         $this->assertEquals(
             (new Metadata())
                 ->withClassDependencies(new ClassDependencyCollection([
                     new ClassDependency('class1'),
                 ])),
-            $compilationMetadata
+            $metadata
         );
 
-        $compilationMetadata = $compilationMetadata->merge([$compilationMetadata2]);
+        $metadata = $metadata->merge([$compilationMetadata2]);
         $this->assertEquals(
             (new Metadata())
                 ->withClassDependencies(new ClassDependencyCollection([
                     new ClassDependency('class1'),
                 ]))
                 ->withVariableDependencies(VariablePlaceholderCollection::createCollection(['variableDependency1'])),
-            $compilationMetadata
+            $metadata
         );
 
-        $compilationMetadata = $compilationMetadata->merge([$compilationMetadata3]);
+        $metadata = $metadata->merge([$compilationMetadata3]);
         $this->assertEquals(
             (new Metadata())
                 ->withClassDependencies(new ClassDependencyCollection([
@@ -190,10 +190,10 @@ class MetadataTest extends \PHPUnit\Framework\TestCase
                 ]))
                 ->withVariableDependencies(VariablePlaceholderCollection::createCollection(['variableDependency1']))
                 ->withVariableExports(VariablePlaceholderCollection::createCollection(['variableExport1'])),
-            $compilationMetadata
+            $metadata
         );
 
-        $compilationMetadata = $compilationMetadata->merge([$compilationMetadata4]);
+        $metadata = $metadata->merge([$compilationMetadata4]);
         $this->assertEquals(
             (new Metadata())
                 ->withClassDependencies(new ClassDependencyCollection([
@@ -208,7 +208,7 @@ class MetadataTest extends \PHPUnit\Framework\TestCase
                     'variableExport1',
                     'variableExport2',
                 ])),
-            $compilationMetadata
+            $metadata
         );
     }
 }

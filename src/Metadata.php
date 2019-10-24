@@ -55,32 +55,19 @@ class Metadata implements MetadataInterface
         return $new;
     }
 
-    public function withAdditionalClassDependencies(
-        ClassDependencyCollection $classDependencies
-    ): MetadataInterface {
-        $new = clone $this;
-        $new->classDependencies = $new->classDependencies->merge([$classDependencies]);
-
-        return $new;
+    public function addClassDependencies(ClassDependencyCollection $classDependencies)
+    {
+        $this->classDependencies = $this->classDependencies->merge([$classDependencies]);
     }
 
-    public function withAdditionalVariableDependencies(
-        VariablePlaceholderCollection $variableDependencies
-    ): MetadataInterface {
-        $new = clone $this;
-        $new->variableDependencies = $new->variableDependencies->merge([$variableDependencies]);
-
-        return $new;
+    public function addVariableDependencies(VariablePlaceholderCollection $variableDependencies)
+    {
+        $this->variableDependencies = $this->variableDependencies->merge([$variableDependencies]);
     }
 
-
-    public function withAdditionalVariableExports(
-        VariablePlaceholderCollection $variableExports
-    ): MetadataInterface {
-        $new = clone $this;
-        $new->variableExports = $new->variableExports->merge([$variableExports]);
-
-        return $new;
+    public function addVariableExports(VariablePlaceholderCollection $variableExports)
+    {
+        $this->variableExports = $this->variableExports->merge([$variableExports]);
     }
 
     /**
