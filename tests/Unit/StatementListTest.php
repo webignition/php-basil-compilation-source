@@ -292,11 +292,20 @@ class StatementListTest extends \PHPUnit\Framework\TestCase
         $statement1 = new Statement('statement1');
         $statement2 = new Statement('statement2');
 
-        $statementList = new StatementList([
-            $statement1,
-            $statement2,
-        ]);
-
+        $statementList = new StatementList([$statement1, $statement2]);
         $this->assertEquals($statement2, $statementList->getLastStatement());
+    }
+
+    public function testReplaceLastStatement()
+    {
+        $statement1 = new Statement('statement1');
+        $statement2 = new Statement('statement2');
+        $statement3 = new Statement('statement3');
+
+        $statementList = new StatementList([$statement1, $statement2]);
+        $this->assertEquals($statement2, $statementList->getLastStatement());
+
+        $statementList->replaceLastStatement($statement3);
+        $this->assertEquals($statement3, $statementList->getLastStatement());
     }
 }
