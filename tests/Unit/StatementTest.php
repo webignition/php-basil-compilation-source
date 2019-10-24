@@ -6,12 +6,8 @@ declare(strict_types=1);
 
 namespace webignition\BasilCompilationSource\Tests\Unit;
 
-use webignition\BasilCompilationSource\ClassDependency;
-use webignition\BasilCompilationSource\ClassDependencyCollection;
 use webignition\BasilCompilationSource\MetadataInterface;
 use webignition\BasilCompilationSource\Statement;
-use webignition\BasilCompilationSource\StatementList;
-use webignition\BasilCompilationSource\StatementListInterface;
 use webignition\BasilCompilationSource\Metadata;
 use webignition\BasilCompilationSource\VariablePlaceholderCollection;
 
@@ -55,6 +51,22 @@ class StatementTest extends \PHPUnit\Framework\TestCase
         $statement = new Statement($content);
 
         $this->assertSame($expectedStatements, $statement->getStatements());
+    }
+
+    public function testPrepend()
+    {
+        $statement = new Statement('content');
+        $statement = $statement->prepend('prepended ');
+
+        $this->assertEquals('prepended content', $statement->getContent());
+    }
+
+    public function testAppend()
+    {
+        $statement = new Statement('content');
+        $statement = $statement->append(' appended');
+
+        $this->assertEquals('content appended', $statement->getContent());
     }
 
     public function testToString()
