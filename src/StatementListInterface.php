@@ -15,4 +15,7 @@ interface StatementListInterface extends SourceInterface
     public function replaceLastStatement(StatementInterface $statement);
     public function getStatement(int $index): ?StatementInterface;
     public function getLastStatement(): ?StatementInterface;
+    public function prependLastStatement(string $content);
+    public function appendLastStatement(string $content);
+    public function mutateLastStatement(callable $mutator);
 }
