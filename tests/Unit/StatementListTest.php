@@ -253,4 +253,16 @@ class StatementListTest extends \PHPUnit\Framework\TestCase
             ],
         ];
     }
+
+    public function testReplaceStatement()
+    {
+        $statement1 = new Statement('statement1');
+        $statement2 = new Statement('statement2');
+
+        $statementList = new StatementList([$statement1]);
+        $this->assertEquals([$statement1], $statementList->getStatementObjects());
+
+        $statementList->replaceStatement(0, $statement2);
+        $this->assertEquals([$statement2], $statementList->getStatementObjects());
+    }
 }

@@ -77,4 +77,15 @@ class StatementList implements StatementListInterface
             }
         }
     }
+
+    public function replaceStatement(int $index, StatementInterface $statement)
+    {
+        if ($index < 0) {
+            $index = count($this->statements) + $index;
+        }
+
+        if (array_key_exists($index, $this->statements)) {
+            $this->statements[$index] = $statement;
+        }
+    }
 }
