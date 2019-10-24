@@ -4,6 +4,8 @@ namespace webignition\BasilCompilationSource;
 
 class StatementList implements StatementListInterface
 {
+    const LAST_STATEMENT_INDEX = -1;
+
     /**
      * @var StatementInterface[]
      */
@@ -86,6 +88,11 @@ class StatementList implements StatementListInterface
     public function getStatement(int $index): ?StatementInterface
     {
         return $this->statements[$this->translateIndex($index)] ?? null;
+    }
+
+    public function getLastStatement(): ?StatementInterface
+    {
+        return $this->getStatement(self::LAST_STATEMENT_INDEX);
     }
 
     private function translateIndex(int $index): int
