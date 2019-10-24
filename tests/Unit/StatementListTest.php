@@ -448,12 +448,10 @@ class StatementListTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(['statement1', 'statement2'], $statementList->getStatements());
 
-        $statementList->mutateLastStatement(function (StatementInterface $statement) {
-            $statement = $statement->append('!');
-            $statement = $statement->prepend('!');
-
-            return $statement;
+        $statementList->mutateLastStatement(function (string $content) {
+            return '!' . $content . '!';
         });
+
         $this->assertEquals(['statement1', '!statement2!'], $statementList->getStatements());
     }
 }
