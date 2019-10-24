@@ -9,6 +9,4 @@ interface SourceInterface
      */
     public function getStatements(): array;
     public function getMetadata(): MetadataInterface;
-
-    public function __toString(): string;
 }

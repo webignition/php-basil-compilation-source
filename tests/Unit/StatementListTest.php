@@ -253,31 +253,4 @@ class StatementListTest extends \PHPUnit\Framework\TestCase
             ],
         ];
     }
-
-    /**
-     * @dataProvider toStringDataProvider
-     */
-    public function testToString(StatementListInterface $source, string $expectedString)
-    {
-        $this->assertSame($expectedString, (string) $source);
-    }
-
-    public function toStringDataProvider(): array
-    {
-        return [
-            'empty' => [
-                'statementList' => new StatementList([]),
-                'expectedString' => '',
-            ],
-            'has statements' => [
-                'statementList' => new StatementList([
-                    new Statement('statement1'),
-                    new Statement('statement2'),
-                ]),
-                'expectedString' =>
-                    "statement1\n" .
-                    "statement2",
-            ],
-        ];
-    }
 }
