@@ -26,6 +26,11 @@ class Statement implements StatementInterface
         return [$this->content];
     }
 
+    public function getStatementObjects(): array
+    {
+        return [$this];
+    }
+
     public function getMetadata(): MetadataInterface
     {
         return $this->metadata;
