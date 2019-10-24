@@ -5,25 +5,17 @@ namespace webignition\BasilCompilationSource;
 class StatementList implements StatementListInterface
 {
     /**
-     * @var StatementListInterface[]
+     * @var StatementInterface[]
      */
-    private $predecessors;
+    private $statements = [];
 
-    /**
-     * @var string[]
-     */
-    private $statements;
-
-    /**
-     * @var MetadataInterface
-     */
-    private $metadata;
-
-    public function __construct()
+    public function __construct(array $statements)
     {
-        $this->predecessors = [];
-        $this->statements = [];
-        $this->metadata = new Metadata();
+        foreach ($statements as $statement) {
+            if ($statement instanceof StatementInterface) {
+                $this->statements[] = $statement;
+            }
+        }
     }
 
     /**
@@ -33,113 +25,56 @@ class StatementList implements StatementListInterface
     {
         $statements = [];
 
-        foreach ($this->predecessors as $predecessor) {
-            if ($predecessor instanceof StatementListInterface) {
-                $statements = array_merge($statements, $predecessor->getStatements());
-            }
+        foreach ($this->statements as $statement) {
+            $statements[] = (string) $statement;
         }
 
-        return array_merge($statements, $this->statements);
+        return $statements;
     }
 
     public function getMetadata(): MetadataInterface
     {
         $metadata = new Metadata();
-        $metadata = $metadata->merge([$this->metadata]);
 
-        foreach ($this->predecessors as $predecessor) {
-            if ($predecessor instanceof StatementListInterface) {
-                $metadata = $metadata->merge([$predecessor->getMetadata()]);
-            }
+        foreach ($this->statements as $statement) {
+            $metadata = $metadata->merge([$statement->getMetadata()]);
         }
 
         return $metadata;
     }
 
     /**
-     * @return StatementListInterface[]
+     * @return StatementInterface[]
      */
-    public function getPredecessors(): array
+    public function getStatementObjects(): array
     {
-        return $this->predecessors;
-    }
-
-    /**
-     * @param StatementListInterface[] $predecessors
-     *
-     * @return StatementListInterface
-     */
-    public function withPredecessors(array $predecessors): StatementListInterface
-    {
-        $predecessors = array_filter($predecessors, function ($predecessor) {
-            return $predecessor instanceof StatementListInterface;
-        });
-
-        $new = clone $this;
-        $new->predecessors = $predecessors;
-
-        return $new;
-    }
-
-    /**
-     * @param string[] $statements
-     *
-     * @return StatementListInterface
-     */
-    public function withStatements(array $statements): StatementListInterface
-    {
-        $new = clone $this;
-        $new->statements = $statements;
-
-        return $new;
-    }
-
-    public function withMetadata(MetadataInterface $metadata): StatementListInterface
-    {
-        $new = clone $this;
-        $new->metadata = $metadata;
-
-        return $new;
+        return $this->statements;
     }
 
     public function prependStatement(int $index, string $content)
     {
-        $this->mutateStatement($index, function (string $statement) use ($content) {
-            return $content . $statement;
+        $this->mutateStatement($index, function (StatementInterface $statement) use ($content) {
+            return $statement->prepend($content);
         });
     }
 
     public function appendStatement(int $index, string $content)
     {
-        $this->mutateStatement($index, function (string $statement) use ($content) {
-            return $statement . $content;
+        $this->mutateStatement($index, function (StatementInterface $statement) use ($content) {
+            return $statement->append($content);
         });
     }
 
     public function mutateStatement(int $index, callable $mutator)
     {
-        $statements = $this->getStatements();
-
         if ($index < 0) {
-            $index = count($statements) + $index;
+            $index = count($this->statements) + $index;
         }
 
-        $statementIndex = 0;
-
-        foreach ($this->predecessors as $predecessor) {
-            foreach ($predecessor->getStatements() as $predecessorStatementIndex => $predecessorStatement) {
-                if ($statementIndex === $index) {
-                    $predecessor->mutateStatement($predecessorStatementIndex, $mutator);
-
-                    return;
-                }
-
-                $statementIndex++;
+        foreach ($this->statements as $statementIndex => $statement) {
+            if ($statementIndex === $index) {
+                $this->statements[$statementIndex] = $mutator($statement);
             }
-        }
-
-        if (array_key_exists($index, $statements)) {
-            $this->statements[$index] = $mutator($statements[$index]);
         }
     }
 
