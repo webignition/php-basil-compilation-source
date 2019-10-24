@@ -71,10 +71,8 @@ class StatementList implements StatementListInterface
             $index = count($this->statements) + $index;
         }
 
-        foreach ($this->statements as $statementIndex => $statement) {
-            if ($statementIndex === $index) {
-                $this->statements[$statementIndex] = $mutator($statement);
-            }
+        if (array_key_exists($index, $this->statements)) {
+            $this->replaceStatement($index, $mutator($this->statements[$index]));
         }
     }
 
