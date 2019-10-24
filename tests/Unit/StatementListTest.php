@@ -286,4 +286,17 @@ class StatementListTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($statementList->getStatement(2));
         $this->assertNull($statementList->getStatement(-3));
     }
+
+    public function testGetLastStatement()
+    {
+        $statement1 = new Statement('statement1');
+        $statement2 = new Statement('statement2');
+
+        $statementList = new StatementList([
+            $statement1,
+            $statement2,
+        ]);
+
+        $this->assertEquals($statement2, $statementList->getLastStatement());
+    }
 }
