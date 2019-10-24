@@ -314,58 +314,6 @@ class StatementListTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider toCodeDataProvider
-     */
-    public function testToCode(StatementListInterface $source, string $expectedString)
-    {
-        $this->assertSame($expectedString, $source->toCode());
-    }
-
-    public function toCodeDataProvider(): array
-    {
-        return [
-            'empty' => [
-                'statementList' => new StatementList(),
-                'expectedString' => '',
-            ],
-            'statements only' => [
-                'statementList' => (new StatementList())
-                    ->withStatements(['statement1', 'statement2']),
-                'expectedString' =>
-                    "statement1;\n" .
-                    "statement2;",
-            ],
-            'predecessors only' => [
-                'statementList' => (new StatementList())
-                    ->withPredecessors([
-                        (new StatementList())->withStatements(['statement1', 'statement2']),
-                        (new StatementList())->withStatements(['statement3', 'statement4']),
-                    ]),
-                'expectedString' =>
-                    "statement1;\n" .
-                    "statement2;\n" .
-                    "statement3;\n" .
-                    "statement4;",
-            ],
-            'predecessors and statements' => [
-                'statementList' => (new StatementList())
-                    ->withStatements(['statement5', 'statement6'])
-                    ->withPredecessors([
-                        (new StatementList())->withStatements(['statement1', 'statement2']),
-                        (new StatementList())->withStatements(['statement3', 'statement4']),
-                    ]),
-                'expectedString' =>
-                    "statement1;\n" .
-                    "statement2;\n" .
-                    "statement3;\n" .
-                    "statement4;\n" .
-                    "statement5;\n" .
-                    "statement6;",
-            ],
-        ];
-    }
-
-    /**
      * @dataProvider toStringDataProvider
      */
     public function testToString(StatementListInterface $source, string $expectedString)

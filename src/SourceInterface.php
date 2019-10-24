@@ -10,6 +10,5 @@ interface SourceInterface
     public function getStatements(): array;
     public function getMetadata(): MetadataInterface;
 
-    public function toCode(): string;
     public function __toString(): string;
 }
