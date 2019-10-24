@@ -67,23 +67,33 @@ class StatementList implements StatementListInterface
 
     public function mutateStatement(int $index, callable $mutator)
     {
-        if ($index < 0) {
-            $index = count($this->statements) + $index;
-        }
+        $statement = $this->getStatement($index);
 
-        if (array_key_exists($index, $this->statements)) {
-            $this->replaceStatement($index, $mutator($this->statements[$index]));
+        if ($statement instanceof StatementInterface) {
+            $this->replaceStatement($index, $mutator($statement));
         }
     }
 
     public function replaceStatement(int $index, StatementInterface $statement)
     {
+        $currentStatement = $this->getStatement($index);
+
+        if ($currentStatement instanceof StatementInterface) {
+            $this->statements[$this->translateIndex($index)] = $statement;
+        }
+    }
+
+    public function getStatement(int $index): ?StatementInterface
+    {
+        return $this->statements[$this->translateIndex($index)] ?? null;
+    }
+
+    private function translateIndex(int $index): int
+    {
         if ($index < 0) {
             $index = count($this->statements) + $index;
         }
 
-        if (array_key_exists($index, $this->statements)) {
-            $this->statements[$index] = $statement;
-        }
+        return $index;
     }
 }
