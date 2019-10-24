@@ -88,7 +88,9 @@ class StatementList implements StatementListInterface
 
     public function mutateLastStatement(callable $mutator)
     {
-        $this->mutateStatement(self::LAST_STATEMENT_INDEX, $mutator);
+        $this->mutateStatement(self::LAST_STATEMENT_INDEX, function (StatementInterface $statement) use ($mutator) {
+            return $statement->mutate($mutator);
+        });
     }
 
     public function replaceStatement(int $index, StatementInterface $statement)
