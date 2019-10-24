@@ -123,4 +123,46 @@ class StatementList implements StatementListInterface
 
         return $index;
     }
+
+    public function addClassDependencies(int $index, ClassDependencyCollection $classDependencies)
+    {
+        $statement = $this->getStatement($index);
+
+        if ($statement instanceof StatementInterface) {
+            $statement->getMetadata()->addClassDependencies($classDependencies);
+        }
+    }
+
+    public function addVariableDependencies(int $index, VariablePlaceholderCollection $variableDependencies)
+    {
+        $statement = $this->getStatement($index);
+
+        if ($statement instanceof StatementInterface) {
+            $statement->getMetadata()->addVariableDependencies($variableDependencies);
+        }
+    }
+
+    public function addVariableExports(int $index, VariablePlaceholderCollection $variableExports)
+    {
+        $statement = $this->getStatement($index);
+
+        if ($statement instanceof StatementInterface) {
+            $statement->getMetadata()->addVariableExports($variableExports);
+        }
+    }
+
+    public function addClassDependenciesToLastStatement(ClassDependencyCollection $classDependencies)
+    {
+        $this->addClassDependencies(self::LAST_STATEMENT_INDEX, $classDependencies);
+    }
+
+    public function addVariableDependenciesToLastStatement(VariablePlaceholderCollection $variableDependencies)
+    {
+        $this->addVariableDependencies(self::LAST_STATEMENT_INDEX, $variableDependencies);
+    }
+
+    public function addVariableExportsToLastStatement(VariablePlaceholderCollection $variableExports)
+    {
+        $this->addVariableExports(self::LAST_STATEMENT_INDEX, $variableExports);
+    }
 }
