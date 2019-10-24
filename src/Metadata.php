@@ -70,28 +70,10 @@ class Metadata implements MetadataInterface
         $this->variableExports = $this->variableExports->merge([$variableExports]);
     }
 
-    /**
-     * @param MetadataInterface[] $metadataCollection
-     *
-     * @return MetadataInterface
-     */
-    public function merge(array $metadataCollection): MetadataInterface
+    public function add(MetadataInterface $metadata)
     {
-        $classDependencies = new ClassDependencyCollection();
-        $variableDependencies = new VariablePlaceholderCollection();
-        $variableExports = new VariablePlaceholderCollection();
-
-        foreach ($metadataCollection as $metadata) {
-            $classDependencies = $classDependencies->merge([$metadata->getClassDependencies()]);
-            $variableDependencies = $variableDependencies->merge([$metadata->getVariableDependencies()]);
-            $variableExports = $variableExports->merge([$metadata->getVariableExports()]);
-        }
-
-        $new = clone $this;
-        $new->classDependencies = $new->classDependencies->merge([$classDependencies]);
-        $new->variableDependencies = $new->variableDependencies->merge([$variableDependencies]);
-        $new->variableExports = $new->variableExports->merge([$variableExports]);
-
-        return $new;
+        $this->addClassDependencies($metadata->getClassDependencies());
+        $this->addVariableDependencies($metadata->getVariableDependencies());
+        $this->addVariableExports($metadata->getVariableExports());
     }
 }

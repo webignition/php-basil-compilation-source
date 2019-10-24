@@ -16,10 +16,5 @@ interface MetadataInterface
     public function addVariableDependencies(VariablePlaceholderCollection $variableDependencies);
     public function addVariableExports(VariablePlaceholderCollection $variableExports);
 
-    /**
-     * @param MetadataInterface[] $metadataCollection
-     *
-     * @return MetadataInterface
-     */
-    public function merge(array $metadataCollection): MetadataInterface;
+    public function add(MetadataInterface $metadata);
 }

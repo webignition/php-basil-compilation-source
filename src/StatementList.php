@@ -37,7 +37,7 @@ class StatementList implements StatementListInterface
         $metadata = new Metadata();
 
         foreach ($this->statements as $statement) {
-            $metadata = $metadata->merge([$statement->getMetadata()]);
+            $metadata->add($statement->getMetadata());
         }
 
         return $metadata;
