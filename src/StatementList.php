@@ -69,7 +69,7 @@ class StatementList implements StatementListInterface
         });
     }
 
-    public function replaceStatement(int $index, StatementInterface $statement)
+    private function replaceStatement(int $index, StatementInterface $statement)
     {
         $currentStatement = $this->getStatement($index);
 
