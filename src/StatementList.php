@@ -83,11 +83,6 @@ class StatementList implements StatementListInterface
         return $this->statements[$this->translateIndex($index)] ?? null;
     }
 
-    public function getLastStatement(): ?StatementInterface
-    {
-        return $this->getStatement(self::LAST_STATEMENT_INDEX);
-    }
-
     private function translateIndex(int $index): int
     {
         if ($index < 0) {
