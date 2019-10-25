@@ -147,60 +147,6 @@ class StatementListTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @dataProvider appendStatementDataProvider
-     */
-    public function testAppendStatement(
-        StatementListInterface $source,
-        int $index,
-        string $content,
-        array $expectedStatements
-    ) {
-        $source->appendStatement($index, $content);
-
-        $this->assertEquals($expectedStatements, $source->getStatements());
-    }
-
-    public function appendStatementDataProvider(): array
-    {
-        return [
-            'append first of one' => [
-                'statementList' => new StatementList([
-                    new Statement('statement'),
-                ]),
-                'index' => 0,
-                'content' => ' appended',
-                'expectedStatements' => ['statement appended'],
-            ],
-            'append first of two' => [
-                'statementList' => new StatementList([
-                    new Statement('statement1'),
-                    new Statement('statement2'),
-                ]),
-                'index' => 0,
-                'content' => ' appended',
-                'expectedStatements' => ['statement1 appended', 'statement2'],
-            ],
-            'append last of one' => [
-                'statementList' => new StatementList([
-                    new Statement('statement'),
-                ]),
-                'index' => -1,
-                'content' => ' appended',
-                'expectedStatements' => ['statement appended'],
-            ],
-            'append last of two' => [
-                'statementList' => new StatementList([
-                    new Statement('statement1'),
-                    new Statement('statement2'),
-                ]),
-                'index' => -1,
-                'content' => ' appended',
-                'expectedStatements' => ['statement1', 'statement2 appended'],
-            ],
-        ];
-    }
-
     public function testReplaceStatement()
     {
         $statement1 = new Statement('statement1');
