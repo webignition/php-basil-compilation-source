@@ -92,7 +92,9 @@ class StatementList implements SourceInterface
         $statement = $this->getStatement($index);
 
         if ($statement instanceof StatementInterface) {
-            $this->statements[$this->translateIndex($index)] = $mutator($statement);
+            $mutator($statement);
+
+            $this->statements[$this->translateIndex($index)] = $statement;
         }
     }
 

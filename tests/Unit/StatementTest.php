@@ -65,7 +65,7 @@ class StatementTest extends \PHPUnit\Framework\TestCase
     public function testPrepend()
     {
         $statement = new Statement('content');
-        $statement = $statement->prepend('prepended ');
+        $statement->prepend('prepended ');
 
         $this->assertEquals('prepended content', $statement->getContent());
     }
@@ -73,7 +73,7 @@ class StatementTest extends \PHPUnit\Framework\TestCase
     public function testAppend()
     {
         $statement = new Statement('content');
-        $statement = $statement->append(' appended');
+        $statement->append(' appended');
 
         $this->assertEquals('content appended', $statement->getContent());
     }
@@ -81,7 +81,7 @@ class StatementTest extends \PHPUnit\Framework\TestCase
     public function testMutate()
     {
         $statement = new Statement('content');
-        $statement = $statement->mutate(function (string $content) {
+        $statement->mutate(function (string $content) {
             return '!' . $content . '!';
         });
 
@@ -91,7 +91,7 @@ class StatementTest extends \PHPUnit\Framework\TestCase
     public function testMutateLastStatement()
     {
         $statement = new Statement('content');
-        $statement = $statement->mutateLastStatement(function (string $content) {
+        $statement->mutateLastStatement(function (string $content) {
             return '!' . $content . '!';
         });
 
