@@ -18,19 +18,6 @@ class Statement implements StatementInterface
         return $this->content;
     }
 
-    /**
-     * @return string[]
-     */
-    public function getStatements(): array
-    {
-        return [$this->content];
-    }
-
-    public function getStatementObjects(): array
-    {
-        return [$this];
-    }
-
     public function getMetadata(): MetadataInterface
     {
         return $this->metadata;
@@ -55,22 +42,17 @@ class Statement implements StatementInterface
         $this->content = $mutator($this->content);
     }
 
-    public function mutateLastStatement(callable $mutator)
-    {
-        $this->mutate($mutator);
-    }
-
-    public function addClassDependenciesToLastStatement(ClassDependencyCollection $classDependencies)
+    public function addClassDependencies(ClassDependencyCollection $classDependencies)
     {
         $this->metadata->addClassDependencies($classDependencies);
     }
 
-    public function addVariableDependenciesToLastStatement(VariablePlaceholderCollection $variableDependencies)
+    public function addVariableDependencies(VariablePlaceholderCollection $variableDependencies)
     {
         $this->metadata->addVariableDependencies($variableDependencies);
     }
 
-    public function addVariableExportsToLastStatement(VariablePlaceholderCollection $variableExports)
+    public function addVariableExports(VariablePlaceholderCollection $variableExports)
     {
         $this->metadata->addVariableExports($variableExports);
     }
