@@ -76,6 +76,26 @@ class StatementTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('content appended', $statement->getContent());
     }
 
+    public function testMutate()
+    {
+        $statement = new Statement('content');
+        $statement = $statement->mutate(function (string $content) {
+            return '!' . $content . '!';
+        });
+
+        $this->assertEquals('!content!', $statement->getContent());
+    }
+
+    public function testMutateLastStatement()
+    {
+        $statement = new Statement('content');
+        $statement = $statement->mutateLastStatement(function (string $content) {
+            return '!' . $content . '!';
+        });
+
+        $this->assertEquals('!content!', $statement->getContent());
+    }
+
     public function testToString()
     {
         $content = 'statement';
