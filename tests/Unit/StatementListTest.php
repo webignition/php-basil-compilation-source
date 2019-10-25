@@ -10,7 +10,6 @@ use webignition\BasilCompilationSource\ClassDependency;
 use webignition\BasilCompilationSource\ClassDependencyCollection;
 use webignition\BasilCompilationSource\MetadataInterface;
 use webignition\BasilCompilationSource\Statement;
-use webignition\BasilCompilationSource\StatementInterface;
 use webignition\BasilCompilationSource\StatementList;
 use webignition\BasilCompilationSource\StatementListInterface;
 use webignition\BasilCompilationSource\Metadata;
@@ -147,210 +146,6 @@ class StatementListTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @dataProvider prependStatementDataProvider
-     */
-    public function testPrependStatement(
-        StatementListInterface $statementList,
-        int $index,
-        string $content,
-        array $expectedStatements
-    ) {
-        $statementList->prependStatement($index, $content);
-
-        $this->assertEquals($expectedStatements, $statementList->getStatements());
-    }
-
-    public function prependStatementDataProvider(): array
-    {
-        return [
-            'prepend first of one' => [
-                'statementList' => new StatementList([
-                    new Statement('statement'),
-                ]),
-                'index' => 0,
-                'content' => 'prepended ',
-                'expectedStatements' => ['prepended statement'],
-            ],
-            'prepend first of two' => [
-                'statementList' => new StatementList([
-                    new Statement('statement1'),
-                    new Statement('statement2'),
-                ]),
-                'index' => 0,
-                'content' => 'prepended ',
-                'expectedStatements' => ['prepended statement1', 'statement2'],
-            ],
-            'prepend last of one' => [
-                'statementList' => new StatementList([
-                    new Statement('statement'),
-                ]),
-                'index' => -1,
-                'content' => 'prepended ',
-                'expectedStatements' => ['prepended statement'],
-            ],
-            'prepend last of two' => [
-                'statementList' => new StatementList([
-                    new Statement('statement1'),
-                    new Statement('statement2'),
-                ]),
-                'index' => -1,
-                'content' => 'prepended ',
-                'expectedStatements' => ['statement1', 'prepended statement2'],
-            ],
-        ];
-    }
-
-    /**
-     * @dataProvider appendStatementDataProvider
-     */
-    public function testAppendStatement(
-        StatementListInterface $source,
-        int $index,
-        string $content,
-        array $expectedStatements
-    ) {
-        $source->appendStatement($index, $content);
-
-        $this->assertEquals($expectedStatements, $source->getStatements());
-    }
-
-    public function appendStatementDataProvider(): array
-    {
-        return [
-            'append first of one' => [
-                'statementList' => new StatementList([
-                    new Statement('statement'),
-                ]),
-                'index' => 0,
-                'content' => ' appended',
-                'expectedStatements' => ['statement appended'],
-            ],
-            'append first of two' => [
-                'statementList' => new StatementList([
-                    new Statement('statement1'),
-                    new Statement('statement2'),
-                ]),
-                'index' => 0,
-                'content' => ' appended',
-                'expectedStatements' => ['statement1 appended', 'statement2'],
-            ],
-            'append last of one' => [
-                'statementList' => new StatementList([
-                    new Statement('statement'),
-                ]),
-                'index' => -1,
-                'content' => ' appended',
-                'expectedStatements' => ['statement appended'],
-            ],
-            'append last of two' => [
-                'statementList' => new StatementList([
-                    new Statement('statement1'),
-                    new Statement('statement2'),
-                ]),
-                'index' => -1,
-                'content' => ' appended',
-                'expectedStatements' => ['statement1', 'statement2 appended'],
-            ],
-        ];
-    }
-
-    public function testReplaceStatement()
-    {
-        $statement1 = new Statement('statement1');
-        $statement2 = new Statement('statement2');
-
-        $statementList = new StatementList([$statement1]);
-        $this->assertEquals([$statement1], $statementList->getStatementObjects());
-
-        $statementList->replaceStatement(0, $statement2);
-        $this->assertEquals([$statement2], $statementList->getStatementObjects());
-    }
-
-    public function testGetStatement()
-    {
-        $statement1 = new Statement('statement1');
-        $statement2 = new Statement('statement2');
-
-        $statements = [
-            $statement1,
-            $statement2,
-        ];
-
-        $statementList = new StatementList($statements);
-
-        $this->assertEquals($statement1, $statementList->getStatement(0));
-        $this->assertEquals($statement1, $statementList->getStatement(-2));
-        $this->assertEquals($statement2, $statementList->getStatement(1));
-        $this->assertEquals($statement2, $statementList->getStatement(-1));
-
-        $this->assertNull($statementList->getStatement(2));
-        $this->assertNull($statementList->getStatement(-3));
-    }
-
-    public function testGetLastStatement()
-    {
-        $statement1 = new Statement('statement1');
-        $statement2 = new Statement('statement2');
-
-        $statementList = new StatementList([$statement1, $statement2]);
-        $this->assertEquals($statement2, $statementList->getLastStatement());
-    }
-
-    public function testReplaceLastStatement()
-    {
-        $statement1 = new Statement('statement1');
-        $statement2 = new Statement('statement2');
-        $statement3 = new Statement('statement3');
-
-        $statementList = new StatementList([$statement1, $statement2]);
-        $this->assertEquals($statement2, $statementList->getLastStatement());
-
-        $statementList->replaceLastStatement($statement3);
-        $this->assertEquals($statement3, $statementList->getLastStatement());
-    }
-
-    public function testPrependLastStatement()
-    {
-        $statementList = new StatementList([
-            new Statement('statement1'),
-            new Statement('statement2'),
-        ]);
-
-        $this->assertEquals(['statement1', 'statement2'], $statementList->getStatements());
-
-        $statementList->prependLastStatement('prepended ');
-        $this->assertEquals(['statement1', 'prepended statement2'], $statementList->getStatements());
-    }
-
-    public function testAppendLastStatement()
-    {
-        $statementList = new StatementList([
-            new Statement('statement1'),
-            new Statement('statement2'),
-        ]);
-
-        $this->assertEquals(['statement1', 'statement2'], $statementList->getStatements());
-
-        $statementList->appendLastStatement(' appended');
-        $this->assertEquals(['statement1', 'statement2 appended'], $statementList->getStatements());
-    }
-
-    public function testAddClassDependencies()
-    {
-        $statement = new Statement('statement');
-        $this->assertEquals(new ClassDependencyCollection([]), $statement->getMetadata()->getClassDependencies());
-
-        $statementList = new StatementList([$statement]);
-
-        $classDependencies = new ClassDependencyCollection([
-            new ClassDependency(ClassDependency::class),
-        ]);
-
-        $statementList->addClassDependencies(0, $classDependencies);
-        $this->assertEquals($classDependencies, $statement->getMetadata()->getClassDependencies());
-    }
-
     public function testAddClassDependenciesToLastStatement()
     {
         $statement = new Statement('statement2');
@@ -367,22 +162,6 @@ class StatementListTest extends \PHPUnit\Framework\TestCase
 
         $statementList->addClassDependenciesToLastStatement($classDependencies);
         $this->assertEquals($classDependencies, $statement->getMetadata()->getClassDependencies());
-    }
-
-    public function testAddVariableDependencies()
-    {
-        $statement = new Statement('statement');
-        $this->assertEquals(
-            new VariablePlaceholderCollection([]),
-            $statement->getMetadata()->getVariableDependencies()
-        );
-
-        $statementList = new StatementList([$statement]);
-
-        $variableDependencies = VariablePlaceholderCollection::createCollection(['DEPENDENCY']);
-
-        $statementList->addVariableDependencies(0, $variableDependencies);
-        $this->assertEquals($variableDependencies, $statement->getMetadata()->getVariableDependencies());
     }
 
     public function testAddVariableDependenciesToLastStatement()
@@ -402,22 +181,6 @@ class StatementListTest extends \PHPUnit\Framework\TestCase
 
         $statementList->addVariableDependenciesToLastStatement($variableDependencies);
         $this->assertEquals($variableDependencies, $statement->getMetadata()->getVariableDependencies());
-    }
-
-    public function testAddVariableExports()
-    {
-        $statement = new Statement('statement');
-        $this->assertEquals(
-            new VariablePlaceholderCollection([]),
-            $statement->getMetadata()->getVariableExports()
-        );
-
-        $statementList = new StatementList([$statement]);
-
-        $variableExports = VariablePlaceholderCollection::createCollection(['DEPENDENCY']);
-
-        $statementList->addVariableExports(0, $variableExports);
-        $this->assertEquals($variableExports, $statement->getMetadata()->getVariableExports());
     }
 
     public function testAddVariableExportsToLastStatement()

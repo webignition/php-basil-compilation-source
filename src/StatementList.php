@@ -53,39 +53,6 @@ class StatementList implements StatementListInterface
         return $this->statements;
     }
 
-    public function prependStatement(int $index, string $content)
-    {
-        $this->mutateStatement($index, function (StatementInterface $statement) use ($content) {
-            return $statement->prepend($content);
-        });
-    }
-
-    public function prependLastStatement(string $content)
-    {
-        $this->prependStatement(self::LAST_STATEMENT_INDEX, $content);
-    }
-
-    public function appendStatement(int $index, string $content)
-    {
-        $this->mutateStatement($index, function (StatementInterface $statement) use ($content) {
-            return $statement->append($content);
-        });
-    }
-
-    public function appendLastStatement(string $content)
-    {
-        $this->appendStatement(self::LAST_STATEMENT_INDEX, $content);
-    }
-
-    public function mutateStatement(int $index, callable $mutator)
-    {
-        $statement = $this->getStatement($index);
-
-        if ($statement instanceof StatementInterface) {
-            $this->replaceStatement($index, $mutator($statement));
-        }
-    }
-
     public function mutateLastStatement(callable $mutator)
     {
         $this->mutateStatement(self::LAST_STATEMENT_INDEX, function (StatementInterface $statement) use ($mutator) {
@@ -93,28 +60,45 @@ class StatementList implements StatementListInterface
         });
     }
 
-    public function replaceStatement(int $index, StatementInterface $statement)
+    public function addClassDependenciesToLastStatement(ClassDependencyCollection $classDependencies)
     {
-        $currentStatement = $this->getStatement($index);
+        $statement = $this->getStatement(self::LAST_STATEMENT_INDEX);
 
-        if ($currentStatement instanceof StatementInterface) {
-            $this->statements[$this->translateIndex($index)] = $statement;
+        if ($statement instanceof StatementInterface) {
+            $statement->getMetadata()->addClassDependencies($classDependencies);
         }
     }
 
-    public function replaceLastStatement(StatementInterface $statement)
+    public function addVariableDependenciesToLastStatement(VariablePlaceholderCollection $variableDependencies)
     {
-        return $this->replaceStatement(self::LAST_STATEMENT_INDEX, $statement);
+        $statement = $this->getStatement(self::LAST_STATEMENT_INDEX);
+
+        if ($statement instanceof StatementInterface) {
+            $statement->getMetadata()->addVariableDependencies($variableDependencies);
+        }
     }
 
-    public function getStatement(int $index): ?StatementInterface
+    public function addVariableExportsToLastStatement(VariablePlaceholderCollection $variableExports)
+    {
+        $statement = $this->getStatement(self::LAST_STATEMENT_INDEX);
+
+        if ($statement instanceof StatementInterface) {
+            $statement->getMetadata()->addVariableExports($variableExports);
+        }
+    }
+
+    private function mutateStatement(int $index, callable $mutator)
+    {
+        $statement = $this->getStatement($index);
+
+        if ($statement instanceof StatementInterface) {
+            $this->statements[$this->translateIndex($index)] = $mutator($statement);
+        }
+    }
+
+    private function getStatement(int $index): ?StatementInterface
     {
         return $this->statements[$this->translateIndex($index)] ?? null;
-    }
-
-    public function getLastStatement(): ?StatementInterface
-    {
-        return $this->getStatement(self::LAST_STATEMENT_INDEX);
     }
 
     private function translateIndex(int $index): int
@@ -124,47 +108,5 @@ class StatementList implements StatementListInterface
         }
 
         return $index;
-    }
-
-    public function addClassDependencies(int $index, ClassDependencyCollection $classDependencies)
-    {
-        $statement = $this->getStatement($index);
-
-        if ($statement instanceof StatementInterface) {
-            $statement->getMetadata()->addClassDependencies($classDependencies);
-        }
-    }
-
-    public function addVariableDependencies(int $index, VariablePlaceholderCollection $variableDependencies)
-    {
-        $statement = $this->getStatement($index);
-
-        if ($statement instanceof StatementInterface) {
-            $statement->getMetadata()->addVariableDependencies($variableDependencies);
-        }
-    }
-
-    public function addVariableExports(int $index, VariablePlaceholderCollection $variableExports)
-    {
-        $statement = $this->getStatement($index);
-
-        if ($statement instanceof StatementInterface) {
-            $statement->getMetadata()->addVariableExports($variableExports);
-        }
-    }
-
-    public function addClassDependenciesToLastStatement(ClassDependencyCollection $classDependencies)
-    {
-        $this->addClassDependencies(self::LAST_STATEMENT_INDEX, $classDependencies);
-    }
-
-    public function addVariableDependenciesToLastStatement(VariablePlaceholderCollection $variableDependencies)
-    {
-        $this->addVariableDependencies(self::LAST_STATEMENT_INDEX, $variableDependencies);
-    }
-
-    public function addVariableExportsToLastStatement(VariablePlaceholderCollection $variableExports)
-    {
-        $this->addVariableExports(self::LAST_STATEMENT_INDEX, $variableExports);
     }
 }
