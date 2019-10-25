@@ -17,4 +17,7 @@ interface SourceInterface
     public function getMetadata(): MetadataInterface;
 
     public function mutateLastStatement(callable $mutator);
+    public function addClassDependenciesToLastStatement(ClassDependencyCollection $classDependencies);
+    public function addVariableDependenciesToLastStatement(VariablePlaceholderCollection $variableDependencies);
+    public function addVariableExportsToLastStatement(VariablePlaceholderCollection $variableExports);
 }
