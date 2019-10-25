@@ -310,19 +310,6 @@ class StatementListTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($statement3, $statementList->getLastStatement());
     }
 
-    public function testAppendLastStatement()
-    {
-        $statementList = new StatementList([
-            new Statement('statement1'),
-            new Statement('statement2'),
-        ]);
-
-        $this->assertEquals(['statement1', 'statement2'], $statementList->getStatements());
-
-        $statementList->appendLastStatement(' appended');
-        $this->assertEquals(['statement1', 'statement2 appended'], $statementList->getStatements());
-    }
-
     public function testAddClassDependencies()
     {
         $statement = new Statement('statement');

@@ -67,11 +67,6 @@ class StatementList implements StatementListInterface
         });
     }
 
-    public function appendLastStatement(string $content)
-    {
-        $this->appendStatement(self::LAST_STATEMENT_INDEX, $content);
-    }
-
     public function mutateStatement(int $index, callable $mutator)
     {
         $statement = $this->getStatement($index);
