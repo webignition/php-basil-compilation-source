@@ -78,7 +78,7 @@ class StatementList implements StatementListInterface
         }
     }
 
-    public function getStatement(int $index): ?StatementInterface
+    private function getStatement(int $index): ?StatementInterface
     {
         return $this->statements[$this->translateIndex($index)] ?? null;
     }
