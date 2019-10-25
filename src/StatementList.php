@@ -2,7 +2,7 @@
 
 namespace webignition\BasilCompilationSource;
 
-class StatementList implements StatementListInterface
+class StatementList implements SourceInterface
 {
     const LAST_STATEMENT_INDEX = -1;
 

@@ -11,7 +11,6 @@ use webignition\BasilCompilationSource\ClassDependencyCollection;
 use webignition\BasilCompilationSource\MetadataInterface;
 use webignition\BasilCompilationSource\Statement;
 use webignition\BasilCompilationSource\StatementList;
-use webignition\BasilCompilationSource\StatementListInterface;
 use webignition\BasilCompilationSource\Metadata;
 use webignition\BasilCompilationSource\VariablePlaceholderCollection;
 
@@ -32,7 +31,7 @@ class StatementListTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider getStatementsDataProvider
      */
-    public function testGetStatements(StatementListInterface $statementList, array $expectedStatements)
+    public function testGetStatements(StatementList $statementList, array $expectedStatements)
     {
         $this->assertEquals($expectedStatements, $statementList->getStatements());
     }
@@ -60,7 +59,7 @@ class StatementListTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider getMetadataDataProvider
      */
-    public function testGetMetadata(StatementListInterface $statementList, MetadataInterface $expectedMetadata)
+    public function testGetMetadata(StatementList $statementList, MetadataInterface $expectedMetadata)
     {
         $this->assertEquals($expectedMetadata, $statementList->getMetadata());
     }
@@ -121,7 +120,7 @@ class StatementListTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider getStatementObjectsDataProvider
      */
-    public function testGetStatementObjects(StatementListInterface $statementList, array $expectedStatementObjects)
+    public function testGetStatementObjects(StatementList $statementList, array $expectedStatementObjects)
     {
         $this->assertEquals($expectedStatementObjects, $statementList->getStatementObjects());
     }

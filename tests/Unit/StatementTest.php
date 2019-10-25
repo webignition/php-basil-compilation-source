@@ -6,6 +6,8 @@ declare(strict_types=1);
 
 namespace webignition\BasilCompilationSource\Tests\Unit;
 
+use webignition\BasilCompilationSource\ClassDependency;
+use webignition\BasilCompilationSource\ClassDependencyCollection;
 use webignition\BasilCompilationSource\MetadataInterface;
 use webignition\BasilCompilationSource\Statement;
 use webignition\BasilCompilationSource\Metadata;
@@ -94,6 +96,46 @@ class StatementTest extends \PHPUnit\Framework\TestCase
         });
 
         $this->assertEquals('!content!', $statement->getContent());
+    }
+
+    public function testAddClassDependenciesToLastStatement()
+    {
+        $statement = new Statement('statement');
+        $this->assertEquals(new ClassDependencyCollection([]), $statement->getMetadata()->getClassDependencies());
+
+        $classDependencies = new ClassDependencyCollection([
+            new ClassDependency(ClassDependency::class),
+        ]);
+
+        $statement->addClassDependenciesToLastStatement($classDependencies);
+        $this->assertEquals($classDependencies, $statement->getMetadata()->getClassDependencies());
+    }
+
+    public function testAddVariableDependenciesToLastStatement()
+    {
+        $statement = new Statement('statement');
+        $this->assertEquals(
+            new VariablePlaceholderCollection([]),
+            $statement->getMetadata()->getVariableDependencies()
+        );
+        $variableDependencies = VariablePlaceholderCollection::createCollection(['DEPENDENCY']);
+
+        $statement->addVariableDependenciesToLastStatement($variableDependencies);
+        $this->assertEquals($variableDependencies, $statement->getMetadata()->getVariableDependencies());
+    }
+
+    public function testAddVariableExportsToLastStatement()
+    {
+        $statement = new Statement('statement');
+        $this->assertEquals(
+            new VariablePlaceholderCollection([]),
+            $statement->getMetadata()->getVariableExports()
+        );
+
+        $variableExports = VariablePlaceholderCollection::createCollection(['DEPENDENCY']);
+
+        $statement->addVariableExportsToLastStatement($variableExports);
+        $this->assertEquals($variableExports, $statement->getMetadata()->getVariableExports());
     }
 
     public function testToString()

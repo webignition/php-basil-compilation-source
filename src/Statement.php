@@ -63,6 +63,21 @@ class Statement implements StatementInterface
         return $this->mutate($mutator);
     }
 
+    public function addClassDependenciesToLastStatement(ClassDependencyCollection $classDependencies)
+    {
+        $this->metadata->addClassDependencies($classDependencies);
+    }
+
+    public function addVariableDependenciesToLastStatement(VariablePlaceholderCollection $variableDependencies)
+    {
+        $this->metadata->addVariableDependencies($variableDependencies);
+    }
+
+    public function addVariableExportsToLastStatement(VariablePlaceholderCollection $variableExports)
+    {
+        $this->metadata->addVariableExports($variableExports);
+    }
+
     public function __toString(): string
     {
         return $this->content;
