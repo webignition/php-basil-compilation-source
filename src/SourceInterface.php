@@ -15,4 +15,6 @@ interface SourceInterface
     public function getStatementObjects(): array;
 
     public function getMetadata(): MetadataInterface;
+
+    public function mutateLastStatement(callable $mutator);
 }

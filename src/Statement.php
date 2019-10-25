@@ -58,6 +58,11 @@ class Statement implements StatementInterface
         return $new;
     }
 
+    public function mutateLastStatement(callable $mutator)
+    {
+        return $this->mutate($mutator);
+    }
+
     public function __toString(): string
     {
         return $this->content;
