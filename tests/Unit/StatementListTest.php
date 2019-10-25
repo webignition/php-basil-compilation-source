@@ -146,21 +146,6 @@ class StatementListTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public function testAddClassDependencies()
-    {
-        $statement = new Statement('statement');
-        $this->assertEquals(new ClassDependencyCollection([]), $statement->getMetadata()->getClassDependencies());
-
-        $statementList = new StatementList([$statement]);
-
-        $classDependencies = new ClassDependencyCollection([
-            new ClassDependency(ClassDependency::class),
-        ]);
-
-        $statementList->addClassDependencies(0, $classDependencies);
-        $this->assertEquals($classDependencies, $statement->getMetadata()->getClassDependencies());
-    }
-
     public function testAddClassDependenciesToLastStatement()
     {
         $statement = new Statement('statement2');

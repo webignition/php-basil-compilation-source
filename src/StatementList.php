@@ -92,7 +92,7 @@ class StatementList implements StatementListInterface
         return $index;
     }
 
-    public function addClassDependencies(int $index, ClassDependencyCollection $classDependencies)
+    private function addClassDependencies(int $index, ClassDependencyCollection $classDependencies)
     {
         $statement = $this->getStatement($index);
 
