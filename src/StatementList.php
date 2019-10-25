@@ -60,11 +60,6 @@ class StatementList implements StatementListInterface
         });
     }
 
-    public function prependLastStatement(string $content)
-    {
-        $this->prependStatement(self::LAST_STATEMENT_INDEX, $content);
-    }
-
     public function appendStatement(int $index, string $content)
     {
         $this->mutateStatement($index, function (StatementInterface $statement) use ($content) {
