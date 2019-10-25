@@ -30,30 +30,30 @@ class FunctionDefinition implements FunctionDefinitionInterface
         return $this->arguments;
     }
 
-    public function addStatement(StatementInterface $statement)
+    public function addLine(LineInterface $statement)
     {
-        $this->content->addStatement($statement);
+        $this->content->addLine($statement);
     }
 
-    public function addStatements(array $statements)
+    public function addLines(array $statements)
     {
-        $this->content->addStatements($statements);
+        $this->content->addLines($statements);
     }
 
     /**
      * @return string[]
      */
-    public function getStatements(): array
+    public function getLines(): array
     {
-        return $this->content->getStatements();
+        return $this->content->getLines();
     }
 
     /**
-     * @return StatementInterface[]
+     * @return LineInterface[]
      */
-    public function getStatementObjects(): array
+    public function getLineObjects(): array
     {
-        return $this->content->getStatementObjects();
+        return $this->content->getLineObjects();
     }
 
     public function getMetadata(): MetadataInterface

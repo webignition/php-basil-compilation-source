@@ -4,22 +4,22 @@ namespace webignition\BasilCompilationSource;
 
 interface SourceInterface
 {
-    public function addStatement(StatementInterface $statement);
+    public function addLine(LineInterface $statement);
 
     /**
-     * @param StatementInterface[] $statements
+     * @param LineInterface[] $statements
      */
-    public function addStatements(array $statements);
+    public function addLines(array $statements);
 
     /**
      * @return string[]
      */
-    public function getStatements(): array;
+    public function getLines(): array;
 
     /**
-     * @return StatementInterface[]
+     * @return LineInterface[]
      */
-    public function getStatementObjects(): array;
+    public function getLineObjects(): array;
 
     public function getMetadata(): MetadataInterface;
 
