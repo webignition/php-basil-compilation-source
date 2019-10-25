@@ -29,6 +29,27 @@ class StatementListTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @dataProvider addStatementsDataProvider
+     */
+    public function testAddStatements(StatementList $statementList, array $statements, array $expectedStatements)
+    {
+        $statementList->addStatements($statements);
+
+        $this->assertEquals($expectedStatements, $statementList->getStatements());
+    }
+
+    public function addStatementsDataProvider(): array
+    {
+        return [
+            'empty list, empty statements' => [
+                'statementList' => new StatementList([]),
+                'statements' => [],
+                'expectedStatements' => [],
+            ],
+        ];
+    }
+
+    /**
      * @dataProvider getStatementsDataProvider
      */
     public function testGetStatements(StatementList $statementList, array $expectedStatements)

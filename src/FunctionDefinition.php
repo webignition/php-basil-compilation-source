@@ -30,6 +30,11 @@ class FunctionDefinition implements FunctionDefinitionInterface
         return $this->arguments;
     }
 
+    public function addStatements(array $statements)
+    {
+        $this->content->addStatements($statements);
+    }
+
     /**
      * @return string[]
      */

@@ -5,6 +5,11 @@ namespace webignition\BasilCompilationSource;
 interface SourceInterface
 {
     /**
+     * @param StatementInterface[] $statements
+     */
+    public function addStatements(array $statements);
+
+    /**
      * @return string[]
      */
     public function getStatements(): array;
