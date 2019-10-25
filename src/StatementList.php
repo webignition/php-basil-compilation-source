@@ -110,7 +110,7 @@ class StatementList implements StatementListInterface
         }
     }
 
-    public function addVariableExports(int $index, VariablePlaceholderCollection $variableExports)
+    private function addVariableExports(int $index, VariablePlaceholderCollection $variableExports)
     {
         $statement = $this->getStatement($index);
 

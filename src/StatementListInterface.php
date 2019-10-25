@@ -5,7 +5,6 @@ namespace webignition\BasilCompilationSource;
 interface StatementListInterface extends SourceInterface
 {
     public function mutateLastStatement(callable $mutator);
-    public function addVariableExports(int $index, VariablePlaceholderCollection $variableExports);
     public function addClassDependenciesToLastStatement(ClassDependencyCollection $classDependencies);
     public function addVariableDependenciesToLastStatement(VariablePlaceholderCollection $variableDependencies);
     public function addVariableExportsToLastStatement(VariablePlaceholderCollection $variableExports);
