@@ -5,8 +5,8 @@ namespace webignition\BasilCompilationSource;
 interface StatementInterface extends SourceInterface
 {
     public function getContent(): string;
-    public function prepend(string $content): StatementInterface;
-    public function append(string $content): StatementInterface;
-    public function mutate(callable $mutator): StatementInterface;
+    public function prepend(string $content);
+    public function append(string $content);
+    public function mutate(callable $mutator);
     public function __toString(): string;
 }
