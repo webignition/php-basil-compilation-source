@@ -11,6 +11,7 @@ use webignition\BasilCompilationSource\ClassDependencyCollection;
 use webignition\BasilCompilationSource\FunctionDefinition;
 use webignition\BasilCompilationSource\SourceInterface;
 use webignition\BasilCompilationSource\Statement;
+use webignition\BasilCompilationSource\StatementList;
 use webignition\BasilCompilationSource\VariablePlaceholderCollection;
 
 class FunctionDefinitionTest extends \PHPUnit\Framework\TestCase
@@ -32,13 +33,13 @@ class FunctionDefinitionTest extends \PHPUnit\Framework\TestCase
         return [
             'without arguments' => [
                 'name' => 'withoutArguments',
-                'content' => new Statement('statement'),
+                'content' => new StatementList([new Statement('statement')]),
                 'arguments' => null,
                 'expectedArguments' => [],
             ],
             'with arguments' => [
                 'name' => 'withArguments',
-                'content' => new Statement('statement'),
+                'content' => new StatementList([new Statement('statement')]),
                 'arguments' => ['a', 'b', 'c'],
                 'expectedArguments' => ['a', 'b', 'c'],
             ],
@@ -49,7 +50,7 @@ class FunctionDefinitionTest extends \PHPUnit\Framework\TestCase
     {
         $content = 'statement';
         $expectedStatements = [$content];
-        $functionDefinition = new FunctionDefinition('name', new Statement($content));
+        $functionDefinition = new FunctionDefinition('name', new StatementList([new Statement($content)]));
 
         $this->assertSame($expectedStatements, $functionDefinition->getStatements());
     }
@@ -57,7 +58,7 @@ class FunctionDefinitionTest extends \PHPUnit\Framework\TestCase
     public function testGetStatementObjects()
     {
         $statement = new Statement('statement');
-        $functionDefinition = new FunctionDefinition('name', $statement);
+        $functionDefinition = new FunctionDefinition('name', new StatementList([$statement]));
 
         $this->assertEquals([$statement], $functionDefinition->getStatementObjects());
     }
@@ -65,13 +66,13 @@ class FunctionDefinitionTest extends \PHPUnit\Framework\TestCase
     public function testMutateLastStatement()
     {
         $statement = new Statement('content');
-        $functionDefinition = new FunctionDefinition('name', $statement);
+        $functionDefinition = new FunctionDefinition('name', new StatementList([$statement]));
 
         $functionDefinition->mutateLastStatement(function (string $content) {
             return '!' . $content . '!';
         });
 
-        $this->assertEquals('!content!', $functionDefinition->getContent());
+        $this->assertEquals('!content!', $statement->getContent());
     }
 
     public function testAddClassDependenciesToLastStatement()
@@ -79,7 +80,7 @@ class FunctionDefinitionTest extends \PHPUnit\Framework\TestCase
         $statement = new Statement('statement');
         $this->assertEquals(new ClassDependencyCollection([]), $statement->getMetadata()->getClassDependencies());
 
-        $functionDefinition = new FunctionDefinition('name', $statement);
+        $functionDefinition = new FunctionDefinition('name', new StatementList([$statement]));
 
         $classDependencies = new ClassDependencyCollection([
             new ClassDependency(ClassDependency::class),
@@ -97,7 +98,7 @@ class FunctionDefinitionTest extends \PHPUnit\Framework\TestCase
             $statement->getMetadata()->getVariableDependencies()
         );
 
-        $functionDefinition = new FunctionDefinition('name', $statement);
+        $functionDefinition = new FunctionDefinition('name', new StatementList([$statement]));
         $variableDependencies = VariablePlaceholderCollection::createCollection(['DEPENDENCY']);
 
         $functionDefinition->addVariableDependenciesToLastStatement($variableDependencies);
@@ -112,7 +113,7 @@ class FunctionDefinitionTest extends \PHPUnit\Framework\TestCase
             $statement->getMetadata()->getVariableExports()
         );
 
-        $functionDefinition = new FunctionDefinition('name', $statement);
+        $functionDefinition = new FunctionDefinition('name', new StatementList([$statement]));
         $variableExports = VariablePlaceholderCollection::createCollection(['DEPENDENCY']);
 
         $functionDefinition->addVariableExportsToLastStatement($variableExports);

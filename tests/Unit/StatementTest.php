@@ -46,22 +46,6 @@ class StatementTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public function testGetStatements()
-    {
-        $content = 'statement';
-        $expectedStatements = [$content];
-        $statement = new Statement($content);
-
-        $this->assertSame($expectedStatements, $statement->getStatements());
-    }
-
-    public function testGetStatementObjects()
-    {
-        $statement = new Statement('statement');
-
-        $this->assertEquals([$statement], $statement->getStatementObjects());
-    }
-
     public function testPrepend()
     {
         $statement = new Statement('content');
@@ -88,17 +72,7 @@ class StatementTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('!content!', $statement->getContent());
     }
 
-    public function testMutateLastStatement()
-    {
-        $statement = new Statement('content');
-        $statement->mutateLastStatement(function (string $content) {
-            return '!' . $content . '!';
-        });
-
-        $this->assertEquals('!content!', $statement->getContent());
-    }
-
-    public function testAddClassDependenciesToLastStatement()
+    public function testAddClassDependencies()
     {
         $statement = new Statement('statement');
         $this->assertEquals(new ClassDependencyCollection([]), $statement->getMetadata()->getClassDependencies());
@@ -107,11 +81,11 @@ class StatementTest extends \PHPUnit\Framework\TestCase
             new ClassDependency(ClassDependency::class),
         ]);
 
-        $statement->addClassDependenciesToLastStatement($classDependencies);
+        $statement->addClassDependencies($classDependencies);
         $this->assertEquals($classDependencies, $statement->getMetadata()->getClassDependencies());
     }
 
-    public function testAddVariableDependenciesToLastStatement()
+    public function testAddVariableDependencies()
     {
         $statement = new Statement('statement');
         $this->assertEquals(
@@ -120,11 +94,11 @@ class StatementTest extends \PHPUnit\Framework\TestCase
         );
         $variableDependencies = VariablePlaceholderCollection::createCollection(['DEPENDENCY']);
 
-        $statement->addVariableDependenciesToLastStatement($variableDependencies);
+        $statement->addVariableDependencies($variableDependencies);
         $this->assertEquals($variableDependencies, $statement->getMetadata()->getVariableDependencies());
     }
 
-    public function testAddVariableExportsToLastStatement()
+    public function testAddVariableExports()
     {
         $statement = new Statement('statement');
         $this->assertEquals(
@@ -134,7 +108,7 @@ class StatementTest extends \PHPUnit\Framework\TestCase
 
         $variableExports = VariablePlaceholderCollection::createCollection(['DEPENDENCY']);
 
-        $statement->addVariableExportsToLastStatement($variableExports);
+        $statement->addVariableExports($variableExports);
         $this->assertEquals($variableExports, $statement->getMetadata()->getVariableExports());
     }
 
