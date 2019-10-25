@@ -101,7 +101,7 @@ class StatementList implements StatementListInterface
         }
     }
 
-    public function addVariableDependencies(int $index, VariablePlaceholderCollection $variableDependencies)
+    private function addVariableDependencies(int $index, VariablePlaceholderCollection $variableDependencies)
     {
         $statement = $this->getStatement($index);
 
