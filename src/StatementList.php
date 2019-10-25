@@ -80,7 +80,11 @@ class StatementList implements StatementListInterface
 
     public function addVariableExportsToLastStatement(VariablePlaceholderCollection $variableExports)
     {
-        $this->addVariableExports(self::LAST_STATEMENT_INDEX, $variableExports);
+        $statement = $this->getStatement(self::LAST_STATEMENT_INDEX);
+
+        if ($statement instanceof StatementInterface) {
+            $statement->getMetadata()->addVariableExports($variableExports);
+        }
     }
 
     private function mutateStatement(int $index, callable $mutator)
@@ -104,14 +108,5 @@ class StatementList implements StatementListInterface
         }
 
         return $index;
-    }
-
-    private function addVariableExports(int $index, VariablePlaceholderCollection $variableExports)
-    {
-        $statement = $this->getStatement($index);
-
-        if ($statement instanceof StatementInterface) {
-            $statement->getMetadata()->addVariableExports($variableExports);
-        }
     }
 }
