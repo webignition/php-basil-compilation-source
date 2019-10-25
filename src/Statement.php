@@ -57,6 +57,21 @@ class Statement implements StatementInterface
         $this->metadata->addVariableExports($variableExports);
     }
 
+    public function isStatement(): bool
+    {
+        return true;
+    }
+
+    public function isComment(): bool
+    {
+        return false;
+    }
+
+    public function isEmpty(): bool
+    {
+        return false;
+    }
+
     public function __toString(): string
     {
         return $this->content;

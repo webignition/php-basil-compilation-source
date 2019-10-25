@@ -2,9 +2,8 @@
 
 namespace webignition\BasilCompilationSource;
 
-interface StatementInterface
+interface StatementInterface extends LineInterface
 {
-    public function getContent(): string;
     public function getMetadata(): MetadataInterface;
     public function prepend(string $content);
     public function append(string $content);
@@ -12,5 +11,4 @@ interface StatementInterface
     public function addClassDependencies(ClassDependencyCollection $classDependencies);
     public function addVariableDependencies(VariablePlaceholderCollection $variableDependencies);
     public function addVariableExports(VariablePlaceholderCollection $variableExports);
-    public function __toString(): string;
 }
