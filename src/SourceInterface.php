@@ -4,6 +4,8 @@ namespace webignition\BasilCompilationSource;
 
 interface SourceInterface
 {
+    public function addStatement(StatementInterface $statement);
+
     /**
      * @param StatementInterface[] $statements
      */

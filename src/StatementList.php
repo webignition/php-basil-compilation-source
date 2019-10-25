@@ -20,11 +20,16 @@ class StatementList implements SourceInterface
         }
     }
 
+    public function addStatement(StatementInterface $statement)
+    {
+        $this->statements[] = $statement;
+    }
+
     public function addStatements(array $statements)
     {
         foreach ($statements as $statement) {
             if ($statement instanceof StatementInterface) {
-                $this->statements[] = $statement;
+                $this->addStatement($statement);
             }
         }
     }
