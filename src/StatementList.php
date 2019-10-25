@@ -53,7 +53,7 @@ class StatementList implements StatementListInterface
         return $this->statements;
     }
 
-    public function mutateStatement(int $index, callable $mutator)
+    private function mutateStatement(int $index, callable $mutator)
     {
         $statement = $this->getStatement($index);
 
