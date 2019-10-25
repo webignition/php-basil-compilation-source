@@ -148,60 +148,6 @@ class StatementListTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider prependStatementDataProvider
-     */
-    public function testPrependStatement(
-        StatementListInterface $statementList,
-        int $index,
-        string $content,
-        array $expectedStatements
-    ) {
-        $statementList->prependStatement($index, $content);
-
-        $this->assertEquals($expectedStatements, $statementList->getStatements());
-    }
-
-    public function prependStatementDataProvider(): array
-    {
-        return [
-            'prepend first of one' => [
-                'statementList' => new StatementList([
-                    new Statement('statement'),
-                ]),
-                'index' => 0,
-                'content' => 'prepended ',
-                'expectedStatements' => ['prepended statement'],
-            ],
-            'prepend first of two' => [
-                'statementList' => new StatementList([
-                    new Statement('statement1'),
-                    new Statement('statement2'),
-                ]),
-                'index' => 0,
-                'content' => 'prepended ',
-                'expectedStatements' => ['prepended statement1', 'statement2'],
-            ],
-            'prepend last of one' => [
-                'statementList' => new StatementList([
-                    new Statement('statement'),
-                ]),
-                'index' => -1,
-                'content' => 'prepended ',
-                'expectedStatements' => ['prepended statement'],
-            ],
-            'prepend last of two' => [
-                'statementList' => new StatementList([
-                    new Statement('statement1'),
-                    new Statement('statement2'),
-                ]),
-                'index' => -1,
-                'content' => 'prepended ',
-                'expectedStatements' => ['statement1', 'prepended statement2'],
-            ],
-        ];
-    }
-
-    /**
      * @dataProvider appendStatementDataProvider
      */
     public function testAppendStatement(

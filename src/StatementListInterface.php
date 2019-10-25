@@ -4,7 +4,6 @@ namespace webignition\BasilCompilationSource;
 
 interface StatementListInterface extends SourceInterface
 {
-    public function prependStatement(int $index, string $content);
     public function appendStatement(int $index, string $content);
     public function mutateStatement(int $index, callable $mutator);
     public function replaceStatement(int $index, StatementInterface $statement);
