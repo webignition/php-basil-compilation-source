@@ -53,15 +53,6 @@ class StatementList implements StatementListInterface
         return $this->statements;
     }
 
-    private function mutateStatement(int $index, callable $mutator)
-    {
-        $statement = $this->getStatement($index);
-
-        if ($statement instanceof StatementInterface) {
-            $this->replaceStatement($index, $mutator($statement));
-        }
-    }
-
     public function mutateLastStatement(callable $mutator)
     {
         $this->mutateStatement(self::LAST_STATEMENT_INDEX, function (StatementInterface $statement) use ($mutator) {
@@ -69,12 +60,27 @@ class StatementList implements StatementListInterface
         });
     }
 
-    private function replaceStatement(int $index, StatementInterface $statement)
+    public function addClassDependenciesToLastStatement(ClassDependencyCollection $classDependencies)
     {
-        $currentStatement = $this->getStatement($index);
+        $this->addClassDependencies(self::LAST_STATEMENT_INDEX, $classDependencies);
+    }
 
-        if ($currentStatement instanceof StatementInterface) {
-            $this->statements[$this->translateIndex($index)] = $statement;
+    public function addVariableDependenciesToLastStatement(VariablePlaceholderCollection $variableDependencies)
+    {
+        $this->addVariableDependencies(self::LAST_STATEMENT_INDEX, $variableDependencies);
+    }
+
+    public function addVariableExportsToLastStatement(VariablePlaceholderCollection $variableExports)
+    {
+        $this->addVariableExports(self::LAST_STATEMENT_INDEX, $variableExports);
+    }
+
+    private function mutateStatement(int $index, callable $mutator)
+    {
+        $statement = $this->getStatement($index);
+
+        if ($statement instanceof StatementInterface) {
+            $this->statements[$this->translateIndex($index)] = $mutator($statement);
         }
     }
 
@@ -117,20 +123,5 @@ class StatementList implements StatementListInterface
         if ($statement instanceof StatementInterface) {
             $statement->getMetadata()->addVariableExports($variableExports);
         }
-    }
-
-    public function addClassDependenciesToLastStatement(ClassDependencyCollection $classDependencies)
-    {
-        $this->addClassDependencies(self::LAST_STATEMENT_INDEX, $classDependencies);
-    }
-
-    public function addVariableDependenciesToLastStatement(VariablePlaceholderCollection $variableDependencies)
-    {
-        $this->addVariableDependencies(self::LAST_STATEMENT_INDEX, $variableDependencies);
-    }
-
-    public function addVariableExportsToLastStatement(VariablePlaceholderCollection $variableExports)
-    {
-        $this->addVariableExports(self::LAST_STATEMENT_INDEX, $variableExports);
     }
 }
