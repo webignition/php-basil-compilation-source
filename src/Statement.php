@@ -2,20 +2,17 @@
 
 namespace webignition\BasilCompilationSource;
 
-class Statement implements StatementInterface
+class Statement extends AbstractLine implements StatementInterface
 {
-    private $content;
+    const TYPE = 'statement';
+
     private $metadata;
 
     public function __construct(string $content, ?MetadataInterface $metadata = null)
     {
-        $this->content = $content;
-        $this->metadata = $metadata ?? new Metadata();
-    }
+        parent::__construct($content, self::TYPE);
 
-    public function getContent(): string
-    {
-        return $this->content;
+        $this->metadata = $metadata ?? new Metadata();
     }
 
     public function getMetadata(): MetadataInterface
@@ -70,10 +67,5 @@ class Statement implements StatementInterface
     public function isEmpty(): bool
     {
         return false;
-    }
-
-    public function __toString(): string
-    {
-        return $this->content;
     }
 }

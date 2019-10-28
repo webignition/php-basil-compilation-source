@@ -800,4 +800,34 @@ class LineListTest extends \PHPUnit\Framework\TestCase
             ],
         ];
     }
+
+    public function testJsonSerialize()
+    {
+        $lineList = new LineList([
+            new EmptyLine(),
+            new Comment('comment content'),
+            new Statement('statement content'),
+        ]);
+
+        $this->assertSame(
+            [
+                'type' => 'line-list',
+                'lines' => [
+                    [
+                        'type' => 'empty',
+                        'content' => '',
+                    ],
+                    [
+                        'type' => 'comment',
+                        'content' => 'comment content',
+                    ],
+                    [
+                        'type' => 'statement',
+                        'content' => 'statement content',
+                    ],
+                ],
+            ],
+            $lineList->jsonSerialize()
+        );
+    }
 }

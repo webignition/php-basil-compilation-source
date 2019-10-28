@@ -99,6 +99,20 @@ class LineList implements SourceInterface
         }
     }
 
+    public function jsonSerialize(): array
+    {
+        $serializedContent = [];
+
+        foreach ($this->lines as $line) {
+            $serializedContent[] = $line->jsonSerialize();
+        }
+
+        return [
+            'type' => 'line-list',
+            'lines' => $serializedContent,
+        ];
+    }
+
     private function mutateStatement(int $index, callable $mutator)
     {
         $statementData = $this->getStatementData($index);

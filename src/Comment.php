@@ -2,18 +2,13 @@
 
 namespace webignition\BasilCompilationSource;
 
-class Comment implements LineInterface
+class Comment extends AbstractLine
 {
-    private $content;
+    const TYPE = 'comment';
 
     public function __construct(string $content)
     {
-        $this->content = $content;
-    }
-
-    public function getContent(): string
-    {
-        return $this->content;
+        parent::__construct($content, self::TYPE);
     }
 
     public function isStatement(): bool
@@ -29,10 +24,5 @@ class Comment implements LineInterface
     public function isEmpty(): bool
     {
         return false;
-    }
-
-    public function __toString(): string
-    {
-        return $this->content;
     }
 }

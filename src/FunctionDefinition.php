@@ -80,4 +80,13 @@ class FunctionDefinition implements FunctionDefinitionInterface
     {
         $this->content->addVariableExportsToLastStatement($variableExports);
     }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'type' => 'function',
+            'name' => $this->name,
+            'content' => $this->content->jsonSerialize(),
+        ];
+    }
 }
