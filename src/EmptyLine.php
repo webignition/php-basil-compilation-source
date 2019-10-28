@@ -2,11 +2,11 @@
 
 namespace webignition\BasilCompilationSource;
 
-class EmptyLine implements LineInterface
+class EmptyLine extends AbstractLine implements LineInterface
 {
-    public function getContent(): string
+    public function __construct()
     {
-        return '';
+        parent::__construct('');
     }
 
     public function isStatement(): bool
@@ -22,10 +22,5 @@ class EmptyLine implements LineInterface
     public function isEmpty(): bool
     {
         return true;
-    }
-
-    public function __toString(): string
-    {
-        return '';
     }
 }
