@@ -4,11 +4,13 @@ namespace webignition\BasilCompilationSource;
 
 class Statement extends AbstractLine implements StatementInterface
 {
+    const TYPE = 'statement';
+
     private $metadata;
 
     public function __construct(string $content, ?MetadataInterface $metadata = null)
     {
-        parent::__construct($content);
+        parent::__construct($content, self::TYPE);
 
         $this->metadata = $metadata ?? new Metadata();
     }

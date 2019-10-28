@@ -8,5 +8,6 @@ interface LineInterface
     public function isStatement(): bool;
     public function isComment(): bool;
     public function isEmpty(): bool;
+    public function getType(): string;
     public function __toString(): string;
 }

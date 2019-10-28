@@ -4,6 +4,13 @@ namespace webignition\BasilCompilationSource;
 
 class Comment extends AbstractLine
 {
+    const TYPE = 'comment';
+
+    public function __construct(string $content)
+    {
+        parent::__construct($content, self::TYPE);
+    }
+
     public function isStatement(): bool
     {
         return false;

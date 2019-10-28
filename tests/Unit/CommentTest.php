@@ -46,4 +46,9 @@ class CommentTest extends \PHPUnit\Framework\TestCase
 
         $this->assertSame($content, $comment->__toString());
     }
+
+    public function testGetType()
+    {
+        $this->assertSame(Comment::TYPE, (new Comment(''))->getType());
+    }
 }

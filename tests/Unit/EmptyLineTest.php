@@ -42,4 +42,9 @@ class EmptyLineTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertSame('', (string) new EmptyLine());
     }
+
+    public function testGetType()
+    {
+        $this->assertSame(EmptyLine::TYPE, (new EmptyLine())->getType());
+    }
 }
