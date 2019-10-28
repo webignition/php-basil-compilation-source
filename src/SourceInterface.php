@@ -2,7 +2,7 @@
 
 namespace webignition\BasilCompilationSource;
 
-interface SourceInterface
+interface SourceInterface extends \JsonSerializable
 {
     public function addLine(LineInterface $statement);
 
