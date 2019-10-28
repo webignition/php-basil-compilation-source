@@ -2,7 +2,7 @@
 
 namespace webignition\BasilCompilationSource;
 
-interface LineInterface
+interface LineInterface extends \JsonSerializable
 {
     public function getContent(): string;
     public function isStatement(): bool;

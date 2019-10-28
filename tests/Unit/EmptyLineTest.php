@@ -47,4 +47,17 @@ class EmptyLineTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertSame(EmptyLine::TYPE, (new EmptyLine())->getType());
     }
+
+    public function testJsonSerialize()
+    {
+        $comment = new EmptyLine();
+
+        $this->assertSame(
+            [
+                'type' => 'empty',
+                'content' => '',
+            ],
+            $comment->jsonSerialize()
+        );
+    }
 }
