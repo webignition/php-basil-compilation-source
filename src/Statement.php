@@ -6,18 +6,9 @@ class Statement extends AbstractLine implements StatementInterface
 {
     const TYPE = 'statement';
 
-    private $metadata;
-
     public function __construct(string $content, ?MetadataInterface $metadata = null)
     {
-        parent::__construct($content, self::TYPE);
-
-        $this->metadata = $metadata ?? new Metadata();
-    }
-
-    public function getMetadata(): MetadataInterface
-    {
-        return $this->metadata;
+        parent::__construct($content, self::TYPE, $metadata);
     }
 
     public function prepend(string $content)
@@ -41,17 +32,17 @@ class Statement extends AbstractLine implements StatementInterface
 
     public function addClassDependencies(ClassDependencyCollection $classDependencies)
     {
-        $this->metadata->addClassDependencies($classDependencies);
+        $this->getMetadata()->addClassDependencies($classDependencies);
     }
 
     public function addVariableDependencies(VariablePlaceholderCollection $variableDependencies)
     {
-        $this->metadata->addVariableDependencies($variableDependencies);
+        $this->getMetadata()->addVariableDependencies($variableDependencies);
     }
 
     public function addVariableExports(VariablePlaceholderCollection $variableExports)
     {
-        $this->metadata->addVariableExports($variableExports);
+        $this->getMetadata()->addVariableExports($variableExports);
     }
 
     public function isStatement(): bool

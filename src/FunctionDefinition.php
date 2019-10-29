@@ -5,13 +5,13 @@ namespace webignition\BasilCompilationSource;
 class FunctionDefinition implements FunctionDefinitionInterface
 {
     private $name;
+    private $lineList;
     private $arguments = [];
-    private $content;
 
-    public function __construct(string $name, SourceInterface $content, ?array $arguments = null)
+    public function __construct(string $name, LineListInterface $lineList, ?array $arguments = null)
     {
         $this->name = $name;
-        $this->content = $content;
+        $this->lineList = $lineList;
         $this->arguments = $arguments ?? [];
     }
 
@@ -20,9 +20,12 @@ class FunctionDefinition implements FunctionDefinitionInterface
         return $this->name;
     }
 
-    public function getContent(): array
+    /**
+     * @return SourceInterface[]
+     */
+    public function getSources(): array
     {
-        return $this->content->getContent();
+        return $this->lineList->getSources();
     }
 
     public function getArguments(): array
@@ -32,53 +35,45 @@ class FunctionDefinition implements FunctionDefinitionInterface
 
     public function addLine(LineInterface $statement)
     {
-        $this->content->addLine($statement);
+        $this->lineList->addLine($statement);
     }
 
     public function addLines(array $statements)
     {
-        $this->content->addLines($statements);
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getLines(): array
-    {
-        return $this->content->getLines();
+        $this->lineList->addLines($statements);
     }
 
     /**
      * @return LineInterface[]
      */
-    public function getLineObjects(): array
+    public function getLines(): array
     {
-        return $this->content->getLineObjects();
+        return $this->lineList->getLines();
     }
 
     public function getMetadata(): MetadataInterface
     {
-        return $this->content->getMetadata();
+        return $this->lineList->getMetadata();
     }
 
     public function mutateLastStatement(callable $mutator)
     {
-        $this->content->mutateLastStatement($mutator);
+        $this->lineList->mutateLastStatement($mutator);
     }
 
     public function addClassDependenciesToLastStatement(ClassDependencyCollection $classDependencies)
     {
-        $this->content->addClassDependenciesToLastStatement($classDependencies);
+        $this->lineList->addClassDependenciesToLastStatement($classDependencies);
     }
 
     public function addVariableDependenciesToLastStatement(VariablePlaceholderCollection $variableDependencies)
     {
-        $this->content->addVariableDependenciesToLastStatement($variableDependencies);
+        $this->lineList->addVariableDependenciesToLastStatement($variableDependencies);
     }
 
     public function addVariableExportsToLastStatement(VariablePlaceholderCollection $variableExports)
     {
-        $this->content->addVariableExportsToLastStatement($variableExports);
+        $this->lineList->addVariableExportsToLastStatement($variableExports);
     }
 
     public function jsonSerialize(): array
@@ -86,7 +81,7 @@ class FunctionDefinition implements FunctionDefinitionInterface
         return [
             'type' => 'function',
             'name' => $this->name,
-            'content' => $this->content->jsonSerialize(),
+            'line-list' => $this->lineList->jsonSerialize(),
         ];
     }
 }

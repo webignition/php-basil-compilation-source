@@ -11,7 +11,7 @@ use webignition\BasilCompilationSource\ClassDependencyCollection;
 use webignition\BasilCompilationSource\Comment;
 use webignition\BasilCompilationSource\EmptyLine;
 use webignition\BasilCompilationSource\FunctionDefinition;
-use webignition\BasilCompilationSource\SourceInterface;
+use webignition\BasilCompilationSource\LineListInterface;
 use webignition\BasilCompilationSource\Statement;
 use webignition\BasilCompilationSource\LineList;
 use webignition\BasilCompilationSource\VariablePlaceholderCollection;
@@ -21,12 +21,12 @@ class FunctionDefinitionTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider constructDataProvider
      */
-    public function testConstruct(string $name, SourceInterface $content, $arguments, array $expectedArguments)
+    public function testConstruct(string $name, LineListInterface $content, $arguments, array $expectedArguments)
     {
         $functionDefinition = new FunctionDefinition($name, $content, $arguments);
 
         $this->assertSame($name, $functionDefinition->getName());
-        $this->assertSame($content->getContent(), $functionDefinition->getContent());
+        $this->assertSame($content->getSources(), $functionDefinition->getSources());
         $this->assertEquals($expectedArguments, $functionDefinition->getArguments());
         $this->assertEquals($content->getMetadata(), $functionDefinition->getMetadata());
     }
@@ -139,21 +139,12 @@ class FunctionDefinitionTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testGetStatements()
-    {
-        $content = 'statement';
-        $expectedStatements = [$content];
-        $functionDefinition = new FunctionDefinition('name', new LineList([new Statement($content)]));
-
-        $this->assertSame($expectedStatements, $functionDefinition->getLines());
-    }
-
     public function testGetStatementObjects()
     {
         $statement = new Statement('statement');
         $functionDefinition = new FunctionDefinition('name', new LineList([$statement]));
 
-        $this->assertEquals([$statement], $functionDefinition->getLineObjects());
+        $this->assertEquals([$statement], $functionDefinition->getLines());
     }
 
     public function testMutateLastStatement()
@@ -223,7 +214,7 @@ class FunctionDefinitionTest extends \PHPUnit\Framework\TestCase
             [
                 'type' => 'function',
                 'name' => 'functionName',
-                'content' => [
+                'line-list' => [
                     'type' => 'line-list',
                     'lines' => [
                         [

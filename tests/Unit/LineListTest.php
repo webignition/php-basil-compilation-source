@@ -30,7 +30,7 @@ class LineListTest extends \PHPUnit\Framework\TestCase
 
         $lineList = new LineList($lines);
 
-        $this->assertEquals($lines, $lineList->getLineObjects());
+        $this->assertSame($lines, $lineList->getLines());
     }
 
     /**
@@ -88,14 +88,22 @@ class LineListTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider getStatementsDataProvider
+     * @dataProvider getLinesDataProvider
      */
     public function testGetLines(LineList $lineList, array $expectedLines)
     {
         $this->assertEquals($expectedLines, $lineList->getLines());
     }
 
-    public function getStatementsDataProvider(): array
+    /**
+     * @dataProvider getLinesDataProvider
+     */
+    public function testGetContents(LineList $lineList, array $expectedLineObjects)
+    {
+        $this->assertEquals($expectedLineObjects, $lineList->getSources());
+    }
+
+    public function getLinesDataProvider(): array
     {
         return [
             'empty' => [
@@ -110,10 +118,10 @@ class LineListTest extends \PHPUnit\Framework\TestCase
                     new Comment('comment'),
                 ]),
                 'expectedLines' => [
-                    'statement1',
-                    'statement2',
-                    '',
-                    'comment',
+                    new Statement('statement1'),
+                    new Statement('statement2'),
+                    new EmptyLine(),
+                    new Comment('comment'),
                 ],
             ],
         ];
@@ -188,42 +196,6 @@ class LineListTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider getLineObjectsDataProvider
-     */
-    public function testGetLineObjects(LineList $lineList, array $expectedLineObjects)
-    {
-        $this->assertEquals($expectedLineObjects, $lineList->getLineObjects());
-    }
-
-    /**
-     * @dataProvider getLineObjectsDataProvider
-     */
-    public function testGetContent(LineList $lineList, array $expectedLineObjects)
-    {
-        $this->assertEquals($expectedLineObjects, $lineList->getContent());
-    }
-
-    public function getLineObjectsDataProvider(): array
-    {
-        return [
-            'empty' => [
-                'lineList' => new LineList([]),
-                'expectedStatementObjects' => [],
-            ],
-            'non-empty' => [
-                'lineList' => new LineList([
-                    new Statement('statement1'),
-                    new Statement('statement2'),
-                ]),
-                'expectedStatementObjects' => [
-                    new Statement('statement1'),
-                    new Statement('statement2'),
-                ],
-            ],
-        ];
-    }
-
-    /**
      * @dataProvider noStatementLineListDataProvider
      */
     public function testAddClassDependenciesToLastStatementForNoStatementList(LineList $lineList)
@@ -261,8 +233,8 @@ class LineListTest extends \PHPUnit\Framework\TestCase
         ?ClassDependencyCollection $expectedCurrentClassDependencies = null,
         ?ClassDependencyCollection $expectedNewClassDependencies = null
     ) {
-        $lineObjects = $lineList->getLineObjects();
-        $statement = $lineObjects[$lastStatementIndex];
+        $lines = $lineList->getLines();
+        $statement = $lines[$lastStatementIndex];
 
         if ($statement instanceof StatementInterface) {
             $this->assertEquals(
@@ -409,8 +381,8 @@ class LineListTest extends \PHPUnit\Framework\TestCase
         ?VariablePlaceholderCollection $expectedCurrentVariableDependencies = null,
         ?VariablePlaceholderCollection $expectedNewVariableDependencies = null
     ) {
-        $lineObjects = $lineList->getLineObjects();
-        $statement = $lineObjects[$lastStatementIndex];
+        $lines = $lineList->getLines();
+        $statement = $lines[$lastStatementIndex];
 
         if ($statement instanceof StatementInterface) {
             $this->assertEquals(
@@ -557,8 +529,8 @@ class LineListTest extends \PHPUnit\Framework\TestCase
         ?VariablePlaceholderCollection $expectedCurrentVariableDependencies = null,
         ?VariablePlaceholderCollection $expectedNewVariableDependencies = null
     ) {
-        $lineObjects = $lineList->getLineObjects();
-        $statement = $lineObjects[$lastStatementIndex];
+        $lines = $lineList->getLines();
+        $statement = $lines[$lastStatementIndex];
 
         if ($statement instanceof StatementInterface) {
             $this->assertEquals(
@@ -726,8 +698,8 @@ class LineListTest extends \PHPUnit\Framework\TestCase
         string $expectedCurrentContent,
         string $expectedNewContent
     ) {
-        $lineObjects = $lineList->getLineObjects();
-        $statement = $lineObjects[$lastStatementIndex];
+        $lines = $lineList->getLines();
+        $statement = $lines[$lastStatementIndex];
 
         if ($statement instanceof StatementInterface) {
             $this->assertEquals(

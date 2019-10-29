@@ -15,6 +15,7 @@ class EmptyLineTest extends \PHPUnit\Framework\TestCase
         $emptyLine = new EmptyLine();
 
         $this->assertSame('', $emptyLine->getContent());
+        $this->assertSame([$emptyLine], $emptyLine->getSources());
     }
 
     public function testIsStatement()

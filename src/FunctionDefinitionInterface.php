@@ -2,7 +2,7 @@
 
 namespace webignition\BasilCompilationSource;
 
-interface FunctionDefinitionInterface extends SourceInterface
+interface FunctionDefinitionInterface extends LineListInterface
 {
     public function getName(): string;
     public function getArguments(): array;
