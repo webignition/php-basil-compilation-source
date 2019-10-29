@@ -38,9 +38,14 @@ class FunctionDefinition implements FunctionDefinitionInterface
         $this->lineList->addLine($statement);
     }
 
-    public function addLines(array $statements)
+    public function addLinesFromSource(SourceInterface $source)
     {
-        $this->lineList->addLines($statements);
+        $this->lineList->addLinesFromSource($source);
+    }
+
+    public function addLinesFromSources(array $sources)
+    {
+        $this->lineList->addLinesFromSources($sources);
     }
 
     /**

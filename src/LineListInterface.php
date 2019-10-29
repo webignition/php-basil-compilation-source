@@ -5,11 +5,12 @@ namespace webignition\BasilCompilationSource;
 interface LineListInterface extends SourceInterface
 {
     public function addLine(LineInterface $statement);
+    public function addLinesFromSource(SourceInterface $source);
 
     /**
-     * @param LineInterface[] $statements
+     * @param LineInterface[] $sources
      */
-    public function addLines(array $statements);
+    public function addLinesFromSources(array $sources);
 
     /**
      * @return LineInterface[]

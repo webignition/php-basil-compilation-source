@@ -34,25 +34,25 @@ class LineListTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider addLinesDataProvider
+     * @dataProvider addLinesFromSourcesDataProvider
      */
-    public function testAddLines(LineList $lineList, array $statements, array $expectedLines)
+    public function testAddLinesFromSources(LineList $lineList, array $statements, array $expectedLines)
     {
-        $lineList->addLines($statements);
+        $lineList->addLinesFromSources($statements);
 
         $this->assertEquals($expectedLines, $lineList->getLines());
     }
 
-    public function addLinesDataProvider(): array
+    public function addLinesFromSourcesDataProvider(): array
     {
         return [
             'empty list, empty lines' => [
-                'lineList' => new LineList([]),
+                'lineList' => new LineList(),
                 'lines' => [],
                 'expectedLines' => [],
             ],
             'empty list, non-empty lines' => [
-                'lineList' => new LineList([]),
+                'lineList' => new LineList(),
                 'lines' => [
                     new Statement('statement'),
                     new EmptyLine(),
