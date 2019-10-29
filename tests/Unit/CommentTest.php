@@ -16,6 +16,7 @@ class CommentTest extends \PHPUnit\Framework\TestCase
         $comment = new Comment($content);
 
         $this->assertSame($content, $comment->getContent());
+        $this->assertSame([$comment], $comment->getSources());
     }
 
     public function testIsStatement()

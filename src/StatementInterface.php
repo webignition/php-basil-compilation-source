@@ -4,7 +4,6 @@ namespace webignition\BasilCompilationSource;
 
 interface StatementInterface extends LineInterface
 {
-    public function getMetadata(): MetadataInterface;
     public function prepend(string $content);
     public function append(string $content);
     public function mutate(callable $mutator);

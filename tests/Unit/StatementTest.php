@@ -23,6 +23,7 @@ class StatementTest extends \PHPUnit\Framework\TestCase
         $statement = new Statement($content, $metadata);
 
         $this->assertSame($content, $statement->getContent());
+        $this->assertSame([$statement], $statement->getSources());
         $this->assertEquals($expectedMetadata, $statement->getMetadata());
     }
 

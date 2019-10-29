@@ -2,7 +2,7 @@
 
 namespace webignition\BasilCompilationSource;
 
-class LineList implements SourceInterface
+class LineList implements LineListInterface
 {
     const LAST_STATEMENT_INDEX = -1;
 
@@ -30,20 +30,6 @@ class LineList implements SourceInterface
         }
     }
 
-    /**
-     * @return string[]
-     */
-    public function getLines(): array
-    {
-        $lines = [];
-
-        foreach ($this->lines as $line) {
-            $lines[] = (string) $line;
-        }
-
-        return $lines;
-    }
-
     public function getMetadata(): MetadataInterface
     {
         $metadata = new Metadata();
@@ -60,7 +46,7 @@ class LineList implements SourceInterface
     /**
      * @return LineInterface[]
      */
-    public function getLineObjects(): array
+    public function getLines(): array
     {
         return $this->lines;
     }
@@ -113,9 +99,9 @@ class LineList implements SourceInterface
         ];
     }
 
-    public function getContent(): array
+    public function getSources(): array
     {
-        return $this->getLineObjects();
+        return $this->getLines();
     }
 
     private function mutateStatement(int $index, callable $mutator)
