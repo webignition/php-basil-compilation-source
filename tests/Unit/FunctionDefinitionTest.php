@@ -12,6 +12,7 @@ use webignition\BasilCompilationSource\Comment;
 use webignition\BasilCompilationSource\EmptyLine;
 use webignition\BasilCompilationSource\FunctionDefinition;
 use webignition\BasilCompilationSource\LineListInterface;
+use webignition\BasilCompilationSource\SourceInterface;
 use webignition\BasilCompilationSource\Statement;
 use webignition\BasilCompilationSource\LineList;
 use webignition\BasilCompilationSource\VariablePlaceholderCollection;
@@ -50,21 +51,67 @@ class FunctionDefinitionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider addLinesDataProvider
+     * @dataProvider addLinesFromSourceDataProvider
      */
-    public function testAddLines(FunctionDefinition $functionDefinition, array $statements, array $expectedLines)
-    {
-        $functionDefinition->addLines($statements);
+    public function testAddLinesFromSource(
+        FunctionDefinition $functionDefinition,
+        SourceInterface $source,
+        array $expectedLines
+    ) {
+        $functionDefinition->addLinesFromSource($source);
 
         $this->assertEquals($expectedLines, $functionDefinition->getLines());
     }
 
-    public function addLinesDataProvider(): array
+    public function addLinesFromSourceDataProvider(): array
+    {
+        return [
+            'empty list, non-empty source' => [
+                'functionDefinition' => new FunctionDefinition('name', new LineList()),
+                'source' => new Statement('statement'),
+                'expectedLines' => [
+                    new Statement('statement'),
+                ],
+            ],
+            'non-empty list, non-empty lines' => [
+                'functionDefinition' => new FunctionDefinition(
+                    'name',
+                    new LineList([
+                        new Statement('statement1'),
+                        new EmptyLine(),
+                        new Comment('comment1'),
+                    ])
+                ),
+                'source' => new Statement('statement2'),
+                'expectedLines' => [
+                    new Statement('statement1'),
+                    new EmptyLine(),
+                    new Comment('comment1'),
+                    new Statement('statement2'),
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider addLinesFromSourcesDataProvider
+     */
+    public function testAddLinesFromSources(
+        FunctionDefinition $functionDefinition,
+        array $sources,
+        array $expectedLines
+    ) {
+        $functionDefinition->addLinesFromSources($sources);
+
+        $this->assertEquals($expectedLines, $functionDefinition->getLines());
+    }
+
+    public function addLinesFromSourcesDataProvider(): array
     {
         return [
             'empty list, empty lines' => [
                 'functionDefinition' => new FunctionDefinition('name', new LineList()),
-                'lines' => [],
+                'sources' => [],
                 'expectedLines' => [],
             ],
             'empty list, non-empty lines' => [

@@ -11,9 +11,9 @@ class LineList implements LineListInterface
      */
     private $lines = [];
 
-    public function __construct(array $lines = [])
+    public function __construct(array $sources = [])
     {
-        $this->addLines($lines);
+        $this->addLinesFromSources($sources);
     }
 
     public function addLine(LineInterface $statement)
@@ -21,11 +21,20 @@ class LineList implements LineListInterface
         $this->lines[] = $statement;
     }
 
-    public function addLines(array $lines)
+    public function addLinesFromSource(SourceInterface $source)
     {
-        foreach ($lines as $line) {
+        foreach ($source->getSources() as $line) {
             if ($line instanceof LineInterface) {
                 $this->addLine($line);
+            }
+        }
+    }
+
+    public function addLinesFromSources(array $sources)
+    {
+        foreach ($sources as $source) {
+            if ($source instanceof SourceInterface) {
+                $this->addLinesFromSource($source);
             }
         }
     }
