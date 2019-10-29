@@ -190,9 +190,17 @@ class LineListTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider getLineObjectsDataProvider
      */
-    public function testGetLineObjects(LineList $lineList, array $expectedStatementObjects)
+    public function testGetLineObjects(LineList $lineList, array $expectedLineObjects)
     {
-        $this->assertEquals($expectedStatementObjects, $lineList->getLineObjects());
+        $this->assertEquals($expectedLineObjects, $lineList->getLineObjects());
+    }
+
+    /**
+     * @dataProvider getLineObjectsDataProvider
+     */
+    public function testGetContent(LineList $lineList, array $expectedLineObjects)
+    {
+        $this->assertEquals($expectedLineObjects, $lineList->getContent());
     }
 
     public function getLineObjectsDataProvider(): array

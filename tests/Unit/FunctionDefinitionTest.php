@@ -26,7 +26,7 @@ class FunctionDefinitionTest extends \PHPUnit\Framework\TestCase
         $functionDefinition = new FunctionDefinition($name, $content, $arguments);
 
         $this->assertSame($name, $functionDefinition->getName());
-        $this->assertSame($content, $functionDefinition->getContent());
+        $this->assertSame($content->getContent(), $functionDefinition->getContent());
         $this->assertEquals($expectedArguments, $functionDefinition->getArguments());
         $this->assertEquals($content->getMetadata(), $functionDefinition->getMetadata());
     }
