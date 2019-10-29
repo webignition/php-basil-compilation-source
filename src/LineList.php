@@ -44,7 +44,7 @@ class LineList implements LineListInterface
         $metadata = new Metadata();
 
         foreach ($this->lines as $line) {
-            if ($line instanceof StatementInterface) {
+            if ($line instanceof LineInterface) {
                 $metadata->add($line->getMetadata());
             }
         }
@@ -71,8 +71,8 @@ class LineList implements LineListInterface
     {
         $statement = $this->getStatement(self::LAST_STATEMENT_INDEX);
 
-        if ($statement instanceof LineInterface) {
-            $statement->getMetadata()->addClassDependencies($classDependencies);
+        if ($statement instanceof StatementInterface) {
+            $statement->addClassDependencies($classDependencies);
         }
     }
 
@@ -80,8 +80,8 @@ class LineList implements LineListInterface
     {
         $statement = $this->getStatement(self::LAST_STATEMENT_INDEX);
 
-        if ($statement instanceof LineInterface) {
-            $statement->getMetadata()->addVariableDependencies($variableDependencies);
+        if ($statement instanceof StatementInterface) {
+            $statement->addVariableDependencies($variableDependencies);
         }
     }
 
@@ -89,8 +89,8 @@ class LineList implements LineListInterface
     {
         $statement = $this->getStatement(self::LAST_STATEMENT_INDEX);
 
-        if ($statement instanceof LineInterface) {
-            $statement->getMetadata()->addVariableExports($variableExports);
+        if ($statement instanceof StatementInterface) {
+            $statement->addVariableExports($variableExports);
         }
     }
 

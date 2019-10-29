@@ -2,7 +2,7 @@
 
 namespace webignition\BasilCompilationSource;
 
-interface StatementInterface extends LineInterface
+interface StatementInterface extends LineInterface, MutableListLineListInterface
 {
     public function prepend(string $content);
     public function append(string $content);
