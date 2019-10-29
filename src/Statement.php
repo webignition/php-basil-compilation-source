@@ -11,6 +11,21 @@ class Statement extends AbstractLine implements StatementInterface
         parent::__construct($content, self::TYPE, $metadata);
     }
 
+    public function isStatement(): bool
+    {
+        return true;
+    }
+
+    public function isComment(): bool
+    {
+        return false;
+    }
+
+    public function isEmpty(): bool
+    {
+        return false;
+    }
+
     public function prepend(string $content)
     {
         $this->mutate(function (string $statement) use ($content) {
@@ -45,18 +60,23 @@ class Statement extends AbstractLine implements StatementInterface
         $this->getMetadata()->addVariableExports($variableExports);
     }
 
-    public function isStatement(): bool
+    public function mutateLastStatement(callable $mutator)
     {
-        return true;
+        return $this->mutate($mutator);
     }
 
-    public function isComment(): bool
+    public function addClassDependenciesToLastStatement(ClassDependencyCollection $classDependencies)
     {
-        return false;
+        return $this->addClassDependencies($classDependencies);
     }
 
-    public function isEmpty(): bool
+    public function addVariableDependenciesToLastStatement(VariablePlaceholderCollection $variableDependencies)
     {
-        return false;
+        return $this->addVariableDependencies($variableDependencies);
+    }
+
+    public function addVariableExportsToLastStatement(VariablePlaceholderCollection $variableExports)
+    {
+        $this->addVariableExports($variableExports);
     }
 }

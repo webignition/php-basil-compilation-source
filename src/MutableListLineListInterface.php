@@ -2,21 +2,8 @@
 
 namespace webignition\BasilCompilationSource;
 
-interface LineListInterface extends SourceInterface, MutableListLineListInterface
+interface MutableListLineListInterface extends SourceInterface
 {
-    public function addLine(LineInterface $statement);
-    public function addLinesFromSource(SourceInterface $source);
-
-    /**
-     * @param LineInterface[] $sources
-     */
-    public function addLinesFromSources(array $sources);
-
-    /**
-     * @return LineInterface[]
-     */
-    public function getLines(): array;
-
     public function mutateLastStatement(callable $mutator);
     public function addClassDependenciesToLastStatement(ClassDependencyCollection $classDependencies);
     public function addVariableDependenciesToLastStatement(VariablePlaceholderCollection $variableDependencies);

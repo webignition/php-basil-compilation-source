@@ -159,4 +159,54 @@ class StatementTest extends \PHPUnit\Framework\TestCase
             $comment->jsonSerialize()
         );
     }
+
+    public function testMutateLastStatement()
+    {
+        $statement = new Statement('content');
+        $statement->mutateLastStatement(function (string $content) {
+            return '!' . $content . '!';
+        });
+
+        $this->assertEquals('!content!', $statement->getContent());
+    }
+
+    public function testAddClassDependenciesToLastStatement()
+    {
+        $statement = new Statement('statement');
+        $this->assertEquals(new ClassDependencyCollection([]), $statement->getMetadata()->getClassDependencies());
+
+        $classDependencies = new ClassDependencyCollection([
+            new ClassDependency(ClassDependency::class),
+        ]);
+
+        $statement->addClassDependenciesToLastStatement($classDependencies);
+        $this->assertEquals($classDependencies, $statement->getMetadata()->getClassDependencies());
+    }
+
+    public function testAddVariableDependenciesToLastStatement()
+    {
+        $statement = new Statement('statement');
+        $this->assertEquals(
+            new VariablePlaceholderCollection([]),
+            $statement->getMetadata()->getVariableDependencies()
+        );
+        $variableDependencies = VariablePlaceholderCollection::createCollection(['DEPENDENCY']);
+
+        $statement->addVariableDependenciesToLastStatement($variableDependencies);
+        $this->assertEquals($variableDependencies, $statement->getMetadata()->getVariableDependencies());
+    }
+
+    public function testAddVariableExportsToLastStatement()
+    {
+        $statement = new Statement('statement');
+        $this->assertEquals(
+            new VariablePlaceholderCollection([]),
+            $statement->getMetadata()->getVariableExports()
+        );
+
+        $variableExports = VariablePlaceholderCollection::createCollection(['DEPENDENCY']);
+
+        $statement->addVariableExportsToLastStatement($variableExports);
+        $this->assertEquals($variableExports, $statement->getMetadata()->getVariableExports());
+    }
 }
