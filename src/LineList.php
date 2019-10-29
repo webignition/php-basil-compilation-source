@@ -113,6 +113,11 @@ class LineList implements SourceInterface
         ];
     }
 
+    public function getContent(): array
+    {
+        return $this->getLineObjects();
+    }
+
     private function mutateStatement(int $index, callable $mutator)
     {
         $statementData = $this->getStatementData($index);

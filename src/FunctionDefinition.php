@@ -20,9 +20,9 @@ class FunctionDefinition implements FunctionDefinitionInterface
         return $this->name;
     }
 
-    public function getContent(): SourceInterface
+    public function getContent(): array
     {
-        return $this->content;
+        return $this->content->getContent();
     }
 
     public function getArguments(): array

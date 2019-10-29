@@ -27,4 +27,5 @@ interface SourceInterface extends \JsonSerializable
     public function addClassDependenciesToLastStatement(ClassDependencyCollection $classDependencies);
     public function addVariableDependenciesToLastStatement(VariablePlaceholderCollection $variableDependencies);
     public function addVariableExportsToLastStatement(VariablePlaceholderCollection $variableExports);
+    public function getContent(): array;
 }
