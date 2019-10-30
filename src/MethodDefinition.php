@@ -8,22 +8,16 @@ class MethodDefinition implements MethodDefinitionInterface, MutableListLineList
     const VISIBILITY_PROTECTED = 'protected';
     const VISIBILITY_PRIVATE = 'private';
 
-    private $visibility;
+    private $visibility = self::VISIBILITY_PUBLIC;
     private $name;
     private $lineList;
     private $arguments = [];
 
-    public function __construct(string $visibility, string $name, LineList $lineList, ?array $arguments = null)
+    public function __construct(string $name, LineList $lineList, ?array $arguments = null)
     {
-        $this->visibility = $visibility;
         $this->name = $name;
         $this->lineList = $lineList;
         $this->arguments = $arguments ?? [];
-    }
-
-    public function getVisibility(): string
-    {
-        return $this->visibility;
     }
 
     public function getName(): string
@@ -90,5 +84,35 @@ class MethodDefinition implements MethodDefinitionInterface, MutableListLineList
     public function addVariableExportsToLastStatement(VariablePlaceholderCollection $variableExports)
     {
         $this->lineList->addVariableExportsToLastStatement($variableExports);
+    }
+
+    public function setPublic()
+    {
+        $this->visibility= self::VISIBILITY_PUBLIC;
+    }
+
+    public function setProtected()
+    {
+        $this->visibility = self::VISIBILITY_PROTECTED;
+    }
+
+    public function setPrivate()
+    {
+        $this->visibility = self::VISIBILITY_PRIVATE;
+    }
+
+    public function isPublic(): bool
+    {
+        return self::VISIBILITY_PUBLIC === $this->visibility;
+    }
+
+    public function isProtected(): bool
+    {
+        return self::VISIBILITY_PROTECTED === $this->visibility;
+    }
+
+    public function isPrivate(): bool
+    {
+        return self::VISIBILITY_PRIVATE === $this->visibility;
     }
 }

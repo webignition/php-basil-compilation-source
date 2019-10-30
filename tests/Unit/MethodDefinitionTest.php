@@ -22,15 +22,14 @@ class MethodDefinitionTest extends \PHPUnit\Framework\TestCase
      * @dataProvider constructDataProvider
      */
     public function testConstruct(
-        string $visibility,
         string $name,
         LineList $content,
         $arguments,
         array $expectedArguments
     ) {
-        $methodDefinition = new MethodDefinition($visibility, $name, $content, $arguments);
+        $methodDefinition = new MethodDefinition($name, $content, $arguments);
 
-        $this->assertSame($visibility, $methodDefinition->getVisibility());
+        $this->assertTrue($methodDefinition->isPublic());
         $this->assertSame($name, $methodDefinition->getName());
         $this->assertSame($content->getSources(), $methodDefinition->getSources());
         $this->assertEquals($expectedArguments, $methodDefinition->getArguments());
@@ -40,21 +39,42 @@ class MethodDefinitionTest extends \PHPUnit\Framework\TestCase
     public function constructDataProvider(): array
     {
         return [
-            'public, without arguments' => [
-                'visibility' => MethodDefinition::VISIBILITY_PUBLIC,
+            'without arguments' => [
                 'name' => 'withoutArguments',
                 'content' => new LineList([new Statement('statement')]),
                 'arguments' => null,
                 'expectedArguments' => [],
             ],
-            'private, with arguments' => [
-                'visibility' => MethodDefinition::VISIBILITY_PRIVATE,
+            'with arguments' => [
                 'name' => 'withArguments',
                 'content' => new LineList([new Statement('statement')]),
                 'arguments' => ['a', 'b', 'c'],
                 'expectedArguments' => ['a', 'b', 'c'],
             ],
         ];
+    }
+
+    public function testVisibility()
+    {
+        $methodDefinition = new MethodDefinition('name', new LineList());
+        $this->assertTrue($methodDefinition->isPublic());
+        $this->assertFalse($methodDefinition->isProtected());
+        $this->assertFalse($methodDefinition->isPrivate());
+
+        $methodDefinition->setProtected();
+        $this->assertFalse($methodDefinition->isPublic());
+        $this->assertTrue($methodDefinition->isProtected());
+        $this->assertFalse($methodDefinition->isPrivate());
+
+        $methodDefinition->setPrivate();
+        $this->assertFalse($methodDefinition->isPublic());
+        $this->assertFalse($methodDefinition->isProtected());
+        $this->assertTrue($methodDefinition->isPrivate());
+
+        $methodDefinition->setPublic();
+        $this->assertTrue($methodDefinition->isPublic());
+        $this->assertFalse($methodDefinition->isProtected());
+        $this->assertFalse($methodDefinition->isPrivate());
     }
 
     /**
@@ -74,19 +94,14 @@ class MethodDefinitionTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'empty list, non-empty source' => [
-                'functionDefinition' => new MethodDefinition(
-                    MethodDefinition::VISIBILITY_PUBLIC,
-                    'name',
-                    new LineList()
-                ),
+                'methodDefinition' => new MethodDefinition('name', new LineList()),
                 'source' => new Statement('statement'),
                 'expectedLines' => [
                     new Statement('statement'),
                 ],
             ],
             'non-empty list, non-empty lines' => [
-                'functionDefinition' => new MethodDefinition(
-                    MethodDefinition::VISIBILITY_PUBLIC,
+                'methodDefinition' => new MethodDefinition(
                     'name',
                     new LineList([
                         new Statement('statement1'),
@@ -122,20 +137,12 @@ class MethodDefinitionTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'empty list, empty lines' => [
-                'functionDefinition' => new MethodDefinition(
-                    MethodDefinition::VISIBILITY_PUBLIC,
-                    'name',
-                    new LineList()
-                ),
+                'methodDefinition' => new MethodDefinition('name', new LineList()),
                 'sources' => [],
                 'expectedLines' => [],
             ],
             'empty list, non-empty lines' => [
-                'functionDefinition' => new MethodDefinition(
-                    MethodDefinition::VISIBILITY_PUBLIC,
-                    'name',
-                    new LineList()
-                ),
+                'methodDefinition' => new MethodDefinition('name', new LineList()),
                 'lines' => [
                     new Statement('statement'),
                     new EmptyLine(),
@@ -148,8 +155,7 @@ class MethodDefinitionTest extends \PHPUnit\Framework\TestCase
                 ],
             ],
             'non-empty list, non-empty lines' => [
-                'functionDefinition' => new MethodDefinition(
-                    MethodDefinition::VISIBILITY_PUBLIC,
+                'methodDefinition' => new MethodDefinition(
                     'name',
                     new LineList([
                         new Statement('statement1'),
@@ -177,7 +183,6 @@ class MethodDefinitionTest extends \PHPUnit\Framework\TestCase
     public function testAddLine()
     {
         $methodDefinition = new MethodDefinition(
-            MethodDefinition::VISIBILITY_PUBLIC,
             'name',
             new LineList([
                 new Statement('statement1'),
@@ -211,11 +216,7 @@ class MethodDefinitionTest extends \PHPUnit\Framework\TestCase
     public function testGetStatementObjects()
     {
         $statement = new Statement('statement');
-        $methodDefinition = new MethodDefinition(
-            MethodDefinition::VISIBILITY_PUBLIC,
-            'name',
-            new LineList([$statement])
-        );
+        $methodDefinition = new MethodDefinition('name', new LineList([$statement]));
 
         $this->assertEquals([$statement], $methodDefinition->getLines());
     }
@@ -223,11 +224,7 @@ class MethodDefinitionTest extends \PHPUnit\Framework\TestCase
     public function testMutateLastStatement()
     {
         $statement = new Statement('content');
-        $methodDefinition = new MethodDefinition(
-            MethodDefinition::VISIBILITY_PUBLIC,
-            'name',
-            new LineList([$statement])
-        );
+        $methodDefinition = new MethodDefinition('name', new LineList([$statement]));
 
         $methodDefinition->mutateLastStatement(function (string $content) {
             return '!' . $content . '!';
@@ -241,12 +238,7 @@ class MethodDefinitionTest extends \PHPUnit\Framework\TestCase
         $statement = new Statement('statement');
         $this->assertEquals(new ClassDependencyCollection([]), $statement->getMetadata()->getClassDependencies());
 
-        $methodDefinition = new MethodDefinition(
-            MethodDefinition::VISIBILITY_PUBLIC,
-            'name',
-            new LineList([$statement])
-        );
-
+        $methodDefinition = new MethodDefinition('name', new LineList([$statement]));
         $classDependencies = new ClassDependencyCollection([
             new ClassDependency(ClassDependency::class),
         ]);
@@ -263,12 +255,7 @@ class MethodDefinitionTest extends \PHPUnit\Framework\TestCase
             $statement->getMetadata()->getVariableDependencies()
         );
 
-        $methodDefinition = new MethodDefinition(
-            MethodDefinition::VISIBILITY_PUBLIC,
-            'name',
-            new LineList([$statement])
-        );
-
+        $methodDefinition = new MethodDefinition('name', new LineList([$statement]));
         $variableDependencies = VariablePlaceholderCollection::createCollection(['DEPENDENCY']);
 
         $methodDefinition->addVariableDependenciesToLastStatement($variableDependencies);
@@ -283,12 +270,7 @@ class MethodDefinitionTest extends \PHPUnit\Framework\TestCase
             $statement->getMetadata()->getVariableExports()
         );
 
-        $methodDefinition = new MethodDefinition(
-            MethodDefinition::VISIBILITY_PUBLIC,
-            'name',
-            new LineList([$statement])
-        );
-
+        $methodDefinition = new MethodDefinition('name', new LineList([$statement]));
         $variableExports = VariablePlaceholderCollection::createCollection(['DEPENDENCY']);
 
         $methodDefinition->addVariableExportsToLastStatement($variableExports);

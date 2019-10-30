@@ -43,17 +43,17 @@ class ClassDefinitionTest extends \PHPUnit\Framework\TestCase
                 'name' => 'name2',
                 'methods' => [
                     1,
-                    new MethodDefinition(MethodDefinition::VISIBILITY_PUBLIC, 'method1', new LineList()),
+                    new MethodDefinition('method1', new LineList()),
                     'string',
-                    new MethodDefinition(MethodDefinition::VISIBILITY_PUBLIC, 'method2', new LineList()),
+                    new MethodDefinition('method2', new LineList()),
                     true,
-                    new MethodDefinition(MethodDefinition::VISIBILITY_PUBLIC, 'method3', new LineList()),
+                    new MethodDefinition('method3', new LineList()),
                     new \stdClass(),
                 ],
                 'expectedMethods' => [
-                    new MethodDefinition(MethodDefinition::VISIBILITY_PUBLIC, 'method1', new LineList()),
-                    new MethodDefinition(MethodDefinition::VISIBILITY_PUBLIC, 'method2', new LineList()),
-                    new MethodDefinition(MethodDefinition::VISIBILITY_PUBLIC, 'method3', new LineList()),
+                    new MethodDefinition('method1', new LineList()),
+                    new MethodDefinition('method2', new LineList()),
+                    new MethodDefinition('method3', new LineList()),
                 ],
             ],
         ];
@@ -76,13 +76,13 @@ class ClassDefinitionTest extends \PHPUnit\Framework\TestCase
             ],
             'single function, no lines' => [
                 'classDefinition' => new ClassDefinition('name', [
-                    new MethodDefinition(MethodDefinition::VISIBILITY_PUBLIC, 'method', new LineList()),
+                    new MethodDefinition('method', new LineList()),
                 ]),
                 'expectedMetadata' => new Metadata(),
             ],
             'single function, has lines, no metadata' => [
                 'classDefinition' => new ClassDefinition('name', [
-                    new MethodDefinition(MethodDefinition::VISIBILITY_PUBLIC, 'method', new LineList([
+                    new MethodDefinition('method', new LineList([
                         new Statement('statement'),
                     ])),
                 ]),
@@ -90,7 +90,7 @@ class ClassDefinitionTest extends \PHPUnit\Framework\TestCase
             ],
             'single function, has lines, has metadata' => [
                 'classDefinition' => new ClassDefinition('name', [
-                    new MethodDefinition(MethodDefinition::VISIBILITY_PUBLIC, 'method', new LineList([
+                    new MethodDefinition('method', new LineList([
                         new Statement(
                             'statement',
                             (new Metadata())
@@ -107,7 +107,7 @@ class ClassDefinitionTest extends \PHPUnit\Framework\TestCase
             ],
             'many functions with metadata' => [
                 'classDefinition' => new ClassDefinition('name', [
-                    new MethodDefinition(MethodDefinition::VISIBILITY_PUBLIC, 'method', new LineList([
+                    new MethodDefinition('method', new LineList([
                         new Statement(
                             'statement',
                             (new Metadata())
@@ -135,7 +135,7 @@ class ClassDefinitionTest extends \PHPUnit\Framework\TestCase
                                 ]))
                         ),
                     ])),
-                    new MethodDefinition(MethodDefinition::VISIBILITY_PUBLIC, 'method', new LineList([
+                    new MethodDefinition('method', new LineList([
                         new Statement(
                             'statement',
                             (new Metadata())
