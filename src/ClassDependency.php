@@ -32,12 +32,12 @@ class ClassDependency extends AbstractLine implements UniqueItemInterface
 
     private function createContent(string $className, ?string $alias = null)
     {
-        $foo = $className;
+        $content = $className;
 
         if (null !== $alias) {
-            $foo .= ' as ' . $alias;
+            $content .= ' as ' . $alias;
         }
 
-        return $foo;
+        return $content;
     }
 }
