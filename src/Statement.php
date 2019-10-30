@@ -11,21 +11,6 @@ class Statement extends AbstractLine implements StatementInterface
         parent::__construct($content, self::TYPE, $metadata);
     }
 
-    public function isStatement(): bool
-    {
-        return true;
-    }
-
-    public function isComment(): bool
-    {
-        return false;
-    }
-
-    public function isEmpty(): bool
-    {
-        return false;
-    }
-
     public function prepend(string $content)
     {
         $this->mutate(function (string $statement) use ($content) {

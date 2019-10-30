@@ -113,27 +113,6 @@ class StatementTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($variableExports, $statement->getMetadata()->getVariableExports());
     }
 
-    public function testIsStatement()
-    {
-        $statement = new Statement('statement');
-
-        $this->assertTrue($statement->isStatement());
-    }
-
-    public function testIsComment()
-    {
-        $statement = new Statement('statement');
-
-        $this->assertFalse($statement->isComment());
-    }
-
-    public function testIsEmpty()
-    {
-        $statement = new Statement('statement');
-
-        $this->assertFalse($statement->isEmpty());
-    }
-
     public function testToString()
     {
         $content = 'statement';
