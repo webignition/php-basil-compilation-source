@@ -41,12 +41,4 @@ abstract class AbstractLine implements LineInterface
     {
         return $this->type;
     }
-
-    public function jsonSerialize(): array
-    {
-        return [
-            'type' => $this->getType(),
-            'content' => $this->getContent(),
-        ];
-    }
 }

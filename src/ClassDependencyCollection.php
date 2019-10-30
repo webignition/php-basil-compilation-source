@@ -90,18 +90,4 @@ class ClassDependencyCollection extends AbstractUniqueCollection implements \Ite
     {
         return $this->getAll();
     }
-
-    public function jsonSerialize(): array
-    {
-        $serializedContent = [];
-
-        foreach ($this->getAll() as $classDependency) {
-            $serializedContent[] = $classDependency->jsonSerialize();
-        }
-
-        return [
-            'type' => 'class-dependency-collection',
-            'class-dependencies' => $serializedContent,
-        ];
-    }
 }

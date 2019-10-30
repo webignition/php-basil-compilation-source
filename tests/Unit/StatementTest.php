@@ -127,19 +127,6 @@ class StatementTest extends \PHPUnit\Framework\TestCase
         $this->assertSame(LineTypes::STATEMENT, (new Statement(''))->getType());
     }
 
-    public function testJsonSerialize()
-    {
-        $comment = new Statement('statement content');
-
-        $this->assertSame(
-            [
-                'type' => LineTypes::STATEMENT,
-                'content' => 'statement content',
-            ],
-            $comment->jsonSerialize()
-        );
-    }
-
     public function testMutateLastStatement()
     {
         $statement = new Statement('content');

@@ -171,36 +171,4 @@ class ClassDefinitionTest extends \PHPUnit\Framework\TestCase
             ],
         ];
     }
-
-    public function testJsonSerialize()
-    {
-        $classDefinition = new ClassDefinition(
-            'className',
-            [
-                new FunctionDefinition('functionName', new LineList([
-                    new EmptyLine(),
-                ])),
-            ]
-        );
-
-        $this->assertSame(
-            [
-                'type' => 'class',
-                'name' => 'className',
-                'functions' => [
-                    [
-                        'type' => 'function',
-                        'name' => 'functionName',
-                        'lines' => [
-                            [
-                                'type' => 'empty',
-                                'content' => '',
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-            $classDefinition->jsonSerialize()
-        );
-    }
 }

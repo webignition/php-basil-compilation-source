@@ -44,23 +44,6 @@ class ClassDefinition implements ClassDefinitionInterface
         return $metadata;
     }
 
-    public function jsonSerialize(): array
-    {
-        $functions = [];
-
-        foreach ($this->functions as $function) {
-            if ($function instanceof FunctionDefinitionInterface) {
-                $functions[] = $function->jsonSerialize();
-            }
-        }
-
-        return [
-            'type' => 'class',
-            'name' => $this->name,
-            'functions' => $functions,
-        ];
-    }
-
     /**
      * @return SourceInterface[]
      */

@@ -175,24 +175,4 @@ class ClassDependencyCollectionTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertEquals(new Metadata(), (new ClassDependencyCollection())->getMetadata());
     }
-
-    public function testJsonSerialize()
-    {
-        $classDependency = new ClassDependency(ClassDependency::class);
-
-        $collection = new ClassDependencyCollection([$classDependency]);
-
-        $this->assertSame(
-            [
-                'type' => 'class-dependency-collection',
-                'class-dependencies' => [
-                    [
-                        'type' => 'use-statement',
-                        'content' => ClassDependency::class,
-                    ],
-                ],
-            ],
-            $collection->jsonSerialize()
-        );
-    }
 }

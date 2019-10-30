@@ -94,20 +94,6 @@ class LineList implements LineListInterface, MutableListLineListInterface
         }
     }
 
-    public function jsonSerialize(): array
-    {
-        $serializedContent = [];
-
-        foreach ($this->lines as $line) {
-            $serializedContent[] = $line->jsonSerialize();
-        }
-
-        return [
-            'type' => 'line-list',
-            'lines' => $serializedContent,
-        ];
-    }
-
     public function getSources(): array
     {
         return $this->getLines();

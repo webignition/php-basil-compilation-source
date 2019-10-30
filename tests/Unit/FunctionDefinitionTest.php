@@ -249,25 +249,4 @@ class FunctionDefinitionTest extends \PHPUnit\Framework\TestCase
         $functionDefinition->addVariableExportsToLastStatement($variableExports);
         $this->assertEquals($variableExports, $statement->getMetadata()->getVariableExports());
     }
-
-    public function testJsonSerialize()
-    {
-        $functionDefinition = new FunctionDefinition('functionName', new LineList([
-            new EmptyLine(),
-        ]));
-
-        $this->assertSame(
-            [
-                'type' => 'function',
-                'name' => 'functionName',
-                'lines' => [
-                    [
-                        'type' => 'empty',
-                        'content' => '',
-                    ],
-                ],
-            ],
-            $functionDefinition->jsonSerialize()
-        );
-    }
 }
