@@ -2,7 +2,7 @@
 
 namespace webignition\BasilCompilationSource;
 
-class ClassDependency extends AbstractLine implements UniqueItemInterface
+class ClassDependency extends AbstractStatement implements UniqueItemInterface
 {
     private $className;
     private $alias;
