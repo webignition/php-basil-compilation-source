@@ -12,7 +12,7 @@ class ClassDefinition implements ClassDefinitionInterface
         $this->name = $name;
 
         foreach ($functions as $function) {
-            if ($function instanceof FunctionDefinitionInterface) {
+            if ($function instanceof MethodDefinitionInterface) {
                 $this->functions[] = $function;
             }
         }
@@ -24,9 +24,9 @@ class ClassDefinition implements ClassDefinitionInterface
     }
 
     /**
-     * @return FunctionDefinitionInterface[]
+     * @return MethodDefinitionInterface[]
      */
-    public function getFunctions(): array
+    public function getMethods(): array
     {
         return $this->functions;
     }
@@ -36,7 +36,7 @@ class ClassDefinition implements ClassDefinitionInterface
         $metadata = new Metadata();
 
         foreach ($this->functions as $function) {
-            if ($function instanceof FunctionDefinitionInterface) {
+            if ($function instanceof MethodDefinitionInterface) {
                 $metadata->add($function->getMetadata());
             }
         }
@@ -49,6 +49,6 @@ class ClassDefinition implements ClassDefinitionInterface
      */
     public function getSources(): array
     {
-        return $this->getFunctions();
+        return $this->getMethods();
     }
 }

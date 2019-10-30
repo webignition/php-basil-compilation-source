@@ -2,7 +2,9 @@
 
 namespace webignition\BasilCompilationSource;
 
-interface MethodDefinitionInterface extends FunctionDefinitionInterface
+interface MethodDefinitionInterface extends LineListInterface
 {
     public function getVisibility(): string;
+    public function getName(): string;
+    public function getArguments(): array;
 }
