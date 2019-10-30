@@ -4,11 +4,9 @@ namespace webignition\BasilCompilationSource;
 
 class Statement extends AbstractLine implements StatementInterface
 {
-    const TYPE = 'statement';
-
     public function __construct(string $content, ?MetadataInterface $metadata = null)
     {
-        parent::__construct($content, self::TYPE, $metadata);
+        parent::__construct($content, LineTypes::STATEMENT, $metadata);
     }
 
     public function prepend(string $content)
