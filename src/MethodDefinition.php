@@ -7,8 +7,10 @@ class MethodDefinition implements MethodDefinitionInterface, MutableListLineList
     const VISIBILITY_PUBLIC = 'public';
     const VISIBILITY_PROTECTED = 'protected';
     const VISIBILITY_PRIVATE = 'private';
+    const RETURN_TYPE_VOID = 'void';
 
     private $visibility = self::VISIBILITY_PUBLIC;
+    private $returnType = self::RETURN_TYPE_VOID;
     private $name;
     private $lineList;
     private $arguments = [];
@@ -114,5 +116,15 @@ class MethodDefinition implements MethodDefinitionInterface, MutableListLineList
     public function isPrivate(): bool
     {
         return self::VISIBILITY_PRIVATE === $this->visibility;
+    }
+
+    public function getReturnType(): string
+    {
+        return $this->returnType;
+    }
+
+    public function setReturnType(string $returnType)
+    {
+        $this->returnType = $returnType;
     }
 }
