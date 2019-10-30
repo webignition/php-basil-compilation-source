@@ -8,6 +8,7 @@ namespace webignition\BasilCompilationSource\Tests\Unit;
 
 use webignition\BasilCompilationSource\ClassDependency;
 use webignition\BasilCompilationSource\ClassDependencyCollection;
+use webignition\BasilCompilationSource\LineTypes;
 use webignition\BasilCompilationSource\MetadataInterface;
 use webignition\BasilCompilationSource\Statement;
 use webignition\BasilCompilationSource\Metadata;
@@ -123,7 +124,7 @@ class StatementTest extends \PHPUnit\Framework\TestCase
 
     public function testGetType()
     {
-        $this->assertSame(Statement::TYPE, (new Statement(''))->getType());
+        $this->assertSame(LineTypes::STATEMENT, (new Statement(''))->getType());
     }
 
     public function testJsonSerialize()
@@ -132,7 +133,7 @@ class StatementTest extends \PHPUnit\Framework\TestCase
 
         $this->assertSame(
             [
-                'type' => 'statement',
+                'type' => LineTypes::STATEMENT,
                 'content' => 'statement content',
             ],
             $comment->jsonSerialize()

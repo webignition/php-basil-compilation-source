@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace webignition\BasilCompilationSource\Tests\Unit;
 
 use webignition\BasilCompilationSource\Comment;
+use webignition\BasilCompilationSource\LineTypes;
 
 class CommentTest extends \PHPUnit\Framework\TestCase
 {
@@ -29,7 +30,7 @@ class CommentTest extends \PHPUnit\Framework\TestCase
 
     public function testGetType()
     {
-        $this->assertSame(Comment::TYPE, (new Comment(''))->getType());
+        $this->assertSame(LineTypes::COMMENT, (new Comment(''))->getType());
     }
 
     public function testJsonSerialize()
@@ -38,7 +39,7 @@ class CommentTest extends \PHPUnit\Framework\TestCase
 
         $this->assertSame(
             [
-                'type' => 'comment',
+                'type' => LineTypes::COMMENT,
                 'content' => 'comment content',
             ],
             $comment->jsonSerialize()

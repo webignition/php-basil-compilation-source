@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace webignition\BasilCompilationSource\Tests\Unit;
 
 use webignition\BasilCompilationSource\EmptyLine;
+use webignition\BasilCompilationSource\LineTypes;
 
 class EmptyLineTest extends \PHPUnit\Framework\TestCase
 {
@@ -25,7 +26,7 @@ class EmptyLineTest extends \PHPUnit\Framework\TestCase
 
     public function testGetType()
     {
-        $this->assertSame(EmptyLine::TYPE, (new EmptyLine())->getType());
+        $this->assertSame(LineTypes::EMPTY, (new EmptyLine())->getType());
     }
 
     public function testJsonSerialize()
@@ -34,7 +35,7 @@ class EmptyLineTest extends \PHPUnit\Framework\TestCase
 
         $this->assertSame(
             [
-                'type' => 'empty',
+                'type' => LineTypes::EMPTY,
                 'content' => '',
             ],
             $comment->jsonSerialize()
