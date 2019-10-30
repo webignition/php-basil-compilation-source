@@ -7,7 +7,7 @@ interface ClassDefinitionInterface extends SourceInterface
     public function getName(): string;
 
     /**
-     * @return FunctionDefinitionInterface[]
+     * @return MethodDefinitionInterface[]
      */
-    public function getFunctions(): array;
+    public function getMethods(): array;
 }

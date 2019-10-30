@@ -10,25 +10,30 @@ use webignition\BasilCompilationSource\ClassDependency;
 use webignition\BasilCompilationSource\ClassDependencyCollection;
 use webignition\BasilCompilationSource\Comment;
 use webignition\BasilCompilationSource\EmptyLine;
-use webignition\BasilCompilationSource\FunctionDefinition;
+use webignition\BasilCompilationSource\MethodDefinition;
+use webignition\BasilCompilationSource\LineList;
 use webignition\BasilCompilationSource\SourceInterface;
 use webignition\BasilCompilationSource\Statement;
-use webignition\BasilCompilationSource\LineList;
 use webignition\BasilCompilationSource\VariablePlaceholderCollection;
 
-class FunctionDefinitionTest extends \PHPUnit\Framework\TestCase
+class MethodDefinitionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider constructDataProvider
      */
-    public function testConstruct(string $name, LineList $content, $arguments, array $expectedArguments)
-    {
-        $functionDefinition = new FunctionDefinition($name, $content, $arguments);
+    public function testConstruct(
+        string $name,
+        LineList $content,
+        $arguments,
+        array $expectedArguments
+    ) {
+        $methodDefinition = new MethodDefinition($name, $content, $arguments);
 
-        $this->assertSame($name, $functionDefinition->getName());
-        $this->assertSame($content->getSources(), $functionDefinition->getSources());
-        $this->assertEquals($expectedArguments, $functionDefinition->getArguments());
-        $this->assertEquals($content->getMetadata(), $functionDefinition->getMetadata());
+        $this->assertTrue($methodDefinition->isPublic());
+        $this->assertSame($name, $methodDefinition->getName());
+        $this->assertSame($content->getSources(), $methodDefinition->getSources());
+        $this->assertEquals($expectedArguments, $methodDefinition->getArguments());
+        $this->assertEquals($content->getMetadata(), $methodDefinition->getMetadata());
     }
 
     public function constructDataProvider(): array
@@ -49,31 +54,54 @@ class FunctionDefinitionTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
+    public function testVisibility()
+    {
+        $methodDefinition = new MethodDefinition('name', new LineList());
+        $this->assertTrue($methodDefinition->isPublic());
+        $this->assertFalse($methodDefinition->isProtected());
+        $this->assertFalse($methodDefinition->isPrivate());
+
+        $methodDefinition->setProtected();
+        $this->assertFalse($methodDefinition->isPublic());
+        $this->assertTrue($methodDefinition->isProtected());
+        $this->assertFalse($methodDefinition->isPrivate());
+
+        $methodDefinition->setPrivate();
+        $this->assertFalse($methodDefinition->isPublic());
+        $this->assertFalse($methodDefinition->isProtected());
+        $this->assertTrue($methodDefinition->isPrivate());
+
+        $methodDefinition->setPublic();
+        $this->assertTrue($methodDefinition->isPublic());
+        $this->assertFalse($methodDefinition->isProtected());
+        $this->assertFalse($methodDefinition->isPrivate());
+    }
+
     /**
      * @dataProvider addLinesFromSourceDataProvider
      */
     public function testAddLinesFromSource(
-        FunctionDefinition $functionDefinition,
+        MethodDefinition $methodDefinition,
         SourceInterface $source,
         array $expectedLines
     ) {
-        $functionDefinition->addLinesFromSource($source);
+        $methodDefinition->addLinesFromSource($source);
 
-        $this->assertEquals($expectedLines, $functionDefinition->getLines());
+        $this->assertEquals($expectedLines, $methodDefinition->getLines());
     }
 
     public function addLinesFromSourceDataProvider(): array
     {
         return [
             'empty list, non-empty source' => [
-                'functionDefinition' => new FunctionDefinition('name', new LineList()),
+                'methodDefinition' => new MethodDefinition('name', new LineList()),
                 'source' => new Statement('statement'),
                 'expectedLines' => [
                     new Statement('statement'),
                 ],
             ],
             'non-empty list, non-empty lines' => [
-                'functionDefinition' => new FunctionDefinition(
+                'methodDefinition' => new MethodDefinition(
                     'name',
                     new LineList([
                         new Statement('statement1'),
@@ -96,25 +124,25 @@ class FunctionDefinitionTest extends \PHPUnit\Framework\TestCase
      * @dataProvider addLinesFromSourcesDataProvider
      */
     public function testAddLinesFromSources(
-        FunctionDefinition $functionDefinition,
+        MethodDefinition $methodDefinition,
         array $sources,
         array $expectedLines
     ) {
-        $functionDefinition->addLinesFromSources($sources);
+        $methodDefinition->addLinesFromSources($sources);
 
-        $this->assertEquals($expectedLines, $functionDefinition->getLines());
+        $this->assertEquals($expectedLines, $methodDefinition->getLines());
     }
 
     public function addLinesFromSourcesDataProvider(): array
     {
         return [
             'empty list, empty lines' => [
-                'functionDefinition' => new FunctionDefinition('name', new LineList()),
+                'methodDefinition' => new MethodDefinition('name', new LineList()),
                 'sources' => [],
                 'expectedLines' => [],
             ],
             'empty list, non-empty lines' => [
-                'functionDefinition' => new FunctionDefinition('name', new LineList()),
+                'methodDefinition' => new MethodDefinition('name', new LineList()),
                 'lines' => [
                     new Statement('statement'),
                     new EmptyLine(),
@@ -127,7 +155,7 @@ class FunctionDefinitionTest extends \PHPUnit\Framework\TestCase
                 ],
             ],
             'non-empty list, non-empty lines' => [
-                'functionDefinition' => new FunctionDefinition(
+                'methodDefinition' => new MethodDefinition(
                     'name',
                     new LineList([
                         new Statement('statement1'),
@@ -154,7 +182,7 @@ class FunctionDefinitionTest extends \PHPUnit\Framework\TestCase
 
     public function testAddLine()
     {
-        $functionDefinition = new FunctionDefinition(
+        $methodDefinition = new MethodDefinition(
             'name',
             new LineList([
                 new Statement('statement1'),
@@ -169,10 +197,10 @@ class FunctionDefinitionTest extends \PHPUnit\Framework\TestCase
                 new EmptyLine(),
                 new Comment('comment1'),
             ],
-            $functionDefinition->getLines()
+            $methodDefinition->getLines()
         );
 
-        $functionDefinition->addLine(new EmptyLine());
+        $methodDefinition->addLine(new EmptyLine());
 
         $this->assertEquals(
             [
@@ -181,24 +209,24 @@ class FunctionDefinitionTest extends \PHPUnit\Framework\TestCase
                 new Comment('comment1'),
                 new EmptyLine(),
             ],
-            $functionDefinition->getLines()
+            $methodDefinition->getLines()
         );
     }
 
     public function testGetStatementObjects()
     {
         $statement = new Statement('statement');
-        $functionDefinition = new FunctionDefinition('name', new LineList([$statement]));
+        $methodDefinition = new MethodDefinition('name', new LineList([$statement]));
 
-        $this->assertEquals([$statement], $functionDefinition->getLines());
+        $this->assertEquals([$statement], $methodDefinition->getLines());
     }
 
     public function testMutateLastStatement()
     {
         $statement = new Statement('content');
-        $functionDefinition = new FunctionDefinition('name', new LineList([$statement]));
+        $methodDefinition = new MethodDefinition('name', new LineList([$statement]));
 
-        $functionDefinition->mutateLastStatement(function (string $content) {
+        $methodDefinition->mutateLastStatement(function (string $content) {
             return '!' . $content . '!';
         });
 
@@ -210,13 +238,12 @@ class FunctionDefinitionTest extends \PHPUnit\Framework\TestCase
         $statement = new Statement('statement');
         $this->assertEquals(new ClassDependencyCollection([]), $statement->getMetadata()->getClassDependencies());
 
-        $functionDefinition = new FunctionDefinition('name', new LineList([$statement]));
-
+        $methodDefinition = new MethodDefinition('name', new LineList([$statement]));
         $classDependencies = new ClassDependencyCollection([
             new ClassDependency(ClassDependency::class),
         ]);
 
-        $functionDefinition->addClassDependenciesToLastStatement($classDependencies);
+        $methodDefinition->addClassDependenciesToLastStatement($classDependencies);
         $this->assertEquals($classDependencies, $statement->getMetadata()->getClassDependencies());
     }
 
@@ -228,10 +255,10 @@ class FunctionDefinitionTest extends \PHPUnit\Framework\TestCase
             $statement->getMetadata()->getVariableDependencies()
         );
 
-        $functionDefinition = new FunctionDefinition('name', new LineList([$statement]));
+        $methodDefinition = new MethodDefinition('name', new LineList([$statement]));
         $variableDependencies = VariablePlaceholderCollection::createCollection(['DEPENDENCY']);
 
-        $functionDefinition->addVariableDependenciesToLastStatement($variableDependencies);
+        $methodDefinition->addVariableDependenciesToLastStatement($variableDependencies);
         $this->assertEquals($variableDependencies, $statement->getMetadata()->getVariableDependencies());
     }
 
@@ -243,10 +270,10 @@ class FunctionDefinitionTest extends \PHPUnit\Framework\TestCase
             $statement->getMetadata()->getVariableExports()
         );
 
-        $functionDefinition = new FunctionDefinition('name', new LineList([$statement]));
+        $methodDefinition = new MethodDefinition('name', new LineList([$statement]));
         $variableExports = VariablePlaceholderCollection::createCollection(['DEPENDENCY']);
 
-        $functionDefinition->addVariableExportsToLastStatement($variableExports);
+        $methodDefinition->addVariableExportsToLastStatement($variableExports);
         $this->assertEquals($variableExports, $statement->getMetadata()->getVariableExports());
     }
 }

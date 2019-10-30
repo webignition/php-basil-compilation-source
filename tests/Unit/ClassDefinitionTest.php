@@ -10,10 +10,9 @@ use webignition\BasilCompilationSource\ClassDefinition;
 use webignition\BasilCompilationSource\ClassDefinitionInterface;
 use webignition\BasilCompilationSource\ClassDependency;
 use webignition\BasilCompilationSource\ClassDependencyCollection;
-use webignition\BasilCompilationSource\EmptyLine;
-use webignition\BasilCompilationSource\FunctionDefinition;
 use webignition\BasilCompilationSource\Metadata;
 use webignition\BasilCompilationSource\MetadataInterface;
+use webignition\BasilCompilationSource\MethodDefinition;
 use webignition\BasilCompilationSource\Statement;
 use webignition\BasilCompilationSource\LineList;
 use webignition\BasilCompilationSource\VariablePlaceholderCollection;
@@ -23,38 +22,38 @@ class ClassDefinitionTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider constructDataProvider
      */
-    public function testConstruct(string $name, array $functions, array $expectedFunctions)
+    public function testConstruct(string $name, array $methods, array $expectedMethods)
     {
-        $classDefinition = new ClassDefinition($name, $functions);
+        $classDefinition = new ClassDefinition($name, $methods);
 
         $this->assertSame($name, $classDefinition->getName());
-        $this->assertEquals($classDefinition->getFunctions(), $expectedFunctions);
-        $this->assertEquals($classDefinition->getSources(), $expectedFunctions);
+        $this->assertEquals($classDefinition->getMethods(), $expectedMethods);
+        $this->assertEquals($classDefinition->getSources(), $expectedMethods);
     }
 
     public function constructDataProvider(): array
     {
         return [
-            'empty functions' => [
+            'empty methods' => [
                 'name' => 'name1',
-                'functions' => [],
-                'expectedFunctions' => [],
+                'methods' => [],
+                'expectedMethods' => [],
             ],
-            'invalid and valid functions' => [
+            'invalid and valid methods' => [
                 'name' => 'name2',
-                'functions' => [
+                'methods' => [
                     1,
-                    new FunctionDefinition('function1', new LineList()),
+                    new MethodDefinition('method1', new LineList()),
                     'string',
-                    new FunctionDefinition('function2', new LineList()),
+                    new MethodDefinition('method2', new LineList()),
                     true,
-                    new FunctionDefinition('function3', new LineList()),
+                    new MethodDefinition('method3', new LineList()),
                     new \stdClass(),
                 ],
-                'expectedFunctions' => [
-                    new FunctionDefinition('function1', new LineList()),
-                    new FunctionDefinition('function2', new LineList()),
-                    new FunctionDefinition('function3', new LineList()),
+                'expectedMethods' => [
+                    new MethodDefinition('method1', new LineList()),
+                    new MethodDefinition('method2', new LineList()),
+                    new MethodDefinition('method3', new LineList()),
                 ],
             ],
         ];
@@ -77,13 +76,13 @@ class ClassDefinitionTest extends \PHPUnit\Framework\TestCase
             ],
             'single function, no lines' => [
                 'classDefinition' => new ClassDefinition('name', [
-                    new FunctionDefinition('function', new LineList()),
+                    new MethodDefinition('method', new LineList()),
                 ]),
                 'expectedMetadata' => new Metadata(),
             ],
             'single function, has lines, no metadata' => [
                 'classDefinition' => new ClassDefinition('name', [
-                    new FunctionDefinition('function', new LineList([
+                    new MethodDefinition('method', new LineList([
                         new Statement('statement'),
                     ])),
                 ]),
@@ -91,7 +90,7 @@ class ClassDefinitionTest extends \PHPUnit\Framework\TestCase
             ],
             'single function, has lines, has metadata' => [
                 'classDefinition' => new ClassDefinition('name', [
-                    new FunctionDefinition('function', new LineList([
+                    new MethodDefinition('method', new LineList([
                         new Statement(
                             'statement',
                             (new Metadata())
@@ -108,7 +107,7 @@ class ClassDefinitionTest extends \PHPUnit\Framework\TestCase
             ],
             'many functions with metadata' => [
                 'classDefinition' => new ClassDefinition('name', [
-                    new FunctionDefinition('function', new LineList([
+                    new MethodDefinition('method', new LineList([
                         new Statement(
                             'statement',
                             (new Metadata())
@@ -136,7 +135,7 @@ class ClassDefinitionTest extends \PHPUnit\Framework\TestCase
                                 ]))
                         ),
                     ])),
-                    new FunctionDefinition('function', new LineList([
+                    new MethodDefinition('method', new LineList([
                         new Statement(
                             'statement',
                             (new Metadata())

@@ -2,8 +2,13 @@
 
 namespace webignition\BasilCompilationSource;
 
-class FunctionDefinition implements FunctionDefinitionInterface, MutableListLineListInterface
+class MethodDefinition implements MethodDefinitionInterface, MutableListLineListInterface
 {
+    const VISIBILITY_PUBLIC = 'public';
+    const VISIBILITY_PROTECTED = 'protected';
+    const VISIBILITY_PRIVATE = 'private';
+
+    private $visibility = self::VISIBILITY_PUBLIC;
     private $name;
     private $lineList;
     private $arguments = [];
@@ -79,5 +84,35 @@ class FunctionDefinition implements FunctionDefinitionInterface, MutableListLine
     public function addVariableExportsToLastStatement(VariablePlaceholderCollection $variableExports)
     {
         $this->lineList->addVariableExportsToLastStatement($variableExports);
+    }
+
+    public function setPublic()
+    {
+        $this->visibility= self::VISIBILITY_PUBLIC;
+    }
+
+    public function setProtected()
+    {
+        $this->visibility = self::VISIBILITY_PROTECTED;
+    }
+
+    public function setPrivate()
+    {
+        $this->visibility = self::VISIBILITY_PRIVATE;
+    }
+
+    public function isPublic(): bool
+    {
+        return self::VISIBILITY_PUBLIC === $this->visibility;
+    }
+
+    public function isProtected(): bool
+    {
+        return self::VISIBILITY_PROTECTED === $this->visibility;
+    }
+
+    public function isPrivate(): bool
+    {
+        return self::VISIBILITY_PRIVATE === $this->visibility;
     }
 }
