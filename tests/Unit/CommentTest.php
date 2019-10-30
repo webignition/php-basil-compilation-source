@@ -32,17 +32,4 @@ class CommentTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertSame(LineTypes::COMMENT, (new Comment(''))->getType());
     }
-
-    public function testJsonSerialize()
-    {
-        $comment = new Comment('comment content');
-
-        $this->assertSame(
-            [
-                'type' => LineTypes::COMMENT,
-                'content' => 'comment content',
-            ],
-            $comment->jsonSerialize()
-        );
-    }
 }

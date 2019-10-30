@@ -2,7 +2,7 @@
 
 namespace webignition\BasilCompilationSource;
 
-interface SourceInterface extends \JsonSerializable
+interface SourceInterface
 {
     public function getMetadata(): MetadataInterface;
 

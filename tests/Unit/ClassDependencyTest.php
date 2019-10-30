@@ -99,15 +99,4 @@ class ClassDependencyTest extends \PHPUnit\Framework\TestCase
             (new ClassDependency(ClassDependency::class))->getType()
         );
     }
-
-    public function testJsonSerialize()
-    {
-        $this->assertSame(
-            [
-                'type' => LineTypes::USE_STATEMENT,
-                'content' => ClassDependency::class,
-            ],
-            (new ClassDependency(ClassDependency::class))->jsonSerialize()
-        );
-    }
 }

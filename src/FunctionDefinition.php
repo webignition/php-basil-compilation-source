@@ -80,15 +80,4 @@ class FunctionDefinition implements FunctionDefinitionInterface, MutableListLine
     {
         $this->lineList->addVariableExportsToLastStatement($variableExports);
     }
-
-    public function jsonSerialize(): array
-    {
-        $serializedLineList = $this->lineList->jsonSerialize();
-
-        return [
-            'type' => 'function',
-            'name' => $this->name,
-            'lines' => $serializedLineList['lines'],
-        ];
-    }
 }
