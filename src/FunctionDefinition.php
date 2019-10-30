@@ -83,10 +83,12 @@ class FunctionDefinition implements FunctionDefinitionInterface, MutableListLine
 
     public function jsonSerialize(): array
     {
+        $serializedLineList = $this->lineList->jsonSerialize();
+
         return [
             'type' => 'function',
             'name' => $this->name,
-            'line-list' => $this->lineList->jsonSerialize(),
+            'lines' => $serializedLineList['lines'],
         ];
     }
 }
