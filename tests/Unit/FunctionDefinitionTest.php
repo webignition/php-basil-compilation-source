@@ -260,13 +260,10 @@ class FunctionDefinitionTest extends \PHPUnit\Framework\TestCase
             [
                 'type' => 'function',
                 'name' => 'functionName',
-                'line-list' => [
-                    'type' => 'line-list',
-                    'lines' => [
-                        [
-                            'type' => 'empty',
-                            'content' => '',
-                        ],
+                'lines' => [
+                    [
+                        'type' => 'empty',
+                        'content' => '',
                     ],
                 ],
             ],
