@@ -2,13 +2,15 @@
 
 namespace webignition\BasilCompilationSource;
 
-class ClassDependency implements UniqueItemInterface
+class ClassDependency extends AbstractLine implements UniqueItemInterface
 {
     private $className;
     private $alias;
 
     public function __construct(string $className, ?string $alias = null)
     {
+        parent::__construct($this->createContent($className, $alias), LineTypes::USE_STATEMENT);
+
         $this->className = $className;
         $this->alias = $alias;
     }
@@ -25,12 +27,17 @@ class ClassDependency implements UniqueItemInterface
 
     public function getId(): string
     {
-        $id = $this->className;
+        return $this->content;
+    }
 
-        if (null !== $this->alias) {
-            $id .= ':' . $this->alias;
+    private function createContent(string $className, ?string $alias = null)
+    {
+        $foo = $className;
+
+        if (null !== $alias) {
+            $foo .= ' as ' . $alias;
         }
 
-        return $id;
+        return $foo;
     }
 }
