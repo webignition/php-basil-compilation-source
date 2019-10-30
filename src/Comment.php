@@ -4,10 +4,8 @@ namespace webignition\BasilCompilationSource;
 
 class Comment extends AbstractLine
 {
-    const TYPE = 'comment';
-
     public function __construct(string $content)
     {
-        parent::__construct($content, self::TYPE);
+        parent::__construct($content, LineTypes::COMMENT);
     }
 }

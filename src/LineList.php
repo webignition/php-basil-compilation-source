@@ -2,7 +2,7 @@
 
 namespace webignition\BasilCompilationSource;
 
-class LineList implements LineListInterface
+class LineList implements LineListInterface, MutableListLineListInterface
 {
     const LAST_STATEMENT_INDEX = -1;
 

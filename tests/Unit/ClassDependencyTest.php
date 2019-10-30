@@ -7,6 +7,8 @@ declare(strict_types=1);
 namespace webignition\BasilCompilationSource\Tests\Unit;
 
 use webignition\BasilCompilationSource\ClassDependency;
+use webignition\BasilCompilationSource\LineTypes;
+use webignition\BasilCompilationSource\Metadata;
 
 class ClassDependencyTest extends \PHPUnit\Framework\TestCase
 {
@@ -36,29 +38,76 @@ class ClassDependencyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider getIdDataProvider
+     * @dataProvider contentDataProvider
+     */
+    public function testGetContent(ClassDependency $classDependency, string $expectedString)
+    {
+        $this->assertSame($expectedString, $classDependency->getContent());
+    }
+
+    /**
+     * @dataProvider contentDataProvider
      */
     public function testGetId(ClassDependency $classDependency, string $expectedId)
     {
         $this->assertSame($expectedId, $classDependency->getId());
     }
 
-    public function getIdDataProvider(): array
+    /**
+     * @dataProvider contentDataProvider
+     */
+    public function testToString(ClassDependency $classDependency, string $expectedString)
+    {
+        $this->assertSame($expectedString, (string) $classDependency);
+    }
+
+    public function contentDataProvider(): array
     {
         return [
-            'name, no alias' => [
+            'no alias' => [
                 'classDependency' => new ClassDependency(
                     ClassDependency::class
                 ),
                 'expectedId' => ClassDependency::class,
             ],
-            'name, has alias' => [
+            'has alias' => [
                 'classDependency' => new ClassDependency(
                     ClassDependency::class,
                     'CD'
                 ),
-                'expectedId' => ClassDependency::class . ':CD',
+                'expectedId' => ClassDependency::class . ' as CD',
             ],
         ];
+    }
+
+    public function testGetMetadata()
+    {
+        $this->assertEquals(new Metadata(), (new ClassDependency(ClassDependency::class))->getMetadata());
+    }
+
+    public function testGetSources()
+    {
+        $classDependency = new ClassDependency(ClassDependency::class);
+
+        $this->assertSame([$classDependency], $classDependency->getSources());
+    }
+
+    public function testGetType()
+    {
+        $this->assertSame(
+            LineTypes::USE_STATEMENT,
+            (new ClassDependency(ClassDependency::class))->getType()
+        );
+    }
+
+    public function testJsonSerialize()
+    {
+        $this->assertSame(
+            [
+                'type' => LineTypes::USE_STATEMENT,
+                'content' => ClassDependency::class,
+            ],
+            (new ClassDependency(ClassDependency::class))->jsonSerialize()
+        );
     }
 }

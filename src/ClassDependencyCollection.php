@@ -2,7 +2,7 @@
 
 namespace webignition\BasilCompilationSource;
 
-class ClassDependencyCollection extends AbstractUniqueCollection implements \Iterator
+class ClassDependencyCollection extends AbstractUniqueCollection implements \Iterator, LineListInterface
 {
     /**
      * @param string $id
@@ -46,5 +46,62 @@ class ClassDependencyCollection extends AbstractUniqueCollection implements \Ite
     public function current(): ClassDependency
     {
         return parent::current();
+    }
+
+    public function addLine(LineInterface $statement)
+    {
+        $this->add($statement);
+    }
+
+    public function addLinesFromSource(SourceInterface $source)
+    {
+        foreach ($source->getSources() as $line) {
+            $this->add($line);
+        }
+    }
+
+    /**
+     * @param SourceInterface[] $sources
+     */
+    public function addLinesFromSources(array $sources)
+    {
+        foreach ($sources as $source) {
+            $this->addLinesFromSource($source);
+        }
+    }
+
+    /**
+     * @return LineInterface[]
+     */
+    public function getLines(): array
+    {
+        return $this->getAll();
+    }
+
+    public function getMetadata(): MetadataInterface
+    {
+        return new Metadata();
+    }
+
+    /**
+     * @return SourceInterface[]
+     */
+    public function getSources(): array
+    {
+        return $this->getAll();
+    }
+
+    public function jsonSerialize(): array
+    {
+        $serializedContent = [];
+
+        foreach ($this->getAll() as $classDependency) {
+            $serializedContent[] = $classDependency->jsonSerialize();
+        }
+
+        return [
+            'type' => 'class-dependency-collection',
+            'class-dependencies' => $serializedContent,
+        ];
     }
 }

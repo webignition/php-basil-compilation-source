@@ -11,7 +11,6 @@ use webignition\BasilCompilationSource\ClassDependencyCollection;
 use webignition\BasilCompilationSource\Comment;
 use webignition\BasilCompilationSource\EmptyLine;
 use webignition\BasilCompilationSource\FunctionDefinition;
-use webignition\BasilCompilationSource\LineListInterface;
 use webignition\BasilCompilationSource\SourceInterface;
 use webignition\BasilCompilationSource\Statement;
 use webignition\BasilCompilationSource\LineList;
@@ -22,7 +21,7 @@ class FunctionDefinitionTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider constructDataProvider
      */
-    public function testConstruct(string $name, LineListInterface $content, $arguments, array $expectedArguments)
+    public function testConstruct(string $name, LineList $content, $arguments, array $expectedArguments)
     {
         $functionDefinition = new FunctionDefinition($name, $content, $arguments);
 

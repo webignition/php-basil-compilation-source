@@ -2,13 +2,13 @@
 
 namespace webignition\BasilCompilationSource;
 
-class FunctionDefinition implements FunctionDefinitionInterface
+class FunctionDefinition implements FunctionDefinitionInterface, MutableListLineListInterface
 {
     private $name;
     private $lineList;
     private $arguments = [];
 
-    public function __construct(string $name, LineListInterface $lineList, ?array $arguments = null)
+    public function __construct(string $name, LineList $lineList, ?array $arguments = null)
     {
         $this->name = $name;
         $this->lineList = $lineList;

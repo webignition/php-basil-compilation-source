@@ -8,6 +8,7 @@ namespace webignition\BasilCompilationSource\Tests\Unit;
 
 use webignition\BasilCompilationSource\ClassDependency;
 use webignition\BasilCompilationSource\ClassDependencyCollection;
+use webignition\BasilCompilationSource\Metadata;
 use webignition\BasilCompilationSource\UnknownItemException;
 use webignition\BasilCompilationSource\VariablePlaceholder;
 use webignition\BasilCompilationSource\VariablePlaceholderCollection;
@@ -117,5 +118,81 @@ class ClassDependencyCollectionTest extends \PHPUnit\Framework\TestCase
 
             $this->assertEquals($expectedClassDependency, $classDependency);
         }
+    }
+
+    public function testAddLine()
+    {
+        $classDependency1 = new ClassDependency('1');
+        $classDependency2 = new ClassDependency('2');
+
+        $collection = new ClassDependencyCollection([$classDependency1]);
+        $this->assertEquals([$classDependency1], $collection->getLines());
+
+        $collection->addLine($classDependency2);
+
+        $expectedSources = [$classDependency1, $classDependency2];
+
+        $this->assertEquals($expectedSources, $collection->getLines());
+        $this->assertEquals($expectedSources, $collection->getAll());
+        $this->assertEquals($expectedSources, $collection->getSources());
+    }
+
+    public function testAddLinesFromSource()
+    {
+        $classDependency1 = new ClassDependency('1');
+        $classDependency2 = new ClassDependency('2');
+
+        $collection = new ClassDependencyCollection([$classDependency1]);
+        $this->assertEquals([$classDependency1], $collection->getLines());
+
+        $collection->addLinesFromSource($classDependency2);
+
+        $expectedSources = [$classDependency1, $classDependency2];
+
+        $this->assertEquals($expectedSources, $collection->getLines());
+        $this->assertEquals($expectedSources, $collection->getAll());
+        $this->assertEquals($expectedSources, $collection->getSources());
+    }
+
+    public function testAddLinesFromSources()
+    {
+        $classDependency1 = new ClassDependency('1');
+        $classDependency2 = new ClassDependency('2');
+
+        $collection = new ClassDependencyCollection([$classDependency1]);
+        $this->assertEquals([$classDependency1], $collection->getLines());
+
+        $collection->addLinesFromSources([$classDependency2]);
+
+        $expectedSources = [$classDependency1, $classDependency2];
+
+        $this->assertEquals($expectedSources, $collection->getLines());
+        $this->assertEquals($expectedSources, $collection->getAll());
+        $this->assertEquals($expectedSources, $collection->getSources());
+    }
+
+    public function testGetMetadata()
+    {
+        $this->assertEquals(new Metadata(), (new ClassDependencyCollection())->getMetadata());
+    }
+
+    public function testJsonSerialize()
+    {
+        $classDependency = new ClassDependency(ClassDependency::class);
+
+        $collection = new ClassDependencyCollection([$classDependency]);
+
+        $this->assertSame(
+            [
+                'type' => 'class-dependency-collection',
+                'class-dependencies' => [
+                    [
+                        'type' => 'use-statement',
+                        'content' => ClassDependency::class,
+                    ],
+                ],
+            ],
+            $collection->jsonSerialize()
+        );
     }
 }
