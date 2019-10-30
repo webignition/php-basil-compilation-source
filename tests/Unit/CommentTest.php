@@ -19,27 +19,6 @@ class CommentTest extends \PHPUnit\Framework\TestCase
         $this->assertSame([$comment], $comment->getSources());
     }
 
-    public function testIsStatement()
-    {
-        $comment = new Comment('comment');
-
-        $this->assertFalse($comment->isStatement());
-    }
-
-    public function testIsComment()
-    {
-        $comment = new Comment('comment');
-
-        $this->assertTrue($comment->isComment());
-    }
-
-    public function testIsEmpty()
-    {
-        $comment = new Comment('comment');
-
-        $this->assertFalse($comment->isEmpty());
-    }
-
     public function testToString()
     {
         $content = 'comment';

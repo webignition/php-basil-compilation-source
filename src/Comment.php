@@ -10,19 +10,4 @@ class Comment extends AbstractLine
     {
         parent::__construct($content, self::TYPE);
     }
-
-    public function isStatement(): bool
-    {
-        return false;
-    }
-
-    public function isComment(): bool
-    {
-        return true;
-    }
-
-    public function isEmpty(): bool
-    {
-        return false;
-    }
 }
