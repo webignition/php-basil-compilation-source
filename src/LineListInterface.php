@@ -8,7 +8,7 @@ interface LineListInterface extends SourceInterface, MutableListLineListInterfac
     public function addLinesFromSource(SourceInterface $source);
 
     /**
-     * @param LineInterface[] $sources
+     * @param SourceInterface[] $sources
      */
     public function addLinesFromSources(array $sources);
 
