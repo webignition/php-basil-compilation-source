@@ -30,7 +30,7 @@ class MethodDefinitionTest extends \PHPUnit\Framework\TestCase
         $methodDefinition = new MethodDefinition($name, $content, $arguments);
 
         $this->assertTrue($methodDefinition->isPublic());
-        $this->assertEquals(MethodDefinition::RETURN_TYPE_VOID, $methodDefinition->getReturnType());
+        $this->assertNull($methodDefinition->getReturnType());
         $this->assertSame($name, $methodDefinition->getName());
         $this->assertSame($content->getSources(), $methodDefinition->getSources());
         $this->assertEquals($expectedArguments, $methodDefinition->getArguments());
@@ -281,7 +281,7 @@ class MethodDefinitionTest extends \PHPUnit\Framework\TestCase
     public function testSetReturnType()
     {
         $methodDefinition = new MethodDefinition('name', new LineList());
-        $this->assertEquals(MethodDefinition::RETURN_TYPE_VOID, $methodDefinition->getReturnType());
+        $this->assertNull($methodDefinition->getReturnType());
 
         $returnType = 'array';
         $methodDefinition->setReturnType($returnType);
