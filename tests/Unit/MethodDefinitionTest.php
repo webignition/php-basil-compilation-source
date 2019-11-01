@@ -30,6 +30,7 @@ class MethodDefinitionTest extends \PHPUnit\Framework\TestCase
         $methodDefinition = new MethodDefinition($name, $content, $arguments);
 
         $this->assertTrue($methodDefinition->isPublic());
+        $this->assertFalse($methodDefinition->isStatic());
         $this->assertNull($methodDefinition->getReturnType());
         $this->assertSame($name, $methodDefinition->getName());
         $this->assertSame($content->getSources(), $methodDefinition->getSources());
@@ -286,5 +287,14 @@ class MethodDefinitionTest extends \PHPUnit\Framework\TestCase
         $returnType = 'array';
         $methodDefinition->setReturnType($returnType);
         $this->assertEquals($returnType, $methodDefinition->getReturnType());
+    }
+
+    public function testIsStatic()
+    {
+        $methodDefinition = new MethodDefinition('name', new LineList());
+        $this->assertFalse($methodDefinition->isStatic());
+
+        $methodDefinition->setStatic();
+        $this->assertTrue($methodDefinition->isStatic());
     }
 }

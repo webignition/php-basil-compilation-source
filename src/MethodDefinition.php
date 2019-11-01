@@ -13,6 +13,7 @@ class MethodDefinition implements MethodDefinitionInterface, MutableListLineList
     private $name;
     private $lineList;
     private $arguments = [];
+    private $isStatic = false;
 
     public function __construct(string $name, LineList $lineList, ?array $arguments = null)
     {
@@ -125,5 +126,15 @@ class MethodDefinition implements MethodDefinitionInterface, MutableListLineList
     public function setReturnType(string $returnType)
     {
         $this->returnType = $returnType;
+    }
+
+    public function setStatic(): void
+    {
+        $this->isStatic = true;
+    }
+
+    public function isStatic(): bool
+    {
+        return $this->isStatic;
     }
 }
