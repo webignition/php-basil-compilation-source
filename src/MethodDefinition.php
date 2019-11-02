@@ -137,4 +137,9 @@ class MethodDefinition implements MethodDefinitionInterface, MutableListLineList
     {
         return $this->isStatic;
     }
+
+    public function getVisibility(): string
+    {
+        return $this->visibility;
+    }
 }

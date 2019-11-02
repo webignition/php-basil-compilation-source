@@ -62,21 +62,25 @@ class MethodDefinitionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($methodDefinition->isPublic());
         $this->assertFalse($methodDefinition->isProtected());
         $this->assertFalse($methodDefinition->isPrivate());
+        $this->assertEquals(MethodDefinition::VISIBILITY_PUBLIC, $methodDefinition->getVisibility());
 
         $methodDefinition->setProtected();
         $this->assertFalse($methodDefinition->isPublic());
         $this->assertTrue($methodDefinition->isProtected());
         $this->assertFalse($methodDefinition->isPrivate());
+        $this->assertEquals(MethodDefinition::VISIBILITY_PROTECTED, $methodDefinition->getVisibility());
 
         $methodDefinition->setPrivate();
         $this->assertFalse($methodDefinition->isPublic());
         $this->assertFalse($methodDefinition->isProtected());
         $this->assertTrue($methodDefinition->isPrivate());
+        $this->assertEquals(MethodDefinition::VISIBILITY_PRIVATE, $methodDefinition->getVisibility());
 
         $methodDefinition->setPublic();
         $this->assertTrue($methodDefinition->isPublic());
         $this->assertFalse($methodDefinition->isProtected());
         $this->assertFalse($methodDefinition->isPrivate());
+        $this->assertEquals(MethodDefinition::VISIBILITY_PUBLIC, $methodDefinition->getVisibility());
     }
 
     /**
