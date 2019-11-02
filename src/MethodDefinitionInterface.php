@@ -11,4 +11,5 @@ interface MethodDefinitionInterface extends LineListInterface
     public function getArguments(): array;
     public function getReturnType(): ?string;
     public function isStatic(): bool;
+    public function getVisibility(): string;
 }
