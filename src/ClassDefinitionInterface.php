@@ -10,4 +10,6 @@ interface ClassDefinitionInterface extends SourceInterface
      * @return MethodDefinitionInterface[]
      */
     public function getMethods(): array;
+
+    public function getMethod(string $name): ?MethodDefinitionInterface;
 }

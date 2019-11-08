@@ -10,9 +10,11 @@ use webignition\BasilCompilationSource\ClassDefinition;
 use webignition\BasilCompilationSource\ClassDefinitionInterface;
 use webignition\BasilCompilationSource\ClassDependency;
 use webignition\BasilCompilationSource\ClassDependencyCollection;
+use webignition\BasilCompilationSource\Comment;
 use webignition\BasilCompilationSource\Metadata;
 use webignition\BasilCompilationSource\MetadataInterface;
 use webignition\BasilCompilationSource\MethodDefinition;
+use webignition\BasilCompilationSource\MethodDefinitionInterface;
 use webignition\BasilCompilationSource\Statement;
 use webignition\BasilCompilationSource\LineList;
 use webignition\BasilCompilationSource\VariablePlaceholderCollection;
@@ -51,9 +53,9 @@ class ClassDefinitionTest extends \PHPUnit\Framework\TestCase
                     new \stdClass(),
                 ],
                 'expectedMethods' => [
-                    new MethodDefinition('method1', new LineList()),
-                    new MethodDefinition('method2', new LineList()),
-                    new MethodDefinition('method3', new LineList()),
+                    'method1' => new MethodDefinition('method1', new LineList()),
+                    'method2' => new MethodDefinition('method2', new LineList()),
+                    'method3' => new MethodDefinition('method3', new LineList()),
                 ],
             ],
         ];
@@ -107,7 +109,7 @@ class ClassDefinitionTest extends \PHPUnit\Framework\TestCase
             ],
             'many functions with metadata' => [
                 'classDefinition' => new ClassDefinition('name', [
-                    new MethodDefinition('method', new LineList([
+                    new MethodDefinition('method1', new LineList([
                         new Statement(
                             'statement',
                             (new Metadata())
@@ -135,7 +137,7 @@ class ClassDefinitionTest extends \PHPUnit\Framework\TestCase
                                 ]))
                         ),
                     ])),
-                    new MethodDefinition('method', new LineList([
+                    new MethodDefinition('method2', new LineList([
                         new Statement(
                             'statement',
                             (new Metadata())
@@ -169,5 +171,103 @@ class ClassDefinitionTest extends \PHPUnit\Framework\TestCase
                     ]))
             ],
         ];
+    }
+
+    public function testGetMethodNoMethodExists()
+    {
+        $classDefinition = new ClassDefinition('Classname', []);
+
+        $this->assertNull($classDefinition->getMethod('methodName'));
+    }
+
+    /**
+     * @dataProvider getMethodDataProvider
+     */
+    public function testGetMethod(
+        ClassDefinitionInterface $classDefinition,
+        string $name,
+        MethodDefinitionInterface $expectedMethod
+    ) {
+        $method = $classDefinition->getMethod($name);
+
+        if ($method instanceof MethodDefinitionInterface) {
+            $this->assertSame($name, $method->getName());
+            $this->assertEquals($expectedMethod->getLines(), $method->getLines());
+        }
+    }
+
+    public function getMethodDataProvider(): array
+    {
+        return [
+            'method one of one' => [
+                'classDefinition' => new ClassDefinition('ClassName', [
+                    new MethodDefinition('methodOne', new LineList([
+                        new Comment('methodOne comment'),
+                    ])),
+                ]),
+                'name' => 'methodOne',
+                'expectedMethod' => new MethodDefinition('methodOne', new LineList([
+                    new Comment('methodOne comment'),
+                ])),
+            ],
+            'method one of two' => [
+                'classDefinition' => new ClassDefinition('ClassName', [
+                    new MethodDefinition('methodOne', new LineList([
+                        new Comment('methodOne comment'),
+                    ])),
+                    new MethodDefinition('methodTwo', new LineList([
+                        new Comment('methodTwo comment'),
+                    ]))
+                ]),
+                'name' => 'methodOne',
+                'expectedMethod' => new MethodDefinition('methodOne', new LineList([
+                    new Comment('methodOne comment'),
+                ])),
+            ],
+            'method two of two' => [
+                'classDefinition' => new ClassDefinition('ClassName', [
+                    new MethodDefinition('methodOne', new LineList([
+                        new Comment('methodOne comment'),
+                    ])),
+                    new MethodDefinition('methodTwo', new LineList([
+                        new Comment('methodTwo comment'),
+                    ]))
+                ]),
+                'name' => 'methodTwo',
+                'expectedMethod' => new MethodDefinition('methodTwo', new LineList([
+                    new Comment('methodTwo comment'),
+                ])),
+            ],
+        ];
+    }
+
+    public function testAppendMethod()
+    {
+        $classDefinition = new ClassDefinition('ClassName', [
+            new MethodDefinition('methodOne', new LineList([
+                new Comment('methodOne comment'),
+            ])),
+            new MethodDefinition('methodTwo', new LineList([
+                new Comment('methodTwo comment'),
+            ]))
+        ]);
+
+        $methodOne = $classDefinition->getMethod('methodOne');
+
+        if ($methodOne instanceof MethodDefinitionInterface) {
+            $methodOne->addLine(new Comment('appended'));
+        }
+
+        foreach ($classDefinition->getMethods() as $classMethod) {
+            if ($classMethod instanceof MethodDefinitionInterface && $classMethod->getName() === 'methodOne') {
+                $this->assertEquals(
+                    [
+                        new Comment('methodOne comment'),
+                        new Comment('appended'),
+                    ],
+                    $classMethod->getLines()
+                );
+            }
+        }
     }
 }

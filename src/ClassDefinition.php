@@ -5,15 +5,19 @@ namespace webignition\BasilCompilationSource;
 class ClassDefinition implements ClassDefinitionInterface
 {
     private $name;
-    private $functions = [];
 
-    public function __construct(string $name, array $functions)
+    /**
+     * @var MethodDefinitionInterface[]
+     */
+    private $methods = [];
+
+    public function __construct(string $name, array $methods)
     {
         $this->name = $name;
 
-        foreach ($functions as $function) {
-            if ($function instanceof MethodDefinitionInterface) {
-                $this->functions[] = $function;
+        foreach ($methods as $method) {
+            if ($method instanceof MethodDefinitionInterface) {
+                $this->methods[$method->getName()] = $method;
             }
         }
     }
@@ -28,14 +32,14 @@ class ClassDefinition implements ClassDefinitionInterface
      */
     public function getMethods(): array
     {
-        return $this->functions;
+        return $this->methods;
     }
 
     public function getMetadata(): MetadataInterface
     {
         $metadata = new Metadata();
 
-        foreach ($this->functions as $function) {
+        foreach ($this->methods as $function) {
             if ($function instanceof MethodDefinitionInterface) {
                 $metadata->add($function->getMetadata());
             }
@@ -50,5 +54,10 @@ class ClassDefinition implements ClassDefinitionInterface
     public function getSources(): array
     {
         return $this->getMethods();
+    }
+
+    public function getMethod(string $name): ?MethodDefinitionInterface
+    {
+        return $this->methods[$name] ?? null;
     }
 }
