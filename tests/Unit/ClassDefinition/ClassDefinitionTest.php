@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace webignition\BasilCompilationSource\Tests\Unit\ClassDefinition;
 
+use webignition\BasilCompilationSource\Block\ClassDependencyCollection;
 use webignition\BasilCompilationSource\ClassDefinition\ClassDefinition;
 use webignition\BasilCompilationSource\ClassDefinition\ClassDefinitionInterface;
-use webignition\BasilCompilationSource\ClassDependency;
-use webignition\BasilCompilationSource\ClassDependencyCollection;
+use webignition\BasilCompilationSource\Line\ClassDependency;
 use webignition\BasilCompilationSource\Line\Comment;
 use webignition\BasilCompilationSource\Metadata\Metadata;
 use webignition\BasilCompilationSource\Metadata\MetadataInterface;
