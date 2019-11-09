@@ -6,7 +6,6 @@ namespace webignition\BasilCompilationSource;
 
 use webignition\BasilCompilationSource\Line\AbstractStatement;
 use webignition\BasilCompilationSource\Line\LineTypes;
-use webignition\BasilCompilationSource\UniqueItemInterface;
 
 class ClassDependency extends AbstractStatement implements UniqueItemInterface
 {
