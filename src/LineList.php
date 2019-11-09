@@ -2,7 +2,7 @@
 
 namespace webignition\BasilCompilationSource;
 
-class LineList implements LineListInterface, LineListFactoryInterface, MutableListLineListInterface
+class LineList implements LineListInterface, MutableListLineListInterface
 {
     const LAST_STATEMENT_INDEX = -1;
 
@@ -99,7 +99,7 @@ class LineList implements LineListInterface, LineListFactoryInterface, MutableLi
         return $this->getLines();
     }
 
-    public static function fromContent(array $content): LineListInterface
+    public static function fromContent(array $content): LineList
     {
         $lines = [];
 
