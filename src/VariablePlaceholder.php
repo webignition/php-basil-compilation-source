@@ -1,10 +1,12 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace webignition\BasilCompilationSource;
 
 class VariablePlaceholder implements UniqueItemInterface
 {
-    const TEMPLATE = '{{ %s }}';
+    private const TEMPLATE = '{{ %s }}';
 
     private $name = '';
     private $id = '';

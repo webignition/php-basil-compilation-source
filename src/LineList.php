@@ -1,10 +1,12 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace webignition\BasilCompilationSource;
 
 class LineList implements LineListInterface, MutableListLineListInterface
 {
-    const LAST_STATEMENT_INDEX = -1;
+    private const LAST_STATEMENT_INDEX = -1;
 
     /**
      * @var LineInterface[]
