@@ -6,7 +6,7 @@ namespace webignition\BasilCompilationSource;
 
 use webignition\BasilCompilationSource\Line\LineInterface;
 
-interface LineListInterface extends SourceInterface
+interface BlockInterface extends SourceInterface
 {
     public function addLine(LineInterface $statement);
     public function addLinesFromSource(SourceInterface $source);

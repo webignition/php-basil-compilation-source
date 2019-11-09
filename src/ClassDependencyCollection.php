@@ -9,7 +9,7 @@ use webignition\BasilCompilationSource\Line\LineInterface;
 use webignition\BasilCompilationSource\Metadata\Metadata;
 use webignition\BasilCompilationSource\Metadata\MetadataInterface;
 
-class ClassDependencyCollection extends AbstractUniqueCollection implements \Iterator, LineListInterface
+class ClassDependencyCollection extends AbstractUniqueCollection implements \Iterator, BlockInterface
 {
     /**
      * @param string $id

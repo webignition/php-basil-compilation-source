@@ -8,15 +8,15 @@ use webignition\BasilCompilationSource\Line\ClassDependency;
 use webignition\BasilCompilationSource\ClassDependencyCollection;
 use webignition\BasilCompilationSource\Line\Comment;
 use webignition\BasilCompilationSource\Line\EmptyLine;
-use webignition\BasilCompilationSource\LineListInterface;
+use webignition\BasilCompilationSource\BlockInterface;
 use webignition\BasilCompilationSource\Metadata\MetadataInterface;
 use webignition\BasilCompilationSource\Line\Statement;
-use webignition\BasilCompilationSource\LineList;
+use webignition\BasilCompilationSource\Block;
 use webignition\BasilCompilationSource\Metadata\Metadata;
 use webignition\BasilCompilationSource\Line\StatementInterface;
 use webignition\BasilCompilationSource\VariablePlaceholderCollection;
 
-class LineListTest extends \PHPUnit\Framework\TestCase
+class BlockTest extends \PHPUnit\Framework\TestCase
 {
     public function testConstruct()
     {
@@ -27,7 +27,7 @@ class LineListTest extends \PHPUnit\Framework\TestCase
             new Comment('comment'),
         ];
 
-        $lineList = new LineList($lines);
+        $lineList = new Block($lines);
 
         $this->assertSame($lines, $lineList->getLines());
     }
@@ -35,7 +35,7 @@ class LineListTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider addLinesFromSourcesDataProvider
      */
-    public function testAddLinesFromSources(LineList $lineList, array $statements, array $expectedLines)
+    public function testAddLinesFromSources(Block $lineList, array $statements, array $expectedLines)
     {
         $lineList->addLinesFromSources($statements);
 
@@ -46,12 +46,12 @@ class LineListTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'empty list, empty lines' => [
-                'lineList' => new LineList(),
+                'lineList' => new Block(),
                 'lines' => [],
                 'expectedLines' => [],
             ],
             'empty list, non-empty lines' => [
-                'lineList' => new LineList(),
+                'lineList' => new Block(),
                 'lines' => [
                     new Statement('statement'),
                     new EmptyLine(),
@@ -64,7 +64,7 @@ class LineListTest extends \PHPUnit\Framework\TestCase
                 ],
             ],
             'non-empty list, non-empty lines' => [
-                'lineList' => new LineList([
+                'lineList' => new Block([
                     new Statement('statement1'),
                     new EmptyLine(),
                     new Comment('comment1'),
@@ -89,7 +89,7 @@ class LineListTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider getLinesDataProvider
      */
-    public function testGetLines(LineList $lineList, array $expectedLines)
+    public function testGetLines(Block $lineList, array $expectedLines)
     {
         $this->assertEquals($expectedLines, $lineList->getLines());
     }
@@ -97,7 +97,7 @@ class LineListTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider getLinesDataProvider
      */
-    public function testGetContents(LineList $lineList, array $expectedLineObjects)
+    public function testGetContents(Block $lineList, array $expectedLineObjects)
     {
         $this->assertEquals($expectedLineObjects, $lineList->getSources());
     }
@@ -106,11 +106,11 @@ class LineListTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'empty' => [
-                'lineList' => new LineList([]),
+                'lineList' => new Block([]),
                 'expectedLines' => [],
             ],
             'non-empty' => [
-                'lineList' => new LineList([
+                'lineList' => new Block([
                     new Statement('statement1'),
                     new Statement('statement2'),
                     new EmptyLine(),
@@ -129,7 +129,7 @@ class LineListTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider getMetadataDataProvider
      */
-    public function testGetMetadata(LineList $lineList, MetadataInterface $expectedMetadata)
+    public function testGetMetadata(Block $lineList, MetadataInterface $expectedMetadata)
     {
         $this->assertEquals($expectedMetadata, $lineList->getMetadata());
     }
@@ -138,24 +138,24 @@ class LineListTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'empty' => [
-                'lineList' => new LineList([]),
+                'lineList' => new Block([]),
                 'expectedMetadata' => new Metadata(),
             ],
             'non-statement lines' => [
-                'lineList' => new LineList([
+                'lineList' => new Block([
                     new Comment('comment'),
                     new EmptyLine(),
                 ]),
                 'expectedMetadata' => new Metadata(),
             ],
             'no metadata' => [
-                'lineList' => new LineList([
+                'lineList' => new Block([
                     new Statement('statement1'),
                 ]),
                 'expectedMetadata' => new Metadata(),
             ],
             'has metadata' => [
-                'lineList' => new LineList([
+                'lineList' => new Block([
                     new Statement('statement1', (new Metadata())
                         ->withVariableDependencies(VariablePlaceholderCollection::createCollection([
                             'DEPENDENCY_ONE',
@@ -197,7 +197,7 @@ class LineListTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider noStatementLineListDataProvider
      */
-    public function testAddClassDependenciesToLastStatementForNoStatementList(LineList $lineList)
+    public function testAddClassDependenciesToLastStatementForNoStatementList(Block $lineList)
     {
         $classDependencies = new ClassDependencyCollection([
             new ClassDependency(ClassDependency::class),
@@ -211,10 +211,10 @@ class LineListTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'empty' => [
-                'lineList' => new LineList(),
+                'lineList' => new Block(),
             ],
             'no statements' => [
-                'lineList' => new LineList([
+                'lineList' => new Block([
                     new EmptyLine(),
                     new Comment('comment'),
                 ]),
@@ -226,7 +226,7 @@ class LineListTest extends \PHPUnit\Framework\TestCase
      * @dataProvider addClassDependenciesToLastStatementDataProvider
      */
     public function testAddClassDependenciesToLastStatement(
-        LineList $lineList,
+        Block $lineList,
         ClassDependencyCollection $classDependencies,
         $lastStatementIndex,
         ?ClassDependencyCollection $expectedCurrentClassDependencies = null,
@@ -256,7 +256,7 @@ class LineListTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'single statement only' => [
-                'lineList' => new LineList([
+                'lineList' => new Block([
                     new Statement(
                         'statement',
                         (new Metadata())
@@ -278,7 +278,7 @@ class LineListTest extends \PHPUnit\Framework\TestCase
                 ]),
             ],
             'last line is only statement' => [
-                'lineList' => new LineList([
+                'lineList' => new Block([
                     new Comment('comment'),
                     new EmptyLine(),
                     new Statement(
@@ -302,7 +302,7 @@ class LineListTest extends \PHPUnit\Framework\TestCase
                 ]),
             ],
             'first line is only statement' => [
-                'lineList' => new LineList([
+                'lineList' => new Block([
                     new Statement(
                         'statement',
                         (new Metadata())
@@ -326,7 +326,7 @@ class LineListTest extends \PHPUnit\Framework\TestCase
                 ]),
             ],
             'last statement is not last line' => [
-                'lineList' => new LineList([
+                'lineList' => new Block([
                     new Comment('comment'),
                     new Statement(
                         'statement',
@@ -362,7 +362,7 @@ class LineListTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider noStatementLineListDataProvider
      */
-    public function testAddVariableDependenciesToLastStatementForNoStatementList(LineList $lineList)
+    public function testAddVariableDependenciesToLastStatementForNoStatementList(Block $lineList)
     {
         $variableDependencies = VariablePlaceholderCollection::createCollection(['PLACEHOLDER']);
 
@@ -374,7 +374,7 @@ class LineListTest extends \PHPUnit\Framework\TestCase
      * @dataProvider addVariableDependenciesToLastStatementDataProvider
      */
     public function testAddVariableDependenciesToLastStatement(
-        LineList $lineList,
+        Block $lineList,
         VariablePlaceholderCollection $variableDependencies,
         $lastStatementIndex,
         ?VariablePlaceholderCollection $expectedCurrentVariableDependencies = null,
@@ -404,7 +404,7 @@ class LineListTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'single statement only' => [
-                'lineList' => new LineList([
+                'lineList' => new Block([
                     new Statement(
                         'statement',
                         (new Metadata())
@@ -426,7 +426,7 @@ class LineListTest extends \PHPUnit\Framework\TestCase
                 ]),
             ],
             'last line is only statement' => [
-                'lineList' => new LineList([
+                'lineList' => new Block([
                     new Comment('comment'),
                     new EmptyLine(),
                     new Statement(
@@ -450,7 +450,7 @@ class LineListTest extends \PHPUnit\Framework\TestCase
                 ]),
             ],
             'first line is only statement' => [
-                'lineList' => new LineList([
+                'lineList' => new Block([
                     new Statement(
                         'statement',
                         (new Metadata())
@@ -474,7 +474,7 @@ class LineListTest extends \PHPUnit\Framework\TestCase
                 ]),
             ],
             'last statement is not last line' => [
-                'lineList' => new LineList([
+                'lineList' => new Block([
                     new Comment('comment'),
                     new Statement(
                         'statement',
@@ -510,7 +510,7 @@ class LineListTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider noStatementLineListDataProvider
      */
-    public function testAddVariableExportsToLastStatementForNoStatementList(LineList $lineList)
+    public function testAddVariableExportsToLastStatementForNoStatementList(Block $lineList)
     {
         $variableExports = VariablePlaceholderCollection::createCollection(['PLACEHOLDER']);
 
@@ -522,7 +522,7 @@ class LineListTest extends \PHPUnit\Framework\TestCase
      * @dataProvider addVariableExportsToLastStatementDataProvider
      */
     public function testAddVariableExportsToLastStatement(
-        LineList $lineList,
+        Block $lineList,
         VariablePlaceholderCollection $variableExports,
         $lastStatementIndex,
         ?VariablePlaceholderCollection $expectedCurrentVariableDependencies = null,
@@ -552,7 +552,7 @@ class LineListTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'single statement only' => [
-                'lineList' => new LineList([
+                'lineList' => new Block([
                     new Statement(
                         'statement',
                         (new Metadata())
@@ -574,7 +574,7 @@ class LineListTest extends \PHPUnit\Framework\TestCase
                 ]),
             ],
             'last line is only statement' => [
-                'lineList' => new LineList([
+                'lineList' => new Block([
                     new Comment('comment'),
                     new EmptyLine(),
                     new Statement(
@@ -598,7 +598,7 @@ class LineListTest extends \PHPUnit\Framework\TestCase
                 ]),
             ],
             'first line is only statement' => [
-                'lineList' => new LineList([
+                'lineList' => new Block([
                     new Statement(
                         'statement',
                         (new Metadata())
@@ -622,7 +622,7 @@ class LineListTest extends \PHPUnit\Framework\TestCase
                 ]),
             ],
             'last statement is not last line' => [
-                'lineList' => new LineList([
+                'lineList' => new Block([
                     new Comment('comment'),
                     new Statement(
                         'statement',
@@ -658,7 +658,7 @@ class LineListTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider mutateToLastStatementForNoStatementListDataProvider
      */
-    public function testMutateToLastStatementForNoStatementList(LineList $lineList, array $expectedLines)
+    public function testMutateToLastStatementForNoStatementList(Block $lineList, array $expectedLines)
     {
         $lineList->mutateLastStatement(function () {
             return 'mutated!';
@@ -671,11 +671,11 @@ class LineListTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'empty' => [
-                'lineList' => new LineList(),
+                'lineList' => new Block(),
                 'expectedLines' => [],
             ],
             'no statements' => [
-                'lineList' => new LineList([
+                'lineList' => new Block([
                     new EmptyLine(),
                     new Comment('comment'),
                 ]),
@@ -691,7 +691,7 @@ class LineListTest extends \PHPUnit\Framework\TestCase
      * @dataProvider mutateLastStatementDataProvider
      */
     public function testMutateLastStatement(
-        LineList $lineList,
+        Block $lineList,
         callable $mutator,
         $lastStatementIndex,
         string $expectedCurrentContent,
@@ -721,7 +721,7 @@ class LineListTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'single statement only' => [
-                'lineList' => new LineList([
+                'lineList' => new Block([
                     new Statement('statement'),
                 ]),
                 'mutator' => function ($content) {
@@ -732,7 +732,7 @@ class LineListTest extends \PHPUnit\Framework\TestCase
                 'expectedNewContent' => 'statement mutated',
             ],
             'last line is only statement' => [
-                'lineList' => new LineList([
+                'lineList' => new Block([
                     new Comment('comment'),
                     new EmptyLine(),
                     new Statement('statement'),
@@ -745,7 +745,7 @@ class LineListTest extends \PHPUnit\Framework\TestCase
                 'expectedNewContent' => 'statement mutated',
             ],
             'first line is only statement' => [
-                'lineList' => new LineList([
+                'lineList' => new Block([
                     new Statement(
                         'statement',
                         (new Metadata())
@@ -764,7 +764,7 @@ class LineListTest extends \PHPUnit\Framework\TestCase
                 'expectedNewContent' => 'statement mutated',
             ],
             'last statement is not last line' => [
-                'lineList' => new LineList([
+                'lineList' => new Block([
                     new Comment('comment'),
                     new Statement('statement1'),
                     new Statement('statement2'),
@@ -783,9 +783,9 @@ class LineListTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider fromContentDataProvider
      */
-    public function testFromContent(array $content, LineListInterface $expectedLineList)
+    public function testFromContent(array $content, BlockInterface $expectedLineList)
     {
-        $this->assertEquals($expectedLineList, LineList::fromContent($content));
+        $this->assertEquals($expectedLineList, Block::fromContent($content));
     }
 
     public function fromContentDataProvider(): array
@@ -793,7 +793,7 @@ class LineListTest extends \PHPUnit\Framework\TestCase
         return [
             'empty' => [
                 'content' => [],
-                'expectedLineList' => new LineList(),
+                'expectedLineList' => new Block(),
             ],
             'non-empty' => [
                 'content' => [
@@ -801,7 +801,7 @@ class LineListTest extends \PHPUnit\Framework\TestCase
                     '// comment with single leading whitespace',
                     '//       comment with multiple leading whitespace',
                 ],
-                'expectedLineList' => new LineList([
+                'expectedLineList' => new Block([
                     new Comment('comment without leading whitespace'),
                     new Comment('comment with single leading whitespace'),
                     new Comment('comment with multiple leading whitespace'),

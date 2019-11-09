@@ -14,7 +14,7 @@ use webignition\BasilCompilationSource\Metadata\MetadataInterface;
 use webignition\BasilCompilationSource\MethodDefinition\MethodDefinition;
 use webignition\BasilCompilationSource\MethodDefinition\MethodDefinitionInterface;
 use webignition\BasilCompilationSource\Line\Statement;
-use webignition\BasilCompilationSource\LineList;
+use webignition\BasilCompilationSource\Block;
 use webignition\BasilCompilationSource\VariablePlaceholderCollection;
 
 class ClassDefinitionTest extends \PHPUnit\Framework\TestCase
@@ -43,17 +43,17 @@ class ClassDefinitionTest extends \PHPUnit\Framework\TestCase
                 'name' => 'name2',
                 'methods' => [
                     1,
-                    new MethodDefinition('method1', new LineList()),
+                    new MethodDefinition('method1', new Block()),
                     'string',
-                    new MethodDefinition('method2', new LineList()),
+                    new MethodDefinition('method2', new Block()),
                     true,
-                    new MethodDefinition('method3', new LineList()),
+                    new MethodDefinition('method3', new Block()),
                     new \stdClass(),
                 ],
                 'expectedMethods' => [
-                    'method1' => new MethodDefinition('method1', new LineList()),
-                    'method2' => new MethodDefinition('method2', new LineList()),
-                    'method3' => new MethodDefinition('method3', new LineList()),
+                    'method1' => new MethodDefinition('method1', new Block()),
+                    'method2' => new MethodDefinition('method2', new Block()),
+                    'method3' => new MethodDefinition('method3', new Block()),
                 ],
             ],
         ];
@@ -76,13 +76,13 @@ class ClassDefinitionTest extends \PHPUnit\Framework\TestCase
             ],
             'single function, no lines' => [
                 'classDefinition' => new ClassDefinition('name', [
-                    new MethodDefinition('method', new LineList()),
+                    new MethodDefinition('method', new Block()),
                 ]),
                 'expectedMetadata' => new Metadata(),
             ],
             'single function, has lines, no metadata' => [
                 'classDefinition' => new ClassDefinition('name', [
-                    new MethodDefinition('method', new LineList([
+                    new MethodDefinition('method', new Block([
                         new Statement('statement'),
                     ])),
                 ]),
@@ -90,7 +90,7 @@ class ClassDefinitionTest extends \PHPUnit\Framework\TestCase
             ],
             'single function, has lines, has metadata' => [
                 'classDefinition' => new ClassDefinition('name', [
-                    new MethodDefinition('method', new LineList([
+                    new MethodDefinition('method', new Block([
                         new Statement(
                             'statement',
                             (new Metadata())
@@ -107,7 +107,7 @@ class ClassDefinitionTest extends \PHPUnit\Framework\TestCase
             ],
             'many functions with metadata' => [
                 'classDefinition' => new ClassDefinition('name', [
-                    new MethodDefinition('method1', new LineList([
+                    new MethodDefinition('method1', new Block([
                         new Statement(
                             'statement',
                             (new Metadata())
@@ -135,7 +135,7 @@ class ClassDefinitionTest extends \PHPUnit\Framework\TestCase
                                 ]))
                         ),
                     ])),
-                    new MethodDefinition('method2', new LineList([
+                    new MethodDefinition('method2', new Block([
                         new Statement(
                             'statement',
                             (new Metadata())
@@ -199,40 +199,40 @@ class ClassDefinitionTest extends \PHPUnit\Framework\TestCase
         return [
             'method one of one' => [
                 'classDefinition' => new ClassDefinition('ClassName', [
-                    new MethodDefinition('methodOne', new LineList([
+                    new MethodDefinition('methodOne', new Block([
                         new Comment('methodOne comment'),
                     ])),
                 ]),
                 'name' => 'methodOne',
-                'expectedMethod' => new MethodDefinition('methodOne', new LineList([
+                'expectedMethod' => new MethodDefinition('methodOne', new Block([
                     new Comment('methodOne comment'),
                 ])),
             ],
             'method one of two' => [
                 'classDefinition' => new ClassDefinition('ClassName', [
-                    new MethodDefinition('methodOne', new LineList([
+                    new MethodDefinition('methodOne', new Block([
                         new Comment('methodOne comment'),
                     ])),
-                    new MethodDefinition('methodTwo', new LineList([
+                    new MethodDefinition('methodTwo', new Block([
                         new Comment('methodTwo comment'),
                     ]))
                 ]),
                 'name' => 'methodOne',
-                'expectedMethod' => new MethodDefinition('methodOne', new LineList([
+                'expectedMethod' => new MethodDefinition('methodOne', new Block([
                     new Comment('methodOne comment'),
                 ])),
             ],
             'method two of two' => [
                 'classDefinition' => new ClassDefinition('ClassName', [
-                    new MethodDefinition('methodOne', new LineList([
+                    new MethodDefinition('methodOne', new Block([
                         new Comment('methodOne comment'),
                     ])),
-                    new MethodDefinition('methodTwo', new LineList([
+                    new MethodDefinition('methodTwo', new Block([
                         new Comment('methodTwo comment'),
                     ]))
                 ]),
                 'name' => 'methodTwo',
-                'expectedMethod' => new MethodDefinition('methodTwo', new LineList([
+                'expectedMethod' => new MethodDefinition('methodTwo', new Block([
                     new Comment('methodTwo comment'),
                 ])),
             ],
@@ -242,10 +242,10 @@ class ClassDefinitionTest extends \PHPUnit\Framework\TestCase
     public function testAppendMethod()
     {
         $classDefinition = new ClassDefinition('ClassName', [
-            new MethodDefinition('methodOne', new LineList([
+            new MethodDefinition('methodOne', new Block([
                 new Comment('methodOne comment'),
             ])),
-            new MethodDefinition('methodTwo', new LineList([
+            new MethodDefinition('methodTwo', new Block([
                 new Comment('methodTwo comment'),
             ]))
         ]);

@@ -6,13 +6,13 @@ namespace webignition\BasilCompilationSource\MethodDefinition;
 
 use webignition\BasilCompilationSource\ClassDependencyCollection;
 use webignition\BasilCompilationSource\Line\LineInterface;
-use webignition\BasilCompilationSource\LineList;
+use webignition\BasilCompilationSource\Block;
 use webignition\BasilCompilationSource\Metadata\MetadataInterface;
-use webignition\BasilCompilationSource\MutableListLineListInterface;
+use webignition\BasilCompilationSource\MutableBlockInterface;
 use webignition\BasilCompilationSource\SourceInterface;
 use webignition\BasilCompilationSource\VariablePlaceholderCollection;
 
-class MethodDefinition implements MethodDefinitionInterface, MutableListLineListInterface
+class MethodDefinition implements MethodDefinitionInterface, MutableBlockInterface
 {
     public const VISIBILITY_PUBLIC = 'public';
     public const VISIBILITY_PROTECTED = 'protected';
@@ -25,7 +25,7 @@ class MethodDefinition implements MethodDefinitionInterface, MutableListLineList
     private $arguments = [];
     private $isStatic = false;
 
-    public function __construct(string $name, LineList $lineList, ?array $arguments = null)
+    public function __construct(string $name, Block $lineList, ?array $arguments = null)
     {
         $this->name = $name;
         $this->lineList = $lineList;

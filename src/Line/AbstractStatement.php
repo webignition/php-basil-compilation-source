@@ -6,7 +6,6 @@ namespace webignition\BasilCompilationSource\Line;
 
 use webignition\BasilCompilationSource\ClassDependencyCollection;
 use webignition\BasilCompilationSource\Metadata\MetadataInterface;
-use webignition\BasilCompilationSource\Line\StatementInterface;
 use webignition\BasilCompilationSource\VariablePlaceholderCollection;
 
 abstract class AbstractStatement extends AbstractLine implements StatementInterface

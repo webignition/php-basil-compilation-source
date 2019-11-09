@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace webignition\BasilCompilationSource\MethodDefinition;
 
-use webignition\BasilCompilationSource\LineListInterface;
+use webignition\BasilCompilationSource\BlockInterface;
 
-interface MethodDefinitionInterface extends LineListInterface
+interface MethodDefinitionInterface extends BlockInterface
 {
     public function isPublic(): bool;
     public function isProtected(): bool;
