@@ -1,12 +1,14 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace webignition\BasilCompilationSource;
 
 class MethodDefinition implements MethodDefinitionInterface, MutableListLineListInterface
 {
-    const VISIBILITY_PUBLIC = 'public';
-    const VISIBILITY_PROTECTED = 'protected';
-    const VISIBILITY_PRIVATE = 'private';
+    public const VISIBILITY_PUBLIC = 'public';
+    public const VISIBILITY_PROTECTED = 'protected';
+    public const VISIBILITY_PRIVATE = 'private';
 
     private $visibility = self::VISIBILITY_PUBLIC;
     private $returnType = null;
@@ -90,7 +92,7 @@ class MethodDefinition implements MethodDefinitionInterface, MutableListLineList
 
     public function setPublic()
     {
-        $this->visibility= self::VISIBILITY_PUBLIC;
+        $this->visibility = self::VISIBILITY_PUBLIC;
     }
 
     public function setProtected()

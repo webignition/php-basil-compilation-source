@@ -1,6 +1,4 @@
 <?php
-/** @noinspection PhpDocSignatureInspection */
-/** @noinspection PhpUnhandledExceptionInspection */
 
 declare(strict_types=1);
 
@@ -10,8 +8,6 @@ use webignition\BasilCompilationSource\ClassDependency;
 use webignition\BasilCompilationSource\ClassDependencyCollection;
 use webignition\BasilCompilationSource\Metadata;
 use webignition\BasilCompilationSource\UnknownItemException;
-use webignition\BasilCompilationSource\VariablePlaceholder;
-use webignition\BasilCompilationSource\VariablePlaceholderCollection;
 
 class ClassDependencyCollectionTest extends \PHPUnit\Framework\TestCase
 {

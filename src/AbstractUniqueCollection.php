@@ -1,5 +1,5 @@
 <?php
-/** @noinspection PhpDocSignatureInspection */
+
 declare(strict_types=1);
 
 namespace webignition\BasilCompilationSource;
@@ -24,6 +24,10 @@ abstract class AbstractUniqueCollection implements \Iterator, \Countable
     abstract protected function add($item);
 
     /**
+     * @param string $id
+     *
+     * @return mixed
+     *
      * @throws UnknownItemException
      */
     public function get(string $id)
