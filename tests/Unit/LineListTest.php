@@ -10,6 +10,7 @@ use webignition\BasilCompilationSource\ClassDependency;
 use webignition\BasilCompilationSource\ClassDependencyCollection;
 use webignition\BasilCompilationSource\Comment;
 use webignition\BasilCompilationSource\EmptyLine;
+use webignition\BasilCompilationSource\LineListInterface;
 use webignition\BasilCompilationSource\MetadataInterface;
 use webignition\BasilCompilationSource\Statement;
 use webignition\BasilCompilationSource\LineList;
@@ -777,6 +778,24 @@ class LineListTest extends \PHPUnit\Framework\TestCase
                 'lastStatementIndex' => 2,
                 'expectedCurrentContent' => 'statement2',
                 'expectedNewContent' => 'statement2 mutated',
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider fromContentDataProvider
+     */
+    public function testFromContent(array $content, LineListInterface $expectedLineList)
+    {
+        $this->assertEquals($expectedLineList, LineList::fromContent($content));
+    }
+
+    public function fromContentDataProvider(): array
+    {
+        return [
+            'empty' => [
+                'content' => [],
+                'expectedLineList' => new LineList(),
             ],
         ];
     }
