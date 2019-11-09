@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-namespace webignition\BasilCompilationSource;
+namespace webignition\BasilCompilationSource\MethodDefinition;
+
+use webignition\BasilCompilationSource\LineListInterface;
 
 interface MethodDefinitionInterface extends LineListInterface
 {

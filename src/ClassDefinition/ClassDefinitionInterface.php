@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace webignition\BasilCompilationSource\ClassDefinition;
 
-use webignition\BasilCompilationSource\MethodDefinitionInterface;
+use webignition\BasilCompilationSource\MethodDefinition\MethodDefinitionInterface;
 use webignition\BasilCompilationSource\SourceInterface;
 
 interface ClassDefinitionInterface extends SourceInterface

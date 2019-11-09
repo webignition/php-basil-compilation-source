@@ -2,9 +2,15 @@
 
 declare(strict_types=1);
 
-namespace webignition\BasilCompilationSource;
+namespace webignition\BasilCompilationSource\MethodDefinition;
 
+use webignition\BasilCompilationSource\ClassDependencyCollection;
+use webignition\BasilCompilationSource\LineInterface;
+use webignition\BasilCompilationSource\LineList;
 use webignition\BasilCompilationSource\Metadata\MetadataInterface;
+use webignition\BasilCompilationSource\MutableListLineListInterface;
+use webignition\BasilCompilationSource\SourceInterface;
+use webignition\BasilCompilationSource\VariablePlaceholderCollection;
 
 class MethodDefinition implements MethodDefinitionInterface, MutableListLineListInterface
 {
