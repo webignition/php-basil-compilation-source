@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace webignition\BasilCompilationSource\Tests\Unit\MethodDefinition;
 
-use webignition\BasilCompilationSource\ClassDependency;
-use webignition\BasilCompilationSource\ClassDependencyCollection;
+use webignition\BasilCompilationSource\Block\ClassDependencyCollection;
+use webignition\BasilCompilationSource\Line\ClassDependency;
 use webignition\BasilCompilationSource\Line\Comment;
 use webignition\BasilCompilationSource\Line\EmptyLine;
 use webignition\BasilCompilationSource\MethodDefinition\MethodDefinition;
