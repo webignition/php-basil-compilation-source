@@ -2,9 +2,21 @@
 
 declare(strict_types=1);
 
-namespace webignition\BasilCompilationSource;
+namespace webignition\BasilCompilationSource\Block;
 
-class LineList implements LineListInterface, MutableListLineListInterface
+use webignition\BasilCompilationSource\ClassDependencyCollection;
+use webignition\BasilCompilationSource\Line\Comment;
+use webignition\BasilCompilationSource\Line\EmptyLine;
+use webignition\BasilCompilationSource\Line\LineInterface;
+use webignition\BasilCompilationSource\Line\Statement;
+use webignition\BasilCompilationSource\Line\StatementInterface;
+use webignition\BasilCompilationSource\Metadata\Metadata;
+use webignition\BasilCompilationSource\Metadata\MetadataInterface;
+use webignition\BasilCompilationSource\MutableBlockInterface;
+use webignition\BasilCompilationSource\SourceInterface;
+use webignition\BasilCompilationSource\VariablePlaceholderCollection;
+
+class Block implements BlockInterface, MutableBlockInterface
 {
     private const LAST_STATEMENT_INDEX = -1;
 
@@ -101,7 +113,7 @@ class LineList implements LineListInterface, MutableListLineListInterface
         return $this->getLines();
     }
 
-    public static function fromContent(array $content): LineList
+    public static function fromContent(array $content): Block
     {
         $lines = [];
 
@@ -109,7 +121,7 @@ class LineList implements LineListInterface, MutableListLineListInterface
             $lines[] = self::createLineObjectFromLineString($string);
         }
 
-        return new LineList($lines);
+        return new Block($lines);
     }
 
     private static function createLineObjectFromLineString(string $lineString): LineInterface

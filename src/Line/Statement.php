@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-namespace webignition\BasilCompilationSource;
+namespace webignition\BasilCompilationSource\Line;
+
+use webignition\BasilCompilationSource\Metadata\MetadataInterface;
 
 class Statement extends AbstractStatement implements StatementInterface
 {

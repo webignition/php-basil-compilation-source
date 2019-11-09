@@ -2,7 +2,11 @@
 
 declare(strict_types=1);
 
-namespace webignition\BasilCompilationSource;
+namespace webignition\BasilCompilationSource\Line;
+
+use webignition\BasilCompilationSource\ClassDependencyCollection;
+use webignition\BasilCompilationSource\Metadata\MetadataInterface;
+use webignition\BasilCompilationSource\VariablePlaceholderCollection;
 
 abstract class AbstractStatement extends AbstractLine implements StatementInterface
 {

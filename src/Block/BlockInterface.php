@@ -2,9 +2,12 @@
 
 declare(strict_types=1);
 
-namespace webignition\BasilCompilationSource;
+namespace webignition\BasilCompilationSource\Block;
 
-interface LineListInterface extends SourceInterface
+use webignition\BasilCompilationSource\Line\LineInterface;
+use webignition\BasilCompilationSource\SourceInterface;
+
+interface BlockInterface extends SourceInterface
 {
     public function addLine(LineInterface $statement);
     public function addLinesFromSource(SourceInterface $source);

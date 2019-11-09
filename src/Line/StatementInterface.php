@@ -2,9 +2,13 @@
 
 declare(strict_types=1);
 
-namespace webignition\BasilCompilationSource;
+namespace webignition\BasilCompilationSource\Line;
 
-interface StatementInterface extends LineInterface, MutableListLineListInterface
+use webignition\BasilCompilationSource\ClassDependencyCollection;
+use webignition\BasilCompilationSource\MutableBlockInterface;
+use webignition\BasilCompilationSource\VariablePlaceholderCollection;
+
+interface StatementInterface extends LineInterface, MutableBlockInterface
 {
     public function prepend(string $content);
     public function append(string $content);

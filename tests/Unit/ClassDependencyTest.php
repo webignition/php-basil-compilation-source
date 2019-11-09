@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace webignition\BasilCompilationSource\Tests\Unit;
 
 use webignition\BasilCompilationSource\ClassDependency;
-use webignition\BasilCompilationSource\LineTypes;
-use webignition\BasilCompilationSource\Metadata;
+use webignition\BasilCompilationSource\Line\LineTypes;
+use webignition\BasilCompilationSource\Metadata\Metadata;
 
 class ClassDependencyTest extends \PHPUnit\Framework\TestCase
 {

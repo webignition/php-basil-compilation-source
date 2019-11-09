@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace webignition\BasilCompilationSource\Tests\Unit;
+namespace webignition\BasilCompilationSource\Tests\Unit\MethodDefinition;
 
 use webignition\BasilCompilationSource\ClassDependency;
 use webignition\BasilCompilationSource\ClassDependencyCollection;
-use webignition\BasilCompilationSource\Comment;
-use webignition\BasilCompilationSource\EmptyLine;
-use webignition\BasilCompilationSource\MethodDefinition;
-use webignition\BasilCompilationSource\LineList;
+use webignition\BasilCompilationSource\Line\Comment;
+use webignition\BasilCompilationSource\Line\EmptyLine;
+use webignition\BasilCompilationSource\MethodDefinition\MethodDefinition;
+use webignition\BasilCompilationSource\Block\Block;
 use webignition\BasilCompilationSource\SourceInterface;
-use webignition\BasilCompilationSource\Statement;
+use webignition\BasilCompilationSource\Line\Statement;
 use webignition\BasilCompilationSource\VariablePlaceholderCollection;
 
 class MethodDefinitionTest extends \PHPUnit\Framework\TestCase
@@ -21,7 +21,7 @@ class MethodDefinitionTest extends \PHPUnit\Framework\TestCase
      */
     public function testConstruct(
         string $name,
-        LineList $content,
+        Block $content,
         $arguments,
         array $expectedArguments
     ) {
@@ -41,13 +41,13 @@ class MethodDefinitionTest extends \PHPUnit\Framework\TestCase
         return [
             'without arguments' => [
                 'name' => 'withoutArguments',
-                'content' => new LineList([new Statement('statement')]),
+                'content' => new Block([new Statement('statement')]),
                 'arguments' => null,
                 'expectedArguments' => [],
             ],
             'with arguments' => [
                 'name' => 'withArguments',
-                'content' => new LineList([new Statement('statement')]),
+                'content' => new Block([new Statement('statement')]),
                 'arguments' => ['a', 'b', 'c'],
                 'expectedArguments' => ['a', 'b', 'c'],
             ],
@@ -56,7 +56,7 @@ class MethodDefinitionTest extends \PHPUnit\Framework\TestCase
 
     public function testVisibility()
     {
-        $methodDefinition = new MethodDefinition('name', new LineList());
+        $methodDefinition = new MethodDefinition('name', new Block());
         $this->assertTrue($methodDefinition->isPublic());
         $this->assertFalse($methodDefinition->isProtected());
         $this->assertFalse($methodDefinition->isPrivate());
@@ -98,7 +98,7 @@ class MethodDefinitionTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'empty list, non-empty source' => [
-                'methodDefinition' => new MethodDefinition('name', new LineList()),
+                'methodDefinition' => new MethodDefinition('name', new Block()),
                 'source' => new Statement('statement'),
                 'expectedLines' => [
                     new Statement('statement'),
@@ -107,7 +107,7 @@ class MethodDefinitionTest extends \PHPUnit\Framework\TestCase
             'non-empty list, non-empty lines' => [
                 'methodDefinition' => new MethodDefinition(
                     'name',
-                    new LineList([
+                    new Block([
                         new Statement('statement1'),
                         new EmptyLine(),
                         new Comment('comment1'),
@@ -141,12 +141,12 @@ class MethodDefinitionTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'empty list, empty lines' => [
-                'methodDefinition' => new MethodDefinition('name', new LineList()),
+                'methodDefinition' => new MethodDefinition('name', new Block()),
                 'sources' => [],
                 'expectedLines' => [],
             ],
             'empty list, non-empty lines' => [
-                'methodDefinition' => new MethodDefinition('name', new LineList()),
+                'methodDefinition' => new MethodDefinition('name', new Block()),
                 'lines' => [
                     new Statement('statement'),
                     new EmptyLine(),
@@ -161,7 +161,7 @@ class MethodDefinitionTest extends \PHPUnit\Framework\TestCase
             'non-empty list, non-empty lines' => [
                 'methodDefinition' => new MethodDefinition(
                     'name',
-                    new LineList([
+                    new Block([
                         new Statement('statement1'),
                         new EmptyLine(),
                         new Comment('comment1'),
@@ -188,7 +188,7 @@ class MethodDefinitionTest extends \PHPUnit\Framework\TestCase
     {
         $methodDefinition = new MethodDefinition(
             'name',
-            new LineList([
+            new Block([
                 new Statement('statement1'),
                 new EmptyLine(),
                 new Comment('comment1'),
@@ -220,7 +220,7 @@ class MethodDefinitionTest extends \PHPUnit\Framework\TestCase
     public function testGetStatementObjects()
     {
         $statement = new Statement('statement');
-        $methodDefinition = new MethodDefinition('name', new LineList([$statement]));
+        $methodDefinition = new MethodDefinition('name', new Block([$statement]));
 
         $this->assertEquals([$statement], $methodDefinition->getLines());
     }
@@ -228,7 +228,7 @@ class MethodDefinitionTest extends \PHPUnit\Framework\TestCase
     public function testMutateLastStatement()
     {
         $statement = new Statement('content');
-        $methodDefinition = new MethodDefinition('name', new LineList([$statement]));
+        $methodDefinition = new MethodDefinition('name', new Block([$statement]));
 
         $methodDefinition->mutateLastStatement(function (string $content) {
             return '!' . $content . '!';
@@ -242,7 +242,7 @@ class MethodDefinitionTest extends \PHPUnit\Framework\TestCase
         $statement = new Statement('statement');
         $this->assertEquals(new ClassDependencyCollection([]), $statement->getMetadata()->getClassDependencies());
 
-        $methodDefinition = new MethodDefinition('name', new LineList([$statement]));
+        $methodDefinition = new MethodDefinition('name', new Block([$statement]));
         $classDependencies = new ClassDependencyCollection([
             new ClassDependency(ClassDependency::class),
         ]);
@@ -259,7 +259,7 @@ class MethodDefinitionTest extends \PHPUnit\Framework\TestCase
             $statement->getMetadata()->getVariableDependencies()
         );
 
-        $methodDefinition = new MethodDefinition('name', new LineList([$statement]));
+        $methodDefinition = new MethodDefinition('name', new Block([$statement]));
         $variableDependencies = VariablePlaceholderCollection::createCollection(['DEPENDENCY']);
 
         $methodDefinition->addVariableDependenciesToLastStatement($variableDependencies);
@@ -274,7 +274,7 @@ class MethodDefinitionTest extends \PHPUnit\Framework\TestCase
             $statement->getMetadata()->getVariableExports()
         );
 
-        $methodDefinition = new MethodDefinition('name', new LineList([$statement]));
+        $methodDefinition = new MethodDefinition('name', new Block([$statement]));
         $variableExports = VariablePlaceholderCollection::createCollection(['DEPENDENCY']);
 
         $methodDefinition->addVariableExportsToLastStatement($variableExports);
@@ -283,7 +283,7 @@ class MethodDefinitionTest extends \PHPUnit\Framework\TestCase
 
     public function testSetReturnType()
     {
-        $methodDefinition = new MethodDefinition('name', new LineList());
+        $methodDefinition = new MethodDefinition('name', new Block());
         $this->assertNull($methodDefinition->getReturnType());
 
         $returnType = 'array';
@@ -293,7 +293,7 @@ class MethodDefinitionTest extends \PHPUnit\Framework\TestCase
 
     public function testIsStatic()
     {
-        $methodDefinition = new MethodDefinition('name', new LineList());
+        $methodDefinition = new MethodDefinition('name', new Block());
         $this->assertFalse($methodDefinition->isStatic());
 
         $methodDefinition->setStatic();

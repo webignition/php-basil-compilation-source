@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace webignition\BasilCompilationSource;
 
+use webignition\BasilCompilationSource\Line\AbstractStatement;
+use webignition\BasilCompilationSource\Line\LineTypes;
+
 class ClassDependency extends AbstractStatement implements UniqueItemInterface
 {
     private $className;

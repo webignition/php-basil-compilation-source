@@ -4,7 +4,12 @@ declare(strict_types=1);
 
 namespace webignition\BasilCompilationSource;
 
-class ClassDependencyCollection extends AbstractUniqueCollection implements \Iterator, LineListInterface
+use webignition\BasilCompilationSource\Block\BlockInterface;
+use webignition\BasilCompilationSource\Line\LineInterface;
+use webignition\BasilCompilationSource\Metadata\Metadata;
+use webignition\BasilCompilationSource\Metadata\MetadataInterface;
+
+class ClassDependencyCollection extends AbstractUniqueCollection implements \Iterator, BlockInterface
 {
     /**
      * @param string $id

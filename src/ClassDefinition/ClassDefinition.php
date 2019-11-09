@@ -2,14 +2,19 @@
 
 declare(strict_types=1);
 
-namespace webignition\BasilCompilationSource;
+namespace webignition\BasilCompilationSource\ClassDefinition;
+
+use webignition\BasilCompilationSource\Metadata\Metadata;
+use webignition\BasilCompilationSource\Metadata\MetadataInterface;
+use webignition\BasilCompilationSource\MethodDefinition\MethodDefinitionInterface;
+use webignition\BasilCompilationSource\SourceInterface;
 
 class ClassDefinition implements ClassDefinitionInterface
 {
     private $name;
 
     /**
-     * @var MethodDefinitionInterface[]
+     * @var \webignition\BasilCompilationSource\MethodDefinition\MethodDefinitionInterface[]
      */
     private $methods = [];
 

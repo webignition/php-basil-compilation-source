@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace webignition\BasilCompilationSource;
 
-interface MutableListLineListInterface extends SourceInterface
+interface MutableBlockInterface extends SourceInterface
 {
     public function mutateLastStatement(callable $mutator);
     public function addClassDependenciesToLastStatement(ClassDependencyCollection $classDependencies);

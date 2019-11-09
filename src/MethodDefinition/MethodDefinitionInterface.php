@@ -2,9 +2,11 @@
 
 declare(strict_types=1);
 
-namespace webignition\BasilCompilationSource;
+namespace webignition\BasilCompilationSource\MethodDefinition;
 
-interface MethodDefinitionInterface extends LineListInterface
+use webignition\BasilCompilationSource\Block\BlockInterface;
+
+interface MethodDefinitionInterface extends BlockInterface
 {
     public function isPublic(): bool;
     public function isProtected(): bool;
