@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace webignition\BasilCompilationSource\Tests\Unit;
+namespace webignition\BasilCompilationSource\Tests\Unit\Block;
 
 use webignition\BasilCompilationSource\Line\ClassDependency;
 use webignition\BasilCompilationSource\ClassDependencyCollection;
 use webignition\BasilCompilationSource\Line\Comment;
 use webignition\BasilCompilationSource\Line\EmptyLine;
-use webignition\BasilCompilationSource\BlockInterface;
+use webignition\BasilCompilationSource\Block\BlockInterface;
 use webignition\BasilCompilationSource\Metadata\MetadataInterface;
 use webignition\BasilCompilationSource\Line\Statement;
-use webignition\BasilCompilationSource\Block;
+use webignition\BasilCompilationSource\Block\Block;
 use webignition\BasilCompilationSource\Metadata\Metadata;
 use webignition\BasilCompilationSource\Line\StatementInterface;
 use webignition\BasilCompilationSource\VariablePlaceholderCollection;

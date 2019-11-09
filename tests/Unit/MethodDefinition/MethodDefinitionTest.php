@@ -9,7 +9,7 @@ use webignition\BasilCompilationSource\ClassDependencyCollection;
 use webignition\BasilCompilationSource\Line\Comment;
 use webignition\BasilCompilationSource\Line\EmptyLine;
 use webignition\BasilCompilationSource\MethodDefinition\MethodDefinition;
-use webignition\BasilCompilationSource\Block;
+use webignition\BasilCompilationSource\Block\Block;
 use webignition\BasilCompilationSource\SourceInterface;
 use webignition\BasilCompilationSource\Line\Statement;
 use webignition\BasilCompilationSource\VariablePlaceholderCollection;

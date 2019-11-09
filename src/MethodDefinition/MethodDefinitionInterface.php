@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace webignition\BasilCompilationSource\MethodDefinition;
 
-use webignition\BasilCompilationSource\BlockInterface;
+use webignition\BasilCompilationSource\Block\BlockInterface;
 
 interface MethodDefinitionInterface extends BlockInterface
 {

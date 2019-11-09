@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace webignition\BasilCompilationSource;
+namespace webignition\BasilCompilationSource\Block;
 
 use webignition\BasilCompilationSource\Line\LineInterface;
+use webignition\BasilCompilationSource\SourceInterface;
 
 interface BlockInterface extends SourceInterface
 {

@@ -6,7 +6,7 @@ namespace webignition\BasilCompilationSource\MethodDefinition;
 
 use webignition\BasilCompilationSource\ClassDependencyCollection;
 use webignition\BasilCompilationSource\Line\LineInterface;
-use webignition\BasilCompilationSource\Block;
+use webignition\BasilCompilationSource\Block\Block;
 use webignition\BasilCompilationSource\Metadata\MetadataInterface;
 use webignition\BasilCompilationSource\MutableBlockInterface;
 use webignition\BasilCompilationSource\SourceInterface;

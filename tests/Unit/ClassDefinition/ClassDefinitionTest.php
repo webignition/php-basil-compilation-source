@@ -14,7 +14,7 @@ use webignition\BasilCompilationSource\Metadata\MetadataInterface;
 use webignition\BasilCompilationSource\MethodDefinition\MethodDefinition;
 use webignition\BasilCompilationSource\MethodDefinition\MethodDefinitionInterface;
 use webignition\BasilCompilationSource\Line\Statement;
-use webignition\BasilCompilationSource\Block;
+use webignition\BasilCompilationSource\Block\Block;
 use webignition\BasilCompilationSource\VariablePlaceholderCollection;
 
 class ClassDefinitionTest extends \PHPUnit\Framework\TestCase
