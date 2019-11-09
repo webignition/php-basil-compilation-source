@@ -31,4 +31,9 @@ class VariablePlaceholderTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertSame('{{ NAME }}', (string) new VariablePlaceholder('NAME'));
     }
+
+    public function testTemplateConstantAccess()
+    {
+        $this->assertIsString(VariablePlaceholder::TEMPLATE);
+    }
 }
