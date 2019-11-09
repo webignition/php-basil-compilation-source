@@ -59,7 +59,7 @@ class VariablePlaceholderCollection implements \Iterator, \Countable
         }
     }
 
-    private function add(VariablePlaceholder $variablePlaceholder)
+    public function add(VariablePlaceholder $variablePlaceholder)
     {
         $name = $variablePlaceholder->getName();
 
