@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace webignition\BasilCompilationSource\Tests\Unit;
+namespace webignition\BasilCompilationSource\Tests\Unit\Line;
 
-use webignition\BasilCompilationSource\EmptyLine;
-use webignition\BasilCompilationSource\LineTypes;
+use webignition\BasilCompilationSource\Line\EmptyLine;
+use webignition\BasilCompilationSource\Line\LineTypes;
 
 class EmptyLineTest extends \PHPUnit\Framework\TestCase
 {

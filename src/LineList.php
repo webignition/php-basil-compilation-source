@@ -4,6 +4,11 @@ declare(strict_types=1);
 
 namespace webignition\BasilCompilationSource;
 
+use webignition\BasilCompilationSource\Line\Comment;
+use webignition\BasilCompilationSource\Line\EmptyLine;
+use webignition\BasilCompilationSource\Line\LineInterface;
+use webignition\BasilCompilationSource\Line\Statement;
+use webignition\BasilCompilationSource\Line\StatementInterface;
 use webignition\BasilCompilationSource\Metadata\Metadata;
 use webignition\BasilCompilationSource\Metadata\MetadataInterface;
 

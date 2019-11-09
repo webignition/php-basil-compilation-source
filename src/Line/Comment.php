@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace webignition\BasilCompilationSource;
+namespace webignition\BasilCompilationSource\Line;
 
 class Comment extends AbstractLine
 {

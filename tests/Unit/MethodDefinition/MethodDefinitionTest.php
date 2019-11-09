@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace webignition\BasilCompilationSource\Tests\Unit\MethodDefinition;
 
-use webignition\BasilCompilationSource\ClassDependency;
+use webignition\BasilCompilationSource\Line\ClassDependency;
 use webignition\BasilCompilationSource\ClassDependencyCollection;
-use webignition\BasilCompilationSource\Comment;
-use webignition\BasilCompilationSource\EmptyLine;
+use webignition\BasilCompilationSource\Line\Comment;
+use webignition\BasilCompilationSource\Line\EmptyLine;
 use webignition\BasilCompilationSource\MethodDefinition\MethodDefinition;
 use webignition\BasilCompilationSource\LineList;
 use webignition\BasilCompilationSource\SourceInterface;
-use webignition\BasilCompilationSource\Statement;
+use webignition\BasilCompilationSource\Line\Statement;
 use webignition\BasilCompilationSource\VariablePlaceholderCollection;
 
 class MethodDefinitionTest extends \PHPUnit\Framework\TestCase

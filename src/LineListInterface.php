@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace webignition\BasilCompilationSource;
 
+use webignition\BasilCompilationSource\Line\LineInterface;
+
 interface LineListInterface extends SourceInterface
 {
     public function addLine(LineInterface $statement);

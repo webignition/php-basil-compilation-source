@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace webignition\BasilCompilationSource\MethodDefinition;
 
 use webignition\BasilCompilationSource\ClassDependencyCollection;
-use webignition\BasilCompilationSource\LineInterface;
+use webignition\BasilCompilationSource\Line\LineInterface;
 use webignition\BasilCompilationSource\LineList;
 use webignition\BasilCompilationSource\Metadata\MetadataInterface;
 use webignition\BasilCompilationSource\MutableListLineListInterface;
@@ -66,7 +66,7 @@ class MethodDefinition implements MethodDefinitionInterface, MutableListLineList
     }
 
     /**
-     * @return LineInterface[]
+     * @return \webignition\BasilCompilationSource\Line\LineInterface[]
      */
     public function getLines(): array
     {

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace webignition\BasilCompilationSource\Tests\Unit;
+namespace webignition\BasilCompilationSource\Tests\Unit\Line;
 
-use webignition\BasilCompilationSource\Comment;
-use webignition\BasilCompilationSource\LineTypes;
+use webignition\BasilCompilationSource\Line\Comment;
+use webignition\BasilCompilationSource\Line\LineTypes;
 
 class CommentTest extends \PHPUnit\Framework\TestCase
 {
