@@ -117,7 +117,7 @@ class LineList implements LineListInterface, MutableListLineListInterface
         }
 
         if (strlen($lineString) > 2 && '//' === substr($lineString, 0, 2)) {
-            return new Comment(ltrim($lineString, '/'));
+            return new Comment(ltrim($lineString, '/ '));
         }
 
         return new Statement($lineString);

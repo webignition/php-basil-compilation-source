@@ -797,6 +797,18 @@ class LineListTest extends \PHPUnit\Framework\TestCase
                 'content' => [],
                 'expectedLineList' => new LineList(),
             ],
+            'non-empty' => [
+                'content' => [
+                    '//comment without leading whitespace',
+                    '// comment with single leading whitespace',
+                    '//       comment with multiple leading whitespace',
+                ],
+                'expectedLineList' => new LineList([
+                    new Comment('comment without leading whitespace'),
+                    new Comment('comment with single leading whitespace'),
+                    new Comment('comment with multiple leading whitespace'),
+                ]),
+            ],
         ];
     }
 }
