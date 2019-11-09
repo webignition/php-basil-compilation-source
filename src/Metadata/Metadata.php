@@ -69,12 +69,12 @@ class Metadata implements MetadataInterface
 
     public function addVariableDependencies(VariablePlaceholderCollection $variableDependencies)
     {
-        $this->variableDependencies = $this->variableDependencies->merge([$variableDependencies]);
+        $this->variableDependencies->merge([$variableDependencies]);
     }
 
     public function addVariableExports(VariablePlaceholderCollection $variableExports)
     {
-        $this->variableExports = $this->variableExports->merge([$variableExports]);
+        $this->variableExports->merge([$variableExports]);
     }
 
     public function add(MetadataInterface $metadata)

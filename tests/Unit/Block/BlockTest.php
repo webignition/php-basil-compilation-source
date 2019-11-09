@@ -93,12 +93,12 @@ class BlockTest extends \PHPUnit\Framework\TestCase
     public function addLinesFromSourcesDataProvider(): array
     {
         return [
-            'empty list, empty lines' => [
+            'empty block, empty lines' => [
                 'block' => new Block(),
                 'lines' => [],
                 'expectedLines' => [],
             ],
-            'empty list, non-empty lines' => [
+            'empty block, non-empty lines' => [
                 'block' => new Block(),
                 'lines' => [
                     new Statement('statement'),
@@ -111,7 +111,7 @@ class BlockTest extends \PHPUnit\Framework\TestCase
                     new Comment('comment'),
                 ],
             ],
-            'non-empty list, non-empty lines' => [
+            'non-empty block, non-empty lines' => [
                 'block' => new Block([
                     new Statement('statement1'),
                     new EmptyLine(),
@@ -244,9 +244,9 @@ class BlockTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider noStatementLineListDataProvider
+     * @dataProvider emptyBlockDataProvider
      */
-    public function testAddClassDependenciesToLastStatementForNoStatementList(Block $block)
+    public function testAddClassDependenciesToLastStatementForEmptyBlock(Block $block)
     {
         $classDependencies = new ClassDependencyCollection([
             new ClassDependency(ClassDependency::class),
@@ -256,7 +256,7 @@ class BlockTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(new ClassDependencyCollection(), $block->getMetadata()->getClassDependencies());
     }
 
-    public function noStatementLineListDataProvider(): array
+    public function emptyBlockDataProvider(): array
     {
         return [
             'empty' => [
@@ -409,9 +409,9 @@ class BlockTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider noStatementLineListDataProvider
+     * @dataProvider emptyBlockDataProvider
      */
-    public function testAddVariableDependenciesToLastStatementForNoStatementList(Block $block)
+    public function testAddVariableDependenciesToLastStatementForEmptyBlock(Block $block)
     {
         $variableDependencies = VariablePlaceholderCollection::createCollection(['PLACEHOLDER']);
 
@@ -557,9 +557,9 @@ class BlockTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider noStatementLineListDataProvider
+     * @dataProvider emptyBlockDataProvider
      */
-    public function testAddVariableExportsToLastStatementForNoStatementList(Block $block)
+    public function testAddVariableExportsToLastStatementForEmptyBlock(Block $block)
     {
         $variableExports = VariablePlaceholderCollection::createCollection(['PLACEHOLDER']);
 
@@ -705,9 +705,9 @@ class BlockTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider mutateToLastStatementForNoStatementListDataProvider
+     * @dataProvider mutateToLastStatementForEmptyBlockDataProvider
      */
-    public function testMutateToLastStatementForNoStatementList(Block $block, array $expectedLines)
+    public function testMutateToLastStatementForEmptyBlock(Block $block, array $expectedLines)
     {
         $block->mutateLastStatement(function () {
             return 'mutated!';
@@ -716,7 +716,7 @@ class BlockTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedLines, $block->getLines());
     }
 
-    public function mutateToLastStatementForNoStatementListDataProvider(): array
+    public function mutateToLastStatementForEmptyBlockDataProvider(): array
     {
         return [
             'empty' => [

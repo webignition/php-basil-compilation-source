@@ -85,13 +85,15 @@ class StatementTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($classDependencies, $statement->getMetadata()->getClassDependencies());
     }
 
-    public function testAddVariableDependencies()
+    public function testAddVariableDependenciesFoo()
     {
         $statement = new Statement('statement');
+
         $this->assertEquals(
-            new VariablePlaceholderCollection([]),
+            new VariablePlaceholderCollection(),
             $statement->getMetadata()->getVariableDependencies()
         );
+
         $variableDependencies = VariablePlaceholderCollection::createCollection(['DEPENDENCY']);
 
         $statement->addVariableDependencies($variableDependencies);

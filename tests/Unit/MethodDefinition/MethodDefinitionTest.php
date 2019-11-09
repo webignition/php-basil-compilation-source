@@ -97,14 +97,14 @@ class MethodDefinitionTest extends \PHPUnit\Framework\TestCase
     public function addLinesFromSourceDataProvider(): array
     {
         return [
-            'empty list, non-empty source' => [
+            'empty block, non-empty source' => [
                 'methodDefinition' => new MethodDefinition('name', new Block()),
                 'source' => new Statement('statement'),
                 'expectedLines' => [
                     new Statement('statement'),
                 ],
             ],
-            'non-empty list, non-empty lines' => [
+            'non-empty block, non-empty lines' => [
                 'methodDefinition' => new MethodDefinition(
                     'name',
                     new Block([
@@ -140,12 +140,12 @@ class MethodDefinitionTest extends \PHPUnit\Framework\TestCase
     public function addLinesFromSourcesDataProvider(): array
     {
         return [
-            'empty list, empty lines' => [
+            'empty block, empty lines' => [
                 'methodDefinition' => new MethodDefinition('name', new Block()),
                 'sources' => [],
                 'expectedLines' => [],
             ],
-            'empty list, non-empty lines' => [
+            'empty block, non-empty lines' => [
                 'methodDefinition' => new MethodDefinition('name', new Block()),
                 'lines' => [
                     new Statement('statement'),
@@ -158,7 +158,7 @@ class MethodDefinitionTest extends \PHPUnit\Framework\TestCase
                     new Comment('comment'),
                 ],
             ],
-            'non-empty list, non-empty lines' => [
+            'non-empty block, non-empty lines' => [
                 'methodDefinition' => new MethodDefinition(
                     'name',
                     new Block([

@@ -4,24 +4,20 @@ declare(strict_types=1);
 
 namespace webignition\BasilCompilationSource;
 
-class VariablePlaceholder implements UniqueItemInterface
+class VariablePlaceholder
 {
     private const TEMPLATE = '{{ %s }}';
 
     private $name = '';
-    private $id = '';
 
-    public function __construct(string $name, string $id = '')
+    public function __construct(string $name)
     {
-        $id = '' === $id ? $name : $id;
-
         $this->name = $name;
-        $this->id = $id;
     }
 
-    public function getId(): string
+    public function getName(): string
     {
-        return $this->id;
+        return $this->name;
     }
 
     public function __toString(): string

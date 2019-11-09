@@ -11,25 +11,18 @@ class VariablePlaceholderTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider createDataProvider
      */
-    public function testCreate(string $name, string $id, string $expectedId)
+    public function testCreate(string $name)
     {
-        $placeholder = new VariablePlaceholder($name, $id);
+        $placeholder = new VariablePlaceholder($name);
 
-        $this->assertEquals($expectedId, $placeholder->getId());
+        $this->assertEquals($name, $placeholder->getName());
     }
 
     public function createDataProvider(): array
     {
         return [
-            'implicit id' => [
+            'default' => [
                 'name' => 'PLACEHOLDER',
-                'id' => '',
-                'expectedId' => 'PLACEHOLDER',
-            ],
-            'explicit id' => [
-                'name' => 'PLACEHOLDER',
-                'id' => 'ID',
-                'expectedId' => 'ID',
             ],
         ];
     }

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace webignition\BasilCompilationSource\Tests\Unit;
 
-use webignition\BasilCompilationSource\UnknownItemException;
 use webignition\BasilCompilationSource\VariablePlaceholder;
 use webignition\BasilCompilationSource\VariablePlaceholderCollection;
 
@@ -13,118 +12,68 @@ class VariablePlaceholderCollectionTest extends \PHPUnit\Framework\TestCase
     public function testConstruct()
     {
         $placeholders = [
-            new VariablePlaceholder('1'),
-            new VariablePlaceholder('2'),
-            new VariablePlaceholder('3'),
+            'ONE' => new VariablePlaceholder('ONE'),
+            'TWO' => new VariablePlaceholder('TWO'),
+            'THREE' => new VariablePlaceholder('THREE'),
         ];
 
         $collection = new VariablePlaceholderCollection($placeholders);
 
-        $this->assertEquals($placeholders, $collection->getAll());
+        $this->assertEquals($placeholders, $this->getCollectionVariablePlaceholders($collection));
     }
 
     public function testCreateCollection()
     {
-        $names = ['1', '2', '3'];
+        $names = ['ONE', 'TWO', 'TWO', 'THREE'];
 
         $collection = VariablePlaceholderCollection::createCollection($names);
 
-        $this->assertCount(count($names), $collection);
+        $expectedPlaceholders = [
+            'ONE' => new VariablePlaceholder('ONE'),
+            'TWO' => new VariablePlaceholder('TWO'),
+            'THREE' => new VariablePlaceholder('THREE'),
+        ];
 
-        $this->assertEquals(
-            [
-                new VariablePlaceholder('1'),
-                new VariablePlaceholder('2'),
-                new VariablePlaceholder('3'),
-            ],
-            $collection->getAll()
-        );
+        $this->assertCount(count($expectedPlaceholders), $collection);
+
+        $this->assertEquals($expectedPlaceholders, $this->getCollectionVariablePlaceholders($collection));
     }
 
     public function testCreate()
     {
         $collection = new VariablePlaceholderCollection();
-
-        $this->assertEquals([], $collection->getAll());
+        $this->assertEquals([], $this->getCollectionVariablePlaceholders($collection));
 
         $placeholder = $collection->create('PLACEHOLDER');
 
         $this->assertInstanceOf(VariablePlaceholder::class, $placeholder);
-
         $this->assertEquals(
             [
-                new VariablePlaceholder('PLACEHOLDER'),
+                'PLACEHOLDER' => new VariablePlaceholder('PLACEHOLDER'),
             ],
-            $collection->getAll()
-        );
-    }
-
-    public function testGetItemExists()
-    {
-        $id = 'PLACEHOLDER';
-
-        $collection = VariablePlaceholderCollection::createCollection([
-            $id,
-        ]);
-
-        $this->assertEquals(new VariablePlaceholder($id), $collection->get($id));
-    }
-
-    public function testGetItemDoesNotExist()
-    {
-        $this->expectException(UnknownItemException::class);
-        $this->expectExceptionMessage('Unknown item "PLACEHOLDER"');
-
-        $collection = new VariablePlaceholderCollection();
-
-        $collection->get('PLACEHOLDER');
-    }
-
-    public function testWithAdditionalItems()
-    {
-        $collection = new VariablePlaceholderCollection();
-
-        $this->assertCount(0, $collection);
-
-        $collection = $collection->withAdditionalItems([
-            1,
-            true,
-            'invalid',
-            new VariablePlaceholder('PLACEHOLDER1'),
-            new VariablePlaceholder('PLACEHOLDER2'),
-        ]);
-
-        $this->assertEquals(
-            [
-                new VariablePlaceholder('PLACEHOLDER1'),
-                new VariablePlaceholder('PLACEHOLDER2'),
-            ],
-            $collection->getAll()
+            $this->getCollectionVariablePlaceholders($collection)
         );
     }
 
     public function testMerge()
     {
-        $collection1 = VariablePlaceholderCollection::createCollection(['1', '2']);
-        $collection2 = VariablePlaceholderCollection::createCollection(['2', '3']);
-        $collection3 = VariablePlaceholderCollection::createCollection(['4', '5']);
+        $collection = VariablePlaceholderCollection::createCollection(['ONE']);
 
-        $collection = $collection1->merge([
-            $collection2,
-            $collection3,
+        $collection->merge([
+            VariablePlaceholderCollection::createCollection(['TWO', 'THREE']),
+            VariablePlaceholderCollection::createCollection(['THREE', 'FOUR']),
         ]);
 
-        $this->assertCount(5, $collection);
+        $this->assertCount(4, $collection);
 
         $this->assertEquals(
             [
-                new VariablePlaceholder('1'),
-                new VariablePlaceholder('2'),
-                new VariablePlaceholder('3'),
-                new VariablePlaceholder('4'),
-                new VariablePlaceholder('5'),
+                'ONE' => new VariablePlaceholder('ONE'),
+                'TWO' => new VariablePlaceholder('TWO'),
+                'THREE' => new VariablePlaceholder('THREE'),
+                'FOUR' => new VariablePlaceholder('FOUR'),
             ],
-            $collection->getAll()
+            $this->getCollectionVariablePlaceholders($collection)
         );
     }
 
@@ -143,5 +92,19 @@ class VariablePlaceholderCollectionTest extends \PHPUnit\Framework\TestCase
 
             $this->assertEquals($expectedPlaceholder, $variablePlaceholder);
         }
+    }
+
+    /**
+     * @param VariablePlaceholderCollection $collection
+     *
+     * @return VariablePlaceholder[]
+     */
+    private function getCollectionVariablePlaceholders(VariablePlaceholderCollection $collection): array
+    {
+        $reflectionObject = new \ReflectionObject($collection);
+        $property = $reflectionObject->getProperty('variablePlaceholders');
+        $property->setAccessible(true);
+
+        return $property->getValue($collection);
     }
 }

@@ -71,12 +71,12 @@ class ClassDependencyCollectionTest extends \PHPUnit\Framework\TestCase
     public function addLinesFromSourcesDataProvider(): array
     {
         return [
-            'empty list, empty lines' => [
+            'empty collection, empty lines' => [
                 'collection' => new ClassDependencyCollection(),
                 'lines' => [],
                 'expectedLines' => [],
             ],
-            'empty list, non-empty lines' => [
+            'empty collection, non-empty lines' => [
                 'collection' => new ClassDependencyCollection(),
                 'lines' => [
                     new ClassDependency(ClassDependency::class),
@@ -87,7 +87,7 @@ class ClassDependencyCollectionTest extends \PHPUnit\Framework\TestCase
                     new ClassDependency(ClassDependencyCollection::class),
                 ],
             ],
-            'non-empty list, non-empty lines' => [
+            'non-empty collection, non-empty lines' => [
                 'collection' => new ClassDependencyCollection([
                     new ClassDependency(ClassDependency::class),
                 ]),
