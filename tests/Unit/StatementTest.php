@@ -7,9 +7,9 @@ namespace webignition\BasilCompilationSource\Tests\Unit;
 use webignition\BasilCompilationSource\ClassDependency;
 use webignition\BasilCompilationSource\ClassDependencyCollection;
 use webignition\BasilCompilationSource\LineTypes;
-use webignition\BasilCompilationSource\MetadataInterface;
+use webignition\BasilCompilationSource\Metadata\MetadataInterface;
 use webignition\BasilCompilationSource\Statement;
-use webignition\BasilCompilationSource\Metadata;
+use webignition\BasilCompilationSource\Metadata\Metadata;
 use webignition\BasilCompilationSource\VariablePlaceholderCollection;
 
 class StatementTest extends \PHPUnit\Framework\TestCase

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace webignition\BasilCompilationSource;
 
+use webignition\BasilCompilationSource\Metadata\MetadataInterface;
+
 abstract class AbstractStatement extends AbstractLine implements StatementInterface
 {
     public function __construct(string $content, string $type, ?MetadataInterface $metadata = null)

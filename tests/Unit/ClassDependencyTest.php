@@ -6,7 +6,7 @@ namespace webignition\BasilCompilationSource\Tests\Unit;
 
 use webignition\BasilCompilationSource\ClassDependency;
 use webignition\BasilCompilationSource\LineTypes;
-use webignition\BasilCompilationSource\Metadata;
+use webignition\BasilCompilationSource\Metadata\Metadata;
 
 class ClassDependencyTest extends \PHPUnit\Framework\TestCase
 {

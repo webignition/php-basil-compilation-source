@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace webignition\BasilCompilationSource\ClassDefinition;
 
-use webignition\BasilCompilationSource\Metadata;
-use webignition\BasilCompilationSource\MetadataInterface;
+use webignition\BasilCompilationSource\Metadata\Metadata;
+use webignition\BasilCompilationSource\Metadata\MetadataInterface;
 use webignition\BasilCompilationSource\MethodDefinitionInterface;
 use webignition\BasilCompilationSource\SourceInterface;
 

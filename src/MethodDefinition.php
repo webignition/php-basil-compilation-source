@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace webignition\BasilCompilationSource;
 
+use webignition\BasilCompilationSource\Metadata\MetadataInterface;
+
 class MethodDefinition implements MethodDefinitionInterface, MutableListLineListInterface
 {
     public const VISIBILITY_PUBLIC = 'public';

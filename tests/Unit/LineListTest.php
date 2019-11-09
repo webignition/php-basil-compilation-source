@@ -9,10 +9,10 @@ use webignition\BasilCompilationSource\ClassDependencyCollection;
 use webignition\BasilCompilationSource\Comment;
 use webignition\BasilCompilationSource\EmptyLine;
 use webignition\BasilCompilationSource\LineListInterface;
-use webignition\BasilCompilationSource\MetadataInterface;
+use webignition\BasilCompilationSource\Metadata\MetadataInterface;
 use webignition\BasilCompilationSource\Statement;
 use webignition\BasilCompilationSource\LineList;
-use webignition\BasilCompilationSource\Metadata;
+use webignition\BasilCompilationSource\Metadata\Metadata;
 use webignition\BasilCompilationSource\StatementInterface;
 use webignition\BasilCompilationSource\VariablePlaceholderCollection;
 

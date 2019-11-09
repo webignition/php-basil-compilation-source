@@ -6,7 +6,7 @@ namespace webignition\BasilCompilationSource\Tests\Unit;
 
 use webignition\BasilCompilationSource\ClassDependency;
 use webignition\BasilCompilationSource\ClassDependencyCollection;
-use webignition\BasilCompilationSource\Metadata;
+use webignition\BasilCompilationSource\Metadata\Metadata;
 use webignition\BasilCompilationSource\UnknownItemException;
 
 class ClassDependencyCollectionTest extends \PHPUnit\Framework\TestCase

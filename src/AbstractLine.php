@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace webignition\BasilCompilationSource;
 
+use webignition\BasilCompilationSource\Metadata\Metadata;
+use webignition\BasilCompilationSource\Metadata\MetadataInterface;
+
 abstract class AbstractLine implements LineInterface
 {
     protected $content;
