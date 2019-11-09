@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace webignition\BasilCompilationSource\Tests\Unit\Block;
 
-use A\B;
 use webignition\BasilCompilationSource\Block\ClassDependencyCollection;
 use webignition\BasilCompilationSource\Line\ClassDependency;
 use webignition\BasilCompilationSource\Line\Comment;
 use webignition\BasilCompilationSource\Line\EmptyLine;
-use webignition\BasilCompilationSource\Block\BlockInterface;
 use webignition\BasilCompilationSource\Metadata\MetadataInterface;
 use webignition\BasilCompilationSource\Line\Statement;
 use webignition\BasilCompilationSource\Block\Block;
@@ -21,16 +19,18 @@ class BlockTest extends \PHPUnit\Framework\TestCase
 {
     public function testConstruct()
     {
-        $lines = [
+        $acceptedLines = [
             new Statement('statement1'),
             new Statement('statement2'),
             new EmptyLine(),
             new Comment('comment'),
         ];
 
-        $block = new Block($lines);
+        $block = new Block(array_merge($acceptedLines, [
+            new ClassDependency(ClassDependency::class),
+        ]));
 
-        $this->assertSame($lines, $block->getLines());
+        $this->assertSame($acceptedLines, $block->getLines());
     }
 
     public function testAddLine()
@@ -83,9 +83,9 @@ class BlockTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider addLinesFromSourcesDataProvider
      */
-    public function testAddLinesFromSources(Block $block, array $statements, array $expectedLines)
+    public function testAddLinesFromSources(Block $block, array $lines, array $expectedLines)
     {
-        $block->addLinesFromSources($statements);
+        $block->addLinesFromSources($lines);
 
         $this->assertEquals($expectedLines, $block->getLines());
     }
@@ -94,12 +94,12 @@ class BlockTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'empty list, empty lines' => [
-                'lineList' => new Block(),
+                'block' => new Block(),
                 'lines' => [],
                 'expectedLines' => [],
             ],
             'empty list, non-empty lines' => [
-                'lineList' => new Block(),
+                'block' => new Block(),
                 'lines' => [
                     new Statement('statement'),
                     new EmptyLine(),
@@ -112,7 +112,7 @@ class BlockTest extends \PHPUnit\Framework\TestCase
                 ],
             ],
             'non-empty list, non-empty lines' => [
-                'lineList' => new Block([
+                'block' => new Block([
                     new Statement('statement1'),
                     new EmptyLine(),
                     new Comment('comment1'),
@@ -121,6 +121,7 @@ class BlockTest extends \PHPUnit\Framework\TestCase
                     new Statement('statement2'),
                     new EmptyLine(),
                     new Comment('comment2'),
+                    new ClassDependency(ClassDependency::class),
                 ],
                 'expectedLines' => [
                     new Statement('statement1'),
@@ -154,11 +155,11 @@ class BlockTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'empty' => [
-                'lineList' => new Block([]),
+                'block' => new Block([]),
                 'expectedLines' => [],
             ],
             'non-empty' => [
-                'lineList' => new Block([
+                'block' => new Block([
                     new Statement('statement1'),
                     new Statement('statement2'),
                     new EmptyLine(),
@@ -186,24 +187,24 @@ class BlockTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'empty' => [
-                'lineList' => new Block([]),
+                'block' => new Block([]),
                 'expectedMetadata' => new Metadata(),
             ],
             'non-statement lines' => [
-                'lineList' => new Block([
+                'block' => new Block([
                     new Comment('comment'),
                     new EmptyLine(),
                 ]),
                 'expectedMetadata' => new Metadata(),
             ],
             'no metadata' => [
-                'lineList' => new Block([
+                'block' => new Block([
                     new Statement('statement1'),
                 ]),
                 'expectedMetadata' => new Metadata(),
             ],
             'has metadata' => [
-                'lineList' => new Block([
+                'block' => new Block([
                     new Statement('statement1', (new Metadata())
                         ->withVariableDependencies(VariablePlaceholderCollection::createCollection([
                             'DEPENDENCY_ONE',
@@ -259,10 +260,10 @@ class BlockTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'empty' => [
-                'lineList' => new Block(),
+                'block' => new Block(),
             ],
             'no statements' => [
-                'lineList' => new Block([
+                'block' => new Block([
                     new EmptyLine(),
                     new Comment('comment'),
                 ]),
@@ -304,7 +305,7 @@ class BlockTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'single statement only' => [
-                'lineList' => new Block([
+                'block' => new Block([
                     new Statement(
                         'statement',
                         (new Metadata())
@@ -326,7 +327,7 @@ class BlockTest extends \PHPUnit\Framework\TestCase
                 ]),
             ],
             'last line is only statement' => [
-                'lineList' => new Block([
+                'block' => new Block([
                     new Comment('comment'),
                     new EmptyLine(),
                     new Statement(
@@ -350,7 +351,7 @@ class BlockTest extends \PHPUnit\Framework\TestCase
                 ]),
             ],
             'first line is only statement' => [
-                'lineList' => new Block([
+                'block' => new Block([
                     new Statement(
                         'statement',
                         (new Metadata())
@@ -374,7 +375,7 @@ class BlockTest extends \PHPUnit\Framework\TestCase
                 ]),
             ],
             'last statement is not last line' => [
-                'lineList' => new Block([
+                'block' => new Block([
                     new Comment('comment'),
                     new Statement(
                         'statement',
@@ -452,7 +453,7 @@ class BlockTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'single statement only' => [
-                'lineList' => new Block([
+                'block' => new Block([
                     new Statement(
                         'statement',
                         (new Metadata())
@@ -474,7 +475,7 @@ class BlockTest extends \PHPUnit\Framework\TestCase
                 ]),
             ],
             'last line is only statement' => [
-                'lineList' => new Block([
+                'block' => new Block([
                     new Comment('comment'),
                     new EmptyLine(),
                     new Statement(
@@ -498,7 +499,7 @@ class BlockTest extends \PHPUnit\Framework\TestCase
                 ]),
             ],
             'first line is only statement' => [
-                'lineList' => new Block([
+                'block' => new Block([
                     new Statement(
                         'statement',
                         (new Metadata())
@@ -522,7 +523,7 @@ class BlockTest extends \PHPUnit\Framework\TestCase
                 ]),
             ],
             'last statement is not last line' => [
-                'lineList' => new Block([
+                'block' => new Block([
                     new Comment('comment'),
                     new Statement(
                         'statement',
@@ -600,7 +601,7 @@ class BlockTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'single statement only' => [
-                'lineList' => new Block([
+                'block' => new Block([
                     new Statement(
                         'statement',
                         (new Metadata())
@@ -622,7 +623,7 @@ class BlockTest extends \PHPUnit\Framework\TestCase
                 ]),
             ],
             'last line is only statement' => [
-                'lineList' => new Block([
+                'block' => new Block([
                     new Comment('comment'),
                     new EmptyLine(),
                     new Statement(
@@ -646,7 +647,7 @@ class BlockTest extends \PHPUnit\Framework\TestCase
                 ]),
             ],
             'first line is only statement' => [
-                'lineList' => new Block([
+                'block' => new Block([
                     new Statement(
                         'statement',
                         (new Metadata())
@@ -670,7 +671,7 @@ class BlockTest extends \PHPUnit\Framework\TestCase
                 ]),
             ],
             'last statement is not last line' => [
-                'lineList' => new Block([
+                'block' => new Block([
                     new Comment('comment'),
                     new Statement(
                         'statement',
@@ -719,11 +720,11 @@ class BlockTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'empty' => [
-                'lineList' => new Block(),
+                'block' => new Block(),
                 'expectedLines' => [],
             ],
             'no statements' => [
-                'lineList' => new Block([
+                'block' => new Block([
                     new EmptyLine(),
                     new Comment('comment'),
                 ]),
@@ -769,7 +770,7 @@ class BlockTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'single statement only' => [
-                'lineList' => new Block([
+                'block' => new Block([
                     new Statement('statement'),
                 ]),
                 'mutator' => function ($content) {
@@ -780,7 +781,7 @@ class BlockTest extends \PHPUnit\Framework\TestCase
                 'expectedNewContent' => 'statement mutated',
             ],
             'last line is only statement' => [
-                'lineList' => new Block([
+                'block' => new Block([
                     new Comment('comment'),
                     new EmptyLine(),
                     new Statement('statement'),
@@ -793,7 +794,7 @@ class BlockTest extends \PHPUnit\Framework\TestCase
                 'expectedNewContent' => 'statement mutated',
             ],
             'first line is only statement' => [
-                'lineList' => new Block([
+                'block' => new Block([
                     new Statement(
                         'statement',
                         (new Metadata())
@@ -812,7 +813,7 @@ class BlockTest extends \PHPUnit\Framework\TestCase
                 'expectedNewContent' => 'statement mutated',
             ],
             'last statement is not last line' => [
-                'lineList' => new Block([
+                'block' => new Block([
                     new Comment('comment'),
                     new Statement('statement1'),
                     new Statement('statement2'),
@@ -831,9 +832,9 @@ class BlockTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider fromContentDataProvider
      */
-    public function testFromContent(array $content, BlockInterface $expectedLineList)
+    public function testFromContent(array $content, Block $expectedBlock)
     {
-        $this->assertEquals($expectedLineList, Block::fromContent($content));
+        $this->assertEquals($expectedBlock, Block::fromContent($content));
     }
 
     public function fromContentDataProvider(): array
@@ -841,7 +842,7 @@ class BlockTest extends \PHPUnit\Framework\TestCase
         return [
             'empty' => [
                 'content' => [],
-                'expectedLineList' => new Block(),
+                'expectedBlock' => new Block(),
             ],
             'non-empty' => [
                 'content' => [
@@ -852,7 +853,7 @@ class BlockTest extends \PHPUnit\Framework\TestCase
                     '$x = $y',
                     'use Foo',
                 ],
-                'expectedLineList' => new Block([
+                'expectedBlock' => new Block([
                     new Comment('comment without leading whitespace'),
                     new Comment('comment with single leading whitespace'),
                     new Comment('comment with multiple leading whitespace'),
