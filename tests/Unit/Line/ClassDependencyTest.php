@@ -2,35 +2,36 @@
 
 declare(strict_types=1);
 
-namespace webignition\BasilCompilationSource\Tests\Unit;
+namespace webignition\BasilCompilationSource\Tests\Unit\Line;
 
-use webignition\BasilCompilationSource\ClassDependency;
+use webignition\BasilCompilationSource\Line\ClassDependency;
 use webignition\BasilCompilationSource\Line\LineTypes;
 use webignition\BasilCompilationSource\Metadata\Metadata;
 
 class ClassDependencyTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @dataProvider createDataProvider
+     * @dataProvider constructDataProvider
      */
-    public function testCreate(string $name, ?string $alias)
+    public function testConstruct(string $name, ?string $alias, string $expectedContent)
     {
         $classDependency = new ClassDependency($name, $alias);
 
-        $this->assertSame($name, $classDependency->getClassName());
-        $this->assertSame($alias, $classDependency->getAlias());
+        $this->assertSame($expectedContent, $classDependency->getContent());
     }
 
-    public function createDataProvider(): array
+    public function constructDataProvider(): array
     {
         return [
             'name, no alias' => [
                 'name' => ClassDependency::class,
-                'alias' => '',
+                'alias' => null,
+                'expectedContent' => ClassDependency::class,
             ],
             'name, has alias' => [
                 'name' => ClassDependency::class,
                 'alias' => 'CD',
+                'expectedContent' => ClassDependency::class . ' as CD',
             ],
         ];
     }
@@ -41,14 +42,6 @@ class ClassDependencyTest extends \PHPUnit\Framework\TestCase
     public function testGetContent(ClassDependency $classDependency, string $expectedString)
     {
         $this->assertSame($expectedString, $classDependency->getContent());
-    }
-
-    /**
-     * @dataProvider contentDataProvider
-     */
-    public function testGetId(ClassDependency $classDependency, string $expectedId)
-    {
-        $this->assertSame($expectedId, $classDependency->getId());
     }
 
     /**

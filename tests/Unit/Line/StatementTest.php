@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace webignition\BasilCompilationSource\Tests\Unit\Line;
 
-use webignition\BasilCompilationSource\ClassDependency;
-use webignition\BasilCompilationSource\ClassDependencyCollection;
+use webignition\BasilCompilationSource\Block\ClassDependencyCollection;
+use webignition\BasilCompilationSource\Line\ClassDependency;
 use webignition\BasilCompilationSource\Line\LineTypes;
 use webignition\BasilCompilationSource\Metadata\MetadataInterface;
 use webignition\BasilCompilationSource\Line\Statement;
@@ -85,13 +85,15 @@ class StatementTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($classDependencies, $statement->getMetadata()->getClassDependencies());
     }
 
-    public function testAddVariableDependencies()
+    public function testAddVariableDependenciesFoo()
     {
         $statement = new Statement('statement');
+
         $this->assertEquals(
-            new VariablePlaceholderCollection([]),
+            new VariablePlaceholderCollection(),
             $statement->getMetadata()->getVariableDependencies()
         );
+
         $variableDependencies = VariablePlaceholderCollection::createCollection(['DEPENDENCY']);
 
         $statement->addVariableDependencies($variableDependencies);

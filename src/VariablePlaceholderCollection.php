@@ -4,8 +4,23 @@ declare(strict_types=1);
 
 namespace webignition\BasilCompilationSource;
 
-class VariablePlaceholderCollection extends AbstractUniqueCollection implements \Iterator
+class VariablePlaceholderCollection implements \Iterator, \Countable
 {
+    /**
+     * @var VariablePlaceholder[]
+     */
+    private $variablePlaceholders = [];
+
+    private $iteratorIndex = [];
+    private $iteratorPosition = 0;
+
+    public function __construct(array $items = [])
+    {
+        foreach ($items as $item) {
+            $this->add($item);
+        }
+    }
+
     public static function createCollection(array $names): VariablePlaceholderCollection
     {
         $collection = new VariablePlaceholderCollection();
@@ -21,57 +36,81 @@ class VariablePlaceholderCollection extends AbstractUniqueCollection implements 
 
     public function create(string $name): VariablePlaceholder
     {
-        $variablePlaceholder = new VariablePlaceholder($name);
+        $variablePlaceholder = $this->find($name);
 
-        if (!$this->has($variablePlaceholder)) {
-            $this->doAdd($variablePlaceholder);
+        if (null === $variablePlaceholder) {
+            $variablePlaceholder = new VariablePlaceholder($name);
+            $this->add($variablePlaceholder);
         }
 
-        /** @noinspection PhpUnhandledExceptionInspection */
-        return $this->get($name);
+        return $variablePlaceholder;
     }
 
-    /**
-     * @param string $id
-     *
-     * @return VariablePlaceholder
-     *
-     * @throws UnknownItemException
-     */
-    public function get(string $id): VariablePlaceholder
+    public function merge(array $collections)
     {
-        return parent::get($id);
-    }
+        foreach ($collections as $collection) {
+            if ($collection instanceof VariablePlaceholderCollection) {
+                $localCollection = clone $collection;
 
-    /**
-     * @return VariablePlaceholder[]
-     */
-    public function getAll(): array
-    {
-        return parent::getAll();
-    }
-
-    public function withAdditionalItems(array $items): VariablePlaceholderCollection
-    {
-        return parent::withAdditionalItems($items);
-    }
-
-    public function merge(array $collections): VariablePlaceholderCollection
-    {
-        return parent::merge($collections);
-    }
-
-    protected function add($item)
-    {
-        if ($item instanceof VariablePlaceholder) {
-            $this->doAdd($item);
+                foreach ($localCollection as $variablePlaceholder) {
+                    $this->add($variablePlaceholder);
+                }
+            }
         }
+    }
+
+    private function add(VariablePlaceholder $variablePlaceholder)
+    {
+        $name = $variablePlaceholder->getName();
+
+        if (!array_key_exists($name, $this->variablePlaceholders)) {
+            $indexPosition = count($this->variablePlaceholders);
+
+            $this->variablePlaceholders[$name] = $variablePlaceholder;
+            $this->iteratorIndex[$indexPosition] = $name;
+        }
+    }
+
+    private function find(string $name): ?VariablePlaceholder
+    {
+        return $this->variablePlaceholders[$name] ?? null;
     }
 
     // Iterator methods
 
+    public function rewind()
+    {
+        $this->iteratorPosition = 0;
+    }
+
     public function current(): VariablePlaceholder
     {
-        return parent::current();
+        $key = $this->iteratorIndex[$this->iteratorPosition];
+
+        return $this->variablePlaceholders[$key];
+    }
+
+    public function key(): string
+    {
+        return $this->iteratorIndex[$this->iteratorPosition];
+    }
+
+    public function next()
+    {
+        ++$this->iteratorPosition;
+    }
+
+    public function valid(): bool
+    {
+        $key = $this->iteratorIndex[$this->iteratorPosition] ?? null;
+
+        return $key !== null;
+    }
+
+    // Countable methods
+
+    public function count(): int
+    {
+        return count($this->variablePlaceholders);
     }
 }

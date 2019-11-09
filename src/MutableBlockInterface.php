@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace webignition\BasilCompilationSource;
 
+use webignition\BasilCompilationSource\Block\ClassDependencyCollection;
+
 interface MutableBlockInterface extends SourceInterface
 {
     public function mutateLastStatement(callable $mutator);

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace webignition\BasilCompilationSource\MethodDefinition;
 
-use webignition\BasilCompilationSource\ClassDependencyCollection;
+use webignition\BasilCompilationSource\Block\ClassDependencyCollection;
 use webignition\BasilCompilationSource\Line\LineInterface;
 use webignition\BasilCompilationSource\Block\Block;
 use webignition\BasilCompilationSource\Metadata\MetadataInterface;
@@ -21,14 +21,14 @@ class MethodDefinition implements MethodDefinitionInterface, MutableBlockInterfa
     private $visibility = self::VISIBILITY_PUBLIC;
     private $returnType = null;
     private $name;
-    private $lineList;
+    private $block;
     private $arguments = [];
     private $isStatic = false;
 
-    public function __construct(string $name, Block $lineList, ?array $arguments = null)
+    public function __construct(string $name, Block $block, ?array $arguments = null)
     {
         $this->name = $name;
-        $this->lineList = $lineList;
+        $this->block = $block;
         $this->arguments = $arguments ?? [];
     }
 
@@ -42,7 +42,7 @@ class MethodDefinition implements MethodDefinitionInterface, MutableBlockInterfa
      */
     public function getSources(): array
     {
-        return $this->lineList->getSources();
+        return $this->block->getSources();
     }
 
     public function getArguments(): array
@@ -52,50 +52,50 @@ class MethodDefinition implements MethodDefinitionInterface, MutableBlockInterfa
 
     public function addLine(LineInterface $statement)
     {
-        $this->lineList->addLine($statement);
+        $this->block->addLine($statement);
     }
 
     public function addLinesFromSource(SourceInterface $source)
     {
-        $this->lineList->addLinesFromSource($source);
+        $this->block->addLinesFromSource($source);
     }
 
     public function addLinesFromSources(array $sources)
     {
-        $this->lineList->addLinesFromSources($sources);
+        $this->block->addLinesFromSources($sources);
     }
 
     /**
-     * @return \webignition\BasilCompilationSource\Line\LineInterface[]
+     * @return LineInterface[]
      */
     public function getLines(): array
     {
-        return $this->lineList->getLines();
+        return $this->block->getLines();
     }
 
     public function getMetadata(): MetadataInterface
     {
-        return $this->lineList->getMetadata();
+        return $this->block->getMetadata();
     }
 
     public function mutateLastStatement(callable $mutator)
     {
-        $this->lineList->mutateLastStatement($mutator);
+        $this->block->mutateLastStatement($mutator);
     }
 
     public function addClassDependenciesToLastStatement(ClassDependencyCollection $classDependencies)
     {
-        $this->lineList->addClassDependenciesToLastStatement($classDependencies);
+        $this->block->addClassDependenciesToLastStatement($classDependencies);
     }
 
     public function addVariableDependenciesToLastStatement(VariablePlaceholderCollection $variableDependencies)
     {
-        $this->lineList->addVariableDependenciesToLastStatement($variableDependencies);
+        $this->block->addVariableDependenciesToLastStatement($variableDependencies);
     }
 
     public function addVariableExportsToLastStatement(VariablePlaceholderCollection $variableExports)
     {
-        $this->lineList->addVariableExportsToLastStatement($variableExports);
+        $this->block->addVariableExportsToLastStatement($variableExports);
     }
 
     public function setPublic()
