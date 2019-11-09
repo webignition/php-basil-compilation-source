@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace webignition\BasilCompilationSource\Line;
 
-use webignition\BasilCompilationSource\ClassDependencyCollection;
+use webignition\BasilCompilationSource\Block\ClassDependencyCollection;
 use webignition\BasilCompilationSource\MutableBlockInterface;
 use webignition\BasilCompilationSource\VariablePlaceholderCollection;
 

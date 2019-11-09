@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace webignition\BasilCompilationSource\Tests\Unit\Block;
 
-use webignition\BasilCompilationSource\ClassDependency;
-use webignition\BasilCompilationSource\ClassDependencyCollection;
+use A\B;
+use webignition\BasilCompilationSource\Block\ClassDependencyCollection;
+use webignition\BasilCompilationSource\Line\ClassDependency;
 use webignition\BasilCompilationSource\Line\Comment;
 use webignition\BasilCompilationSource\Line\EmptyLine;
 use webignition\BasilCompilationSource\Block\BlockInterface;
@@ -27,19 +28,66 @@ class BlockTest extends \PHPUnit\Framework\TestCase
             new Comment('comment'),
         ];
 
-        $lineList = new Block($lines);
+        $block = new Block($lines);
 
-        $this->assertSame($lines, $lineList->getLines());
+        $this->assertSame($lines, $block->getLines());
+    }
+
+    public function testAddLine()
+    {
+        $block = new Block();
+        $this->assertEquals([], $block->getLines());
+
+        $emptyLine = new EmptyLine();
+        $block->addLine($emptyLine);
+        $this->assertEquals(
+            [
+                $emptyLine,
+            ],
+            $block->getLines()
+        );
+
+        $comment = new Comment('comment');
+        $block->addLine($comment);
+        $this->assertEquals(
+            [
+                $emptyLine,
+                $comment,
+            ],
+            $block->getLines()
+        );
+
+        $statement = new Statement('$x = $y');
+        $block->addLine($statement);
+        $this->assertEquals(
+            [
+                $emptyLine,
+                $comment,
+                $statement,
+            ],
+            $block->getLines()
+        );
+
+        $classDependency = new ClassDependency(ClassDependency::class);
+        $block->addLine($classDependency);
+        $this->assertEquals(
+            [
+                $emptyLine,
+                $comment,
+                $statement,
+            ],
+            $block->getLines()
+        );
     }
 
     /**
      * @dataProvider addLinesFromSourcesDataProvider
      */
-    public function testAddLinesFromSources(Block $lineList, array $statements, array $expectedLines)
+    public function testAddLinesFromSources(Block $block, array $statements, array $expectedLines)
     {
-        $lineList->addLinesFromSources($statements);
+        $block->addLinesFromSources($statements);
 
-        $this->assertEquals($expectedLines, $lineList->getLines());
+        $this->assertEquals($expectedLines, $block->getLines());
     }
 
     public function addLinesFromSourcesDataProvider(): array
@@ -89,17 +137,17 @@ class BlockTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider getLinesDataProvider
      */
-    public function testGetLines(Block $lineList, array $expectedLines)
+    public function testGetLines(Block $block, array $expectedLines)
     {
-        $this->assertEquals($expectedLines, $lineList->getLines());
+        $this->assertEquals($expectedLines, $block->getLines());
     }
 
     /**
      * @dataProvider getLinesDataProvider
      */
-    public function testGetContents(Block $lineList, array $expectedLineObjects)
+    public function testGetContents(Block $block, array $expectedLineObjects)
     {
-        $this->assertEquals($expectedLineObjects, $lineList->getSources());
+        $this->assertEquals($expectedLineObjects, $block->getSources());
     }
 
     public function getLinesDataProvider(): array
@@ -129,9 +177,9 @@ class BlockTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider getMetadataDataProvider
      */
-    public function testGetMetadata(Block $lineList, MetadataInterface $expectedMetadata)
+    public function testGetMetadata(Block $block, MetadataInterface $expectedMetadata)
     {
-        $this->assertEquals($expectedMetadata, $lineList->getMetadata());
+        $this->assertEquals($expectedMetadata, $block->getMetadata());
     }
 
     public function getMetadataDataProvider(): array
@@ -197,14 +245,14 @@ class BlockTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider noStatementLineListDataProvider
      */
-    public function testAddClassDependenciesToLastStatementForNoStatementList(Block $lineList)
+    public function testAddClassDependenciesToLastStatementForNoStatementList(Block $block)
     {
         $classDependencies = new ClassDependencyCollection([
             new ClassDependency(ClassDependency::class),
         ]);
 
-        $lineList->addClassDependenciesToLastStatement($classDependencies);
-        $this->assertEquals(new ClassDependencyCollection(), $lineList->getMetadata()->getClassDependencies());
+        $block->addClassDependenciesToLastStatement($classDependencies);
+        $this->assertEquals(new ClassDependencyCollection(), $block->getMetadata()->getClassDependencies());
     }
 
     public function noStatementLineListDataProvider(): array
@@ -226,13 +274,13 @@ class BlockTest extends \PHPUnit\Framework\TestCase
      * @dataProvider addClassDependenciesToLastStatementDataProvider
      */
     public function testAddClassDependenciesToLastStatement(
-        Block $lineList,
+        Block $block,
         ClassDependencyCollection $classDependencies,
         $lastStatementIndex,
         ?ClassDependencyCollection $expectedCurrentClassDependencies = null,
         ?ClassDependencyCollection $expectedNewClassDependencies = null
     ) {
-        $lines = $lineList->getLines();
+        $lines = $block->getLines();
         $statement = $lines[$lastStatementIndex];
 
         if ($statement instanceof StatementInterface) {
@@ -241,7 +289,7 @@ class BlockTest extends \PHPUnit\Framework\TestCase
                 $statement->getMetadata()->getClassDependencies()
             );
 
-            $lineList->addClassDependenciesToLastStatement($classDependencies);
+            $block->addClassDependenciesToLastStatement($classDependencies);
 
             $this->assertEquals(
                 $expectedNewClassDependencies,
@@ -362,25 +410,25 @@ class BlockTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider noStatementLineListDataProvider
      */
-    public function testAddVariableDependenciesToLastStatementForNoStatementList(Block $lineList)
+    public function testAddVariableDependenciesToLastStatementForNoStatementList(Block $block)
     {
         $variableDependencies = VariablePlaceholderCollection::createCollection(['PLACEHOLDER']);
 
-        $lineList->addVariableDependenciesToLastStatement($variableDependencies);
-        $this->assertEquals(new VariablePlaceholderCollection(), $lineList->getMetadata()->getVariableDependencies());
+        $block->addVariableDependenciesToLastStatement($variableDependencies);
+        $this->assertEquals(new VariablePlaceholderCollection(), $block->getMetadata()->getVariableDependencies());
     }
 
     /**
      * @dataProvider addVariableDependenciesToLastStatementDataProvider
      */
     public function testAddVariableDependenciesToLastStatement(
-        Block $lineList,
+        Block $block,
         VariablePlaceholderCollection $variableDependencies,
         $lastStatementIndex,
         ?VariablePlaceholderCollection $expectedCurrentVariableDependencies = null,
         ?VariablePlaceholderCollection $expectedNewVariableDependencies = null
     ) {
-        $lines = $lineList->getLines();
+        $lines = $block->getLines();
         $statement = $lines[$lastStatementIndex];
 
         if ($statement instanceof StatementInterface) {
@@ -389,7 +437,7 @@ class BlockTest extends \PHPUnit\Framework\TestCase
                 $statement->getMetadata()->getVariableDependencies()
             );
 
-            $lineList->addVariableDependenciesToLastStatement($variableDependencies);
+            $block->addVariableDependenciesToLastStatement($variableDependencies);
 
             $this->assertEquals(
                 $expectedNewVariableDependencies,
@@ -510,25 +558,25 @@ class BlockTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider noStatementLineListDataProvider
      */
-    public function testAddVariableExportsToLastStatementForNoStatementList(Block $lineList)
+    public function testAddVariableExportsToLastStatementForNoStatementList(Block $block)
     {
         $variableExports = VariablePlaceholderCollection::createCollection(['PLACEHOLDER']);
 
-        $lineList->addVariableExportsToLastStatement($variableExports);
-        $this->assertEquals(new VariablePlaceholderCollection(), $lineList->getMetadata()->getVariableExports());
+        $block->addVariableExportsToLastStatement($variableExports);
+        $this->assertEquals(new VariablePlaceholderCollection(), $block->getMetadata()->getVariableExports());
     }
 
     /**
      * @dataProvider addVariableExportsToLastStatementDataProvider
      */
     public function testAddVariableExportsToLastStatement(
-        Block $lineList,
+        Block $block,
         VariablePlaceholderCollection $variableExports,
         $lastStatementIndex,
         ?VariablePlaceholderCollection $expectedCurrentVariableDependencies = null,
         ?VariablePlaceholderCollection $expectedNewVariableDependencies = null
     ) {
-        $lines = $lineList->getLines();
+        $lines = $block->getLines();
         $statement = $lines[$lastStatementIndex];
 
         if ($statement instanceof StatementInterface) {
@@ -537,7 +585,7 @@ class BlockTest extends \PHPUnit\Framework\TestCase
                 $statement->getMetadata()->getVariableExports()
             );
 
-            $lineList->addVariableExportsToLastStatement($variableExports);
+            $block->addVariableExportsToLastStatement($variableExports);
 
             $this->assertEquals(
                 $expectedNewVariableDependencies,
@@ -658,13 +706,13 @@ class BlockTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider mutateToLastStatementForNoStatementListDataProvider
      */
-    public function testMutateToLastStatementForNoStatementList(Block $lineList, array $expectedLines)
+    public function testMutateToLastStatementForNoStatementList(Block $block, array $expectedLines)
     {
-        $lineList->mutateLastStatement(function () {
+        $block->mutateLastStatement(function () {
             return 'mutated!';
         });
 
-        $this->assertEquals($expectedLines, $lineList->getLines());
+        $this->assertEquals($expectedLines, $block->getLines());
     }
 
     public function mutateToLastStatementForNoStatementListDataProvider(): array
@@ -691,13 +739,13 @@ class BlockTest extends \PHPUnit\Framework\TestCase
      * @dataProvider mutateLastStatementDataProvider
      */
     public function testMutateLastStatement(
-        Block $lineList,
+        Block $block,
         callable $mutator,
         $lastStatementIndex,
         string $expectedCurrentContent,
         string $expectedNewContent
     ) {
-        $lines = $lineList->getLines();
+        $lines = $block->getLines();
         $statement = $lines[$lastStatementIndex];
 
         if ($statement instanceof StatementInterface) {
@@ -706,7 +754,7 @@ class BlockTest extends \PHPUnit\Framework\TestCase
                 $statement->getContent()
             );
 
-            $lineList->mutateLastStatement($mutator);
+            $block->mutateLastStatement($mutator);
 
             $this->assertEquals(
                 $expectedNewContent,
@@ -800,11 +848,16 @@ class BlockTest extends \PHPUnit\Framework\TestCase
                     '//comment without leading whitespace',
                     '// comment with single leading whitespace',
                     '//       comment with multiple leading whitespace',
+                    '',
+                    '$x = $y',
+                    'use Foo',
                 ],
                 'expectedLineList' => new Block([
                     new Comment('comment without leading whitespace'),
                     new Comment('comment with single leading whitespace'),
                     new Comment('comment with multiple leading whitespace'),
+                    new EmptyLine(),
+                    new Statement('$x = $y')
                 ]),
             ],
         ];

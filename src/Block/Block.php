@@ -4,74 +4,33 @@ declare(strict_types=1);
 
 namespace webignition\BasilCompilationSource\Block;
 
-use webignition\BasilCompilationSource\ClassDependencyCollection;
 use webignition\BasilCompilationSource\Line\Comment;
 use webignition\BasilCompilationSource\Line\EmptyLine;
 use webignition\BasilCompilationSource\Line\LineInterface;
 use webignition\BasilCompilationSource\Line\Statement;
 use webignition\BasilCompilationSource\Line\StatementInterface;
-use webignition\BasilCompilationSource\Metadata\Metadata;
-use webignition\BasilCompilationSource\Metadata\MetadataInterface;
 use webignition\BasilCompilationSource\MutableBlockInterface;
-use webignition\BasilCompilationSource\SourceInterface;
 use webignition\BasilCompilationSource\VariablePlaceholderCollection;
 
-class Block implements BlockInterface, MutableBlockInterface
+class Block extends AbstractBlock implements BlockInterface, MutableBlockInterface
 {
     private const LAST_STATEMENT_INDEX = -1;
 
-    /**
-     * @var LineInterface[]
-     */
-    private $lines = [];
-
-    public function __construct(array $sources = [])
+    protected function canLineBeAdded(LineInterface $line): bool
     {
-        $this->addLinesFromSources($sources);
-    }
-
-    public function addLine(LineInterface $statement)
-    {
-        $this->lines[] = $statement;
-    }
-
-    public function addLinesFromSource(SourceInterface $source)
-    {
-        foreach ($source->getSources() as $line) {
-            if ($line instanceof LineInterface) {
-                $this->addLine($line);
-            }
-        }
-    }
-
-    public function addLinesFromSources(array $sources)
-    {
-        foreach ($sources as $source) {
-            if ($source instanceof SourceInterface) {
-                $this->addLinesFromSource($source);
-            }
-        }
-    }
-
-    public function getMetadata(): MetadataInterface
-    {
-        $metadata = new Metadata();
-
-        foreach ($this->lines as $line) {
-            if ($line instanceof LineInterface) {
-                $metadata->add($line->getMetadata());
-            }
+        if ($line instanceof Comment) {
+            return true;
         }
 
-        return $metadata;
-    }
+        if ($line instanceof EmptyLine) {
+            return true;
+        }
 
-    /**
-     * @return LineInterface[]
-     */
-    public function getLines(): array
-    {
-        return $this->lines;
+        if ($line instanceof Statement) {
+            return true;
+        }
+
+        return false;
     }
 
     public function mutateLastStatement(callable $mutator)
@@ -108,30 +67,41 @@ class Block implements BlockInterface, MutableBlockInterface
         }
     }
 
-    public function getSources(): array
-    {
-        return $this->getLines();
-    }
-
     public static function fromContent(array $content): Block
     {
         $lines = [];
 
         foreach ($content as $string) {
-            $lines[] = self::createLineObjectFromLineString($string);
+            $line = self::createLineObjectFromLineString($string);
+
+            if ($line instanceof LineInterface) {
+                $lines[] = self::createLineObjectFromLineString($string);
+            }
         }
 
         return new Block($lines);
     }
 
-    private static function createLineObjectFromLineString(string $lineString): LineInterface
+    private static function createLineObjectFromLineString(string $lineString): ?LineInterface
     {
         if ('' === trim($lineString)) {
             return new EmptyLine();
         }
 
-        if (strlen($lineString) > 2 && '//' === substr($lineString, 0, 2)) {
+        $lineLength = strlen($lineString);
+
+        if ($lineLength > 2 && '//' === substr($lineString, 0, 2)) {
             return new Comment(ltrim($lineString, '/ '));
+        }
+
+        $useStatementPrefix = 'use ';
+        $useStatementPrefixLength = strlen($useStatementPrefix);
+
+        if (
+            $lineLength >= $useStatementPrefixLength &&
+            $useStatementPrefix === substr($lineString, 0, $useStatementPrefixLength)
+        ) {
+            return null;
         }
 
         return new Statement($lineString);

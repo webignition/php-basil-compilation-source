@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace webignition\BasilCompilationSource\Metadata;
 
-use webignition\BasilCompilationSource\ClassDependencyCollection;
+use webignition\BasilCompilationSource\Block\ClassDependencyCollection;
 use webignition\BasilCompilationSource\VariablePlaceholderCollection;
 
 class Metadata implements MetadataInterface
@@ -62,7 +62,9 @@ class Metadata implements MetadataInterface
 
     public function addClassDependencies(ClassDependencyCollection $classDependencies)
     {
-        $this->classDependencies = $this->classDependencies->merge([$classDependencies]);
+        foreach ($classDependencies->getLines() as $classDependency) {
+            $this->classDependencies->addLine($classDependency);
+        }
     }
 
     public function addVariableDependencies(VariablePlaceholderCollection $variableDependencies)

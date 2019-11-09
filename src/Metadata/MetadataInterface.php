@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace webignition\BasilCompilationSource\Metadata;
 
-use webignition\BasilCompilationSource\ClassDependencyCollection;
+use webignition\BasilCompilationSource\Block\ClassDependencyCollection;
 use webignition\BasilCompilationSource\VariablePlaceholderCollection;
 
 interface MetadataInterface
