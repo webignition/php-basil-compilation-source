@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace webignition\BasilCompilationSource\Tests\Unit\Line;
 
-use webignition\BasilCompilationSource\Line\ClassDependency;
+use webignition\BasilCompilationSource\ClassDependency;
 use webignition\BasilCompilationSource\ClassDependencyCollection;
 use webignition\BasilCompilationSource\Line\LineTypes;
 use webignition\BasilCompilationSource\Metadata\MetadataInterface;

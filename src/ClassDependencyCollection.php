@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace webignition\BasilCompilationSource;
 
 use webignition\BasilCompilationSource\Block\BlockInterface;
-use webignition\BasilCompilationSource\Line\ClassDependency;
+use webignition\BasilCompilationSource\ClassDependency;
 use webignition\BasilCompilationSource\Line\LineInterface;
 use webignition\BasilCompilationSource\Metadata\Metadata;
 use webignition\BasilCompilationSource\Metadata\MetadataInterface;
