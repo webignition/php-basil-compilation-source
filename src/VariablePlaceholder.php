@@ -6,7 +6,7 @@ namespace webignition\BasilCompilationSource;
 
 class VariablePlaceholder
 {
-    private const TEMPLATE = '{{ %s }}';
+    public const TEMPLATE = '{{ %s }}';
 
     private $name = '';
 
