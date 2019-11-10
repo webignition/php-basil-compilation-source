@@ -66,14 +66,6 @@ class ClassDependencyCollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedLines, $collection->getLines());
     }
 
-    /**
-     * @dataProvider getLinesDataProvider
-     */
-    public function testGetContents(ClassDependencyCollection $collection, array $expectedLineObjects)
-    {
-        $this->assertEquals($expectedLineObjects, $collection->getSources());
-    }
-
     public function getLinesDataProvider(): array
     {
         return [

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace webignition\BasilCompilationSource\Line;
 
 use webignition\BasilCompilationSource\Block\ClassDependencyCollection;
+use webignition\BasilCompilationSource\Metadata\MetadataInterface;
 use webignition\BasilCompilationSource\MutableBlockInterface;
 use webignition\BasilCompilationSource\VariablePlaceholderCollection;
 
@@ -16,4 +17,5 @@ interface StatementInterface extends LineInterface, MutableBlockInterface
     public function addClassDependencies(ClassDependencyCollection $classDependencies);
     public function addVariableDependencies(VariablePlaceholderCollection $variableDependencies);
     public function addVariableExports(VariablePlaceholderCollection $variableExports);
+    public function getMetadata(): MetadataInterface;
 }

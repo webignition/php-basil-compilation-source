@@ -82,14 +82,6 @@ class DocBlockTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedLines, $docBlock->getLines());
     }
 
-    /**
-     * @dataProvider getLinesDataProvider
-     */
-    public function testGetContents(DocBlock $docBlock, array $expectedLineObjects)
-    {
-        $this->assertEquals($expectedLineObjects, $docBlock->getSources());
-    }
-
     public function getLinesDataProvider(): array
     {
         return [

@@ -7,14 +7,13 @@ namespace webignition\BasilCompilationSource\ClassDefinition;
 use webignition\BasilCompilationSource\Metadata\Metadata;
 use webignition\BasilCompilationSource\Metadata\MetadataInterface;
 use webignition\BasilCompilationSource\MethodDefinition\MethodDefinitionInterface;
-use webignition\BasilCompilationSource\SourceInterface;
 
 class ClassDefinition implements ClassDefinitionInterface
 {
     private $name;
 
     /**
-     * @var \webignition\BasilCompilationSource\MethodDefinition\MethodDefinitionInterface[]
+     * @var MethodDefinitionInterface[]
      */
     private $methods = [];
 
@@ -53,14 +52,6 @@ class ClassDefinition implements ClassDefinitionInterface
         }
 
         return $metadata;
-    }
-
-    /**
-     * @return SourceInterface[]
-     */
-    public function getSources(): array
-    {
-        return $this->getMethods();
     }
 
     public function getMethod(string $name): ?MethodDefinitionInterface
