@@ -6,14 +6,13 @@ namespace webignition\BasilCompilationSource\MethodDefinition;
 
 use webignition\BasilCompilationSource\Block\BlockInterface;
 use webignition\BasilCompilationSource\Block\ClassDependencyCollection;
+use webignition\BasilCompilationSource\Block\CodeBlockInterface;
 use webignition\BasilCompilationSource\Block\DocBlock;
 use webignition\BasilCompilationSource\Line\LineInterface;
-use webignition\BasilCompilationSource\Block\CodeBlock;
 use webignition\BasilCompilationSource\Metadata\MetadataInterface;
-use webignition\BasilCompilationSource\MutableBlockInterface;
 use webignition\BasilCompilationSource\VariablePlaceholderCollection;
 
-class MethodDefinition implements MethodDefinitionInterface, MutableBlockInterface
+class MethodDefinition implements MethodDefinitionInterface
 {
     public const VISIBILITY_PUBLIC = 'public';
     public const VISIBILITY_PROTECTED = 'protected';
@@ -27,7 +26,7 @@ class MethodDefinition implements MethodDefinitionInterface, MutableBlockInterfa
     private $isStatic = false;
     private $docBlock;
 
-    public function __construct(string $name, CodeBlock $block, ?array $arguments = null)
+    public function __construct(string $name, CodeBlockInterface $block, ?array $arguments = null)
     {
         $this->name = $name;
         $this->block = $block;

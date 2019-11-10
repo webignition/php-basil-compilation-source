@@ -11,10 +11,9 @@ use webignition\BasilCompilationSource\Line\Statement;
 use webignition\BasilCompilationSource\Line\StatementInterface;
 use webignition\BasilCompilationSource\Metadata\Metadata;
 use webignition\BasilCompilationSource\Metadata\MetadataInterface;
-use webignition\BasilCompilationSource\MutableBlockInterface;
 use webignition\BasilCompilationSource\VariablePlaceholderCollection;
 
-class CodeBlock extends AbstractBlock implements CodeBlockInterface, MutableBlockInterface
+class CodeBlock extends AbstractBlock implements CodeBlockInterface
 {
     private const LAST_STATEMENT_INDEX = -1;
 
