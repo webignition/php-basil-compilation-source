@@ -19,18 +19,25 @@ class CodeBlockTest extends \PHPUnit\Framework\TestCase
 {
     public function testConstruct()
     {
-        $acceptedLines = [
+        $codeBlock = new CodeBlock([
             new Statement('statement1'),
-            new Statement('statement2'),
             new EmptyLine(),
             new Comment('comment'),
-        ];
-
-        $codeBlock = new CodeBlock(array_merge($acceptedLines, [
             new ClassDependency(ClassDependency::class),
-        ]));
+            new CodeBlock([
+                new Statement('statement2'),
+            ]),
+        ]);
 
-        $this->assertSame($acceptedLines, $codeBlock->getLines());
+        $this->assertEquals(
+            [
+                new Statement('statement1'),
+                new EmptyLine(),
+                new Comment('comment'),
+                new Statement('statement2'),
+            ],
+            $codeBlock->getLines()
+        );
     }
 
     public function testAddLine()
