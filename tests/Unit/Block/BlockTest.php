@@ -88,14 +88,6 @@ class BlockTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedLines, $block->getLines());
     }
 
-    /**
-     * @dataProvider getLinesDataProvider
-     */
-    public function testGetContents(Block $block, array $expectedLineObjects)
-    {
-        $this->assertEquals($expectedLineObjects, $block->getSources());
-    }
-
     public function getLinesDataProvider(): array
     {
         return [

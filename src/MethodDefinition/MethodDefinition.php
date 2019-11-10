@@ -10,7 +10,6 @@ use webignition\BasilCompilationSource\Line\LineInterface;
 use webignition\BasilCompilationSource\Block\Block;
 use webignition\BasilCompilationSource\Metadata\MetadataInterface;
 use webignition\BasilCompilationSource\MutableBlockInterface;
-use webignition\BasilCompilationSource\SourceInterface;
 use webignition\BasilCompilationSource\VariablePlaceholderCollection;
 
 class MethodDefinition implements MethodDefinitionInterface, MutableBlockInterface
@@ -36,14 +35,6 @@ class MethodDefinition implements MethodDefinitionInterface, MutableBlockInterfa
     public function getName(): string
     {
         return $this->name;
-    }
-
-    /**
-     * @return SourceInterface[]
-     */
-    public function getSources(): array
-    {
-        return $this->block->getSources();
     }
 
     public function getArguments(): array

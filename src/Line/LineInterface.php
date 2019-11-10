@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace webignition\BasilCompilationSource\Line;
 
-use webignition\BasilCompilationSource\SourceInterface;
-
-interface LineInterface extends SourceInterface
+interface LineInterface
 {
     public function getContent(): string;
     public function getType(): string;

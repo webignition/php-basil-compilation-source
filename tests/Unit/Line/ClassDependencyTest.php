@@ -6,7 +6,6 @@ namespace webignition\BasilCompilationSource\Tests\Unit\Line;
 
 use webignition\BasilCompilationSource\Line\ClassDependency;
 use webignition\BasilCompilationSource\Line\LineTypes;
-use webignition\BasilCompilationSource\Metadata\Metadata;
 
 class ClassDependencyTest extends \PHPUnit\Framework\TestCase
 {
@@ -69,18 +68,6 @@ class ClassDependencyTest extends \PHPUnit\Framework\TestCase
                 'expectedId' => ClassDependency::class . ' as CD',
             ],
         ];
-    }
-
-    public function testGetMetadata()
-    {
-        $this->assertEquals(new Metadata(), (new ClassDependency(ClassDependency::class))->getMetadata());
-    }
-
-    public function testGetSources()
-    {
-        $classDependency = new ClassDependency(ClassDependency::class);
-
-        $this->assertSame([$classDependency], $classDependency->getSources());
     }
 
     public function testGetType()

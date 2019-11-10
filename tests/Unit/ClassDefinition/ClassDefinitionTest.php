@@ -28,7 +28,6 @@ class ClassDefinitionTest extends \PHPUnit\Framework\TestCase
 
         $this->assertSame($name, $classDefinition->getName());
         $this->assertEquals($classDefinition->getMethods(), $expectedMethods);
-        $this->assertEquals($classDefinition->getSources(), $expectedMethods);
     }
 
     public function constructDataProvider(): array

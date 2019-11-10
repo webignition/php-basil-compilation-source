@@ -5,14 +5,24 @@ declare(strict_types=1);
 namespace webignition\BasilCompilationSource\Line;
 
 use webignition\BasilCompilationSource\Block\ClassDependencyCollection;
+use webignition\BasilCompilationSource\Metadata\Metadata;
 use webignition\BasilCompilationSource\Metadata\MetadataInterface;
 use webignition\BasilCompilationSource\VariablePlaceholderCollection;
 
 class Statement extends AbstractLine implements StatementInterface
 {
+    private $metadata;
+
     public function __construct(string $content, ?MetadataInterface $metadata = null)
     {
-        parent::__construct($content, LineTypes::STATEMENT, $metadata);
+        parent::__construct($content, LineTypes::STATEMENT);
+
+        $this->metadata = $metadata ?? new Metadata();
+    }
+
+    public function getMetadata(): MetadataInterface
+    {
+        return $this->metadata;
     }
 
     public function prepend(string $content)

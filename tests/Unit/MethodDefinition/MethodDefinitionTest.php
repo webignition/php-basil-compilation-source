@@ -10,7 +10,6 @@ use webignition\BasilCompilationSource\Line\Comment;
 use webignition\BasilCompilationSource\Line\EmptyLine;
 use webignition\BasilCompilationSource\MethodDefinition\MethodDefinition;
 use webignition\BasilCompilationSource\Block\Block;
-use webignition\BasilCompilationSource\SourceInterface;
 use webignition\BasilCompilationSource\Line\Statement;
 use webignition\BasilCompilationSource\VariablePlaceholderCollection;
 
@@ -31,7 +30,6 @@ class MethodDefinitionTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($methodDefinition->isStatic());
         $this->assertNull($methodDefinition->getReturnType());
         $this->assertSame($name, $methodDefinition->getName());
-        $this->assertSame($content->getSources(), $methodDefinition->getSources());
         $this->assertEquals($expectedArguments, $methodDefinition->getArguments());
         $this->assertEquals($content->getMetadata(), $methodDefinition->getMetadata());
     }

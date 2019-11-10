@@ -4,37 +4,20 @@ declare(strict_types=1);
 
 namespace webignition\BasilCompilationSource\Line;
 
-use webignition\BasilCompilationSource\Metadata\Metadata;
-use webignition\BasilCompilationSource\Metadata\MetadataInterface;
-
 abstract class AbstractLine implements LineInterface
 {
     protected $content;
     private $type;
-    private $metadata;
 
-    public function __construct(string $content, string $type, ?MetadataInterface $metadata = null)
+    public function __construct(string $content, string $type)
     {
         $this->content = $content;
         $this->type = $type;
-        $this->metadata = $metadata ?? new Metadata();
     }
 
     public function getContent(): string
     {
         return $this->content;
-    }
-
-    public function getMetadata(): MetadataInterface
-    {
-        return $this->metadata;
-    }
-
-    public function getSources(): array
-    {
-        return [
-            $this
-        ];
     }
 
     public function __toString(): string

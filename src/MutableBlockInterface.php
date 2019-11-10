@@ -6,7 +6,7 @@ namespace webignition\BasilCompilationSource;
 
 use webignition\BasilCompilationSource\Block\ClassDependencyCollection;
 
-interface MutableBlockInterface extends SourceInterface
+interface MutableBlockInterface
 {
     public function mutateLastStatement(callable $mutator);
     public function addClassDependenciesToLastStatement(ClassDependencyCollection $classDependencies);

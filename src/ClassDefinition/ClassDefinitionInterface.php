@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace webignition\BasilCompilationSource\ClassDefinition;
 
+use webignition\BasilCompilationSource\Metadata\MetadataInterface;
 use webignition\BasilCompilationSource\MethodDefinition\MethodDefinitionInterface;
-use webignition\BasilCompilationSource\SourceInterface;
 
-interface ClassDefinitionInterface extends SourceInterface
+interface ClassDefinitionInterface
 {
+    public function getMetadata(): MetadataInterface;
     public function getName(): string;
 
     /**
