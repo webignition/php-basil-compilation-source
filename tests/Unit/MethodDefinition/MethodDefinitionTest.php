@@ -299,4 +299,28 @@ class MethodDefinitionTest extends \PHPUnit\Framework\TestCase
         $methodDefinition->setStatic();
         $this->assertTrue($methodDefinition->isStatic());
     }
+
+    public function testAddLinesFromBlock()
+    {
+        $block1 = new Block();
+        $block1->addLine(new Comment('comment1'));
+        $block1->addLine(new Statement('statement1'));
+
+        $block2 = new Block();
+        $block2->addLine(new Comment('comment2'));
+        $block2->addLine(new Statement('statement2'));
+
+        $method = new MethodDefinition('methodName', $block1);
+        $method->addLinesFromBlock($block2);
+
+        $this->assertEquals(
+            [
+                new Comment('comment1'),
+                new Statement('statement1'),
+                new Comment('comment2'),
+                new Statement('statement2'),
+            ],
+            $method->getLines()
+        );
+    }
 }
