@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace webignition\BasilCompilationSource\MethodDefinition;
 
+use webignition\BasilCompilationSource\Block\BlockInterface;
 use webignition\BasilCompilationSource\Block\ClassDependencyCollection;
 use webignition\BasilCompilationSource\Line\LineInterface;
 use webignition\BasilCompilationSource\Block\Block;
@@ -63,6 +64,11 @@ class MethodDefinition implements MethodDefinitionInterface, MutableBlockInterfa
     public function addLinesFromSources(array $sources)
     {
         $this->block->addLinesFromSources($sources);
+    }
+
+    public function addLinesFromBlock(BlockInterface $block)
+    {
+        $this->block->addLinesFromBlock($block);
     }
 
     /**

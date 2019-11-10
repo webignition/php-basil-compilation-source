@@ -11,6 +11,7 @@ interface BlockInterface extends SourceInterface
 {
     public function addLine(LineInterface $statement);
     public function addLinesFromSource(SourceInterface $source);
+    public function addLinesFromBlock(BlockInterface $block);
 
     /**
      * @param SourceInterface[] $sources

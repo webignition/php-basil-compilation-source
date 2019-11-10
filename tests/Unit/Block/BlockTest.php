@@ -863,4 +863,26 @@ class BlockTest extends \PHPUnit\Framework\TestCase
             ],
         ];
     }
+
+    public function testAddLinesFromBlock()
+    {
+        $block1 = new Block();
+        $block1->addLine(new Comment('comment1'));
+        $block1->addLine(new Statement('statement1'));
+
+        $block2 = new Block();
+        $block2->addLine(new Comment('comment2'));
+        $block2->addLine(new Statement('statement2'));
+        $block2->addLinesFromBlock($block1);
+
+        $this->assertEquals(
+            [
+                new Comment('comment2'),
+                new Statement('statement2'),
+                new Comment('comment1'),
+                new Statement('statement1'),
+            ],
+            $block2->getLines()
+        );
+    }
 }

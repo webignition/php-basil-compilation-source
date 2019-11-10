@@ -48,6 +48,13 @@ abstract class AbstractBlock implements BlockInterface
         }
     }
 
+    public function addLinesFromBlock(BlockInterface $block)
+    {
+        foreach ($block->getLines() as $line) {
+            $this->addLine($line);
+        }
+    }
+
     public function getMetadata(): MetadataInterface
     {
         $metadata = new Metadata();
