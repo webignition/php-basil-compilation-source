@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace webignition\BasilCompilationSource\MethodDefinition;
 
-use webignition\BasilCompilationSource\Block\BlockInterface;
+use webignition\BasilCompilationSource\Block\CodeBlockInterface;
 use webignition\BasilCompilationSource\Block\DocBlock;
 
-interface MethodDefinitionInterface extends BlockInterface
+interface MethodDefinitionInterface extends CodeBlockInterface
 {
     public function isPublic(): bool;
     public function isProtected(): bool;

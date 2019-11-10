@@ -10,7 +10,7 @@ use webignition\BasilCompilationSource\Line\ClassDependency;
 use webignition\BasilCompilationSource\Line\Comment;
 use webignition\BasilCompilationSource\Line\EmptyLine;
 use webignition\BasilCompilationSource\MethodDefinition\MethodDefinition;
-use webignition\BasilCompilationSource\Block\Block;
+use webignition\BasilCompilationSource\Block\CodeBlock;
 use webignition\BasilCompilationSource\Line\Statement;
 use webignition\BasilCompilationSource\VariablePlaceholderCollection;
 
@@ -21,7 +21,7 @@ class MethodDefinitionTest extends \PHPUnit\Framework\TestCase
      */
     public function testConstruct(
         string $name,
-        Block $content,
+        CodeBlock $content,
         $arguments,
         array $expectedArguments
     ) {
@@ -40,13 +40,13 @@ class MethodDefinitionTest extends \PHPUnit\Framework\TestCase
         return [
             'without arguments' => [
                 'name' => 'withoutArguments',
-                'content' => new Block([new Statement('statement')]),
+                'content' => new CodeBlock([new Statement('statement')]),
                 'arguments' => null,
                 'expectedArguments' => [],
             ],
             'with arguments' => [
                 'name' => 'withArguments',
-                'content' => new Block([new Statement('statement')]),
+                'content' => new CodeBlock([new Statement('statement')]),
                 'arguments' => ['a', 'b', 'c'],
                 'expectedArguments' => ['a', 'b', 'c'],
             ],
@@ -55,7 +55,7 @@ class MethodDefinitionTest extends \PHPUnit\Framework\TestCase
 
     public function testVisibility()
     {
-        $methodDefinition = new MethodDefinition('name', new Block());
+        $methodDefinition = new MethodDefinition('name', new CodeBlock());
         $this->assertTrue($methodDefinition->isPublic());
         $this->assertFalse($methodDefinition->isProtected());
         $this->assertFalse($methodDefinition->isPrivate());
@@ -84,7 +84,7 @@ class MethodDefinitionTest extends \PHPUnit\Framework\TestCase
     {
         $methodDefinition = new MethodDefinition(
             'name',
-            new Block([
+            new CodeBlock([
                 new Statement('statement1'),
                 new EmptyLine(),
                 new Comment('comment1'),
@@ -116,7 +116,7 @@ class MethodDefinitionTest extends \PHPUnit\Framework\TestCase
     public function testGetStatementObjects()
     {
         $statement = new Statement('statement');
-        $methodDefinition = new MethodDefinition('name', new Block([$statement]));
+        $methodDefinition = new MethodDefinition('name', new CodeBlock([$statement]));
 
         $this->assertEquals([$statement], $methodDefinition->getLines());
     }
@@ -124,7 +124,7 @@ class MethodDefinitionTest extends \PHPUnit\Framework\TestCase
     public function testMutateLastStatement()
     {
         $statement = new Statement('content');
-        $methodDefinition = new MethodDefinition('name', new Block([$statement]));
+        $methodDefinition = new MethodDefinition('name', new CodeBlock([$statement]));
 
         $methodDefinition->mutateLastStatement(function (string $content) {
             return '!' . $content . '!';
@@ -138,7 +138,7 @@ class MethodDefinitionTest extends \PHPUnit\Framework\TestCase
         $statement = new Statement('statement');
         $this->assertEquals(new ClassDependencyCollection([]), $statement->getMetadata()->getClassDependencies());
 
-        $methodDefinition = new MethodDefinition('name', new Block([$statement]));
+        $methodDefinition = new MethodDefinition('name', new CodeBlock([$statement]));
         $classDependencies = new ClassDependencyCollection([
             new ClassDependency(ClassDependency::class),
         ]);
@@ -155,7 +155,7 @@ class MethodDefinitionTest extends \PHPUnit\Framework\TestCase
             $statement->getMetadata()->getVariableDependencies()
         );
 
-        $methodDefinition = new MethodDefinition('name', new Block([$statement]));
+        $methodDefinition = new MethodDefinition('name', new CodeBlock([$statement]));
         $variableDependencies = VariablePlaceholderCollection::createCollection(['DEPENDENCY']);
 
         $methodDefinition->addVariableDependenciesToLastStatement($variableDependencies);
@@ -170,7 +170,7 @@ class MethodDefinitionTest extends \PHPUnit\Framework\TestCase
             $statement->getMetadata()->getVariableExports()
         );
 
-        $methodDefinition = new MethodDefinition('name', new Block([$statement]));
+        $methodDefinition = new MethodDefinition('name', new CodeBlock([$statement]));
         $variableExports = VariablePlaceholderCollection::createCollection(['DEPENDENCY']);
 
         $methodDefinition->addVariableExportsToLastStatement($variableExports);
@@ -179,7 +179,7 @@ class MethodDefinitionTest extends \PHPUnit\Framework\TestCase
 
     public function testSetReturnType()
     {
-        $methodDefinition = new MethodDefinition('name', new Block());
+        $methodDefinition = new MethodDefinition('name', new CodeBlock());
         $this->assertNull($methodDefinition->getReturnType());
 
         $returnType = 'array';
@@ -189,7 +189,7 @@ class MethodDefinitionTest extends \PHPUnit\Framework\TestCase
 
     public function testIsStatic()
     {
-        $methodDefinition = new MethodDefinition('name', new Block());
+        $methodDefinition = new MethodDefinition('name', new CodeBlock());
         $this->assertFalse($methodDefinition->isStatic());
 
         $methodDefinition->setStatic();
@@ -198,11 +198,11 @@ class MethodDefinitionTest extends \PHPUnit\Framework\TestCase
 
     public function testAddLinesFromBlock()
     {
-        $block1 = new Block();
+        $block1 = new CodeBlock();
         $block1->addLine(new Comment('comment1'));
         $block1->addLine(new Statement('statement1'));
 
-        $block2 = new Block();
+        $block2 = new CodeBlock();
         $block2->addLine(new Comment('comment2'));
         $block2->addLine(new Statement('statement2'));
 
@@ -222,7 +222,7 @@ class MethodDefinitionTest extends \PHPUnit\Framework\TestCase
 
     public function testGetSetDocBlock()
     {
-        $method = new MethodDefinition('methodName', new Block());
+        $method = new MethodDefinition('methodName', new CodeBlock());
         $this->assertEquals(new DocBlock(), $method->getDocBlock());
 
         $docBlock = new DocBlock([

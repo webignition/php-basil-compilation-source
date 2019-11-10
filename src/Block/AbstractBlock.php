@@ -5,9 +5,6 @@ declare(strict_types=1);
 namespace webignition\BasilCompilationSource\Block;
 
 use webignition\BasilCompilationSource\Line\LineInterface;
-use webignition\BasilCompilationSource\Line\StatementInterface;
-use webignition\BasilCompilationSource\Metadata\Metadata;
-use webignition\BasilCompilationSource\Metadata\MetadataInterface;
 
 abstract class AbstractBlock implements BlockInterface
 {
@@ -22,10 +19,6 @@ abstract class AbstractBlock implements BlockInterface
             if ($source instanceof LineInterface) {
                 $this->addLine($source);
             }
-
-            if ($source instanceof BlockInterface) {
-                $this->addLinesFromBlock($source);
-            }
         }
     }
 
@@ -36,26 +29,6 @@ abstract class AbstractBlock implements BlockInterface
         if ($this->canLineBeAdded($line)) {
             $this->lines[] = $line;
         }
-    }
-
-    public function addLinesFromBlock(BlockInterface $block)
-    {
-        foreach ($block->getLines() as $line) {
-            $this->addLine($line);
-        }
-    }
-
-    public function getMetadata(): MetadataInterface
-    {
-        $metadata = new Metadata();
-
-        foreach ($this->lines as $line) {
-            if ($line instanceof StatementInterface) {
-                $metadata->add($line->getMetadata());
-            }
-        }
-
-        return $metadata;
     }
 
     /**

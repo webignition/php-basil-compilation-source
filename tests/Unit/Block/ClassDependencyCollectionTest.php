@@ -9,7 +9,6 @@ use webignition\BasilCompilationSource\Line\ClassDependency;
 use webignition\BasilCompilationSource\Line\Comment;
 use webignition\BasilCompilationSource\Line\EmptyLine;
 use webignition\BasilCompilationSource\Line\Statement;
-use webignition\BasilCompilationSource\Metadata\Metadata;
 
 class ClassDependencyCollectionTest extends \PHPUnit\Framework\TestCase
 {
@@ -84,16 +83,5 @@ class ClassDependencyCollectionTest extends \PHPUnit\Framework\TestCase
                 ],
             ],
         ];
-    }
-
-    public function testGetMetadata()
-    {
-        $collection = new ClassDependencyCollection();
-        $this->assertEquals(new Metadata(), $collection->getMetadata());
-
-        $collection->addLine(new ClassDependency(ClassDependency::class));
-        $collection->addLine(new ClassDependency(ClassDependencyCollection::class));
-
-        $this->assertEquals(new Metadata(), $collection->getMetadata());
     }
 }
