@@ -8,7 +8,7 @@ use webignition\BasilCompilationSource\Block\BlockInterface;
 use webignition\BasilCompilationSource\Block\ClassDependencyCollection;
 use webignition\BasilCompilationSource\Block\DocBlock;
 use webignition\BasilCompilationSource\Line\LineInterface;
-use webignition\BasilCompilationSource\Block\Block;
+use webignition\BasilCompilationSource\Block\CodeBlock;
 use webignition\BasilCompilationSource\Metadata\MetadataInterface;
 use webignition\BasilCompilationSource\MutableBlockInterface;
 use webignition\BasilCompilationSource\VariablePlaceholderCollection;
@@ -27,7 +27,7 @@ class MethodDefinition implements MethodDefinitionInterface, MutableBlockInterfa
     private $isStatic = false;
     private $docBlock;
 
-    public function __construct(string $name, Block $block, ?array $arguments = null)
+    public function __construct(string $name, CodeBlock $block, ?array $arguments = null)
     {
         $this->name = $name;
         $this->block = $block;

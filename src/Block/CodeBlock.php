@@ -9,12 +9,32 @@ use webignition\BasilCompilationSource\Line\EmptyLine;
 use webignition\BasilCompilationSource\Line\LineInterface;
 use webignition\BasilCompilationSource\Line\Statement;
 use webignition\BasilCompilationSource\Line\StatementInterface;
+use webignition\BasilCompilationSource\Metadata\Metadata;
+use webignition\BasilCompilationSource\Metadata\MetadataInterface;
 use webignition\BasilCompilationSource\MutableBlockInterface;
 use webignition\BasilCompilationSource\VariablePlaceholderCollection;
 
-class Block extends AbstractBlock implements BlockInterface, MutableBlockInterface
+class CodeBlock extends AbstractBlock implements CodeBlockInterface, MutableBlockInterface
 {
     private const LAST_STATEMENT_INDEX = -1;
+
+    public function __construct(array $sources = [])
+    {
+        $lines = [];
+
+        foreach ($sources as $source) {
+            if ($source instanceof LineInterface) {
+                $lines[] = $source;
+            }
+
+            if ($source instanceof BlockInterface) {
+                $lines = array_merge($lines, $source->getLines());
+            }
+        }
+
+        parent::__construct($sources);
+    }
+
 
     protected function canLineBeAdded(LineInterface $line): bool
     {
@@ -31,6 +51,27 @@ class Block extends AbstractBlock implements BlockInterface, MutableBlockInterfa
         }
 
         return false;
+    }
+
+
+    public function addLinesFromBlock(BlockInterface $block)
+    {
+        foreach ($block->getLines() as $line) {
+            $this->addLine($line);
+        }
+    }
+
+    public function getMetadata(): MetadataInterface
+    {
+        $metadata = new Metadata();
+
+        foreach ($this->lines as $line) {
+            if ($line instanceof StatementInterface) {
+                $metadata->add($line->getMetadata());
+            }
+        }
+
+        return $metadata;
     }
 
     public function mutateLastStatement(callable $mutator)
@@ -67,7 +108,7 @@ class Block extends AbstractBlock implements BlockInterface, MutableBlockInterfa
         }
     }
 
-    public static function fromContent(array $content): Block
+    public static function fromContent(array $content): CodeBlock
     {
         $lines = [];
 
@@ -79,7 +120,7 @@ class Block extends AbstractBlock implements BlockInterface, MutableBlockInterfa
             }
         }
 
-        return new Block($lines);
+        return new CodeBlock($lines);
     }
 
     private static function createLineObjectFromLineString(string $lineString): ?LineInterface

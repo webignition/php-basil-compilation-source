@@ -9,7 +9,6 @@ use webignition\BasilCompilationSource\Line\ClassDependency;
 use webignition\BasilCompilationSource\Line\Comment;
 use webignition\BasilCompilationSource\Line\EmptyLine;
 use webignition\BasilCompilationSource\Line\Statement;
-use webignition\BasilCompilationSource\Metadata\Metadata;
 
 class DocBlockTest extends \PHPUnit\Framework\TestCase
 {
@@ -102,14 +101,5 @@ class DocBlockTest extends \PHPUnit\Framework\TestCase
                 ],
             ],
         ];
-    }
-
-    public function testGetMetadata()
-    {
-        $docBlock = new DocBlock();
-        $this->assertEquals(new Metadata(), $docBlock->getMetadata());
-
-        $docBlock->addLine(new Comment('comment'));
-        $this->assertEquals(new Metadata(), $docBlock->getMetadata());
     }
 }
