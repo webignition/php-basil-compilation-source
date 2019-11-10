@@ -6,6 +6,7 @@ namespace webignition\BasilCompilationSource\MethodDefinition;
 
 use webignition\BasilCompilationSource\Block\BlockInterface;
 use webignition\BasilCompilationSource\Block\ClassDependencyCollection;
+use webignition\BasilCompilationSource\Block\DocBlock;
 use webignition\BasilCompilationSource\Line\LineInterface;
 use webignition\BasilCompilationSource\Block\Block;
 use webignition\BasilCompilationSource\Metadata\MetadataInterface;
@@ -24,12 +25,14 @@ class MethodDefinition implements MethodDefinitionInterface, MutableBlockInterfa
     private $block;
     private $arguments = [];
     private $isStatic = false;
+    private $docBlock;
 
     public function __construct(string $name, Block $block, ?array $arguments = null)
     {
         $this->name = $name;
         $this->block = $block;
         $this->arguments = $arguments ?? [];
+        $this->docBlock = new DocBlock();
     }
 
     public function getName(): string
@@ -138,5 +141,15 @@ class MethodDefinition implements MethodDefinitionInterface, MutableBlockInterfa
     public function getVisibility(): string
     {
         return $this->visibility;
+    }
+
+    public function setDocBlock(DocBlock $docBlock)
+    {
+        $this->docBlock = $docBlock;
+    }
+
+    public function getDocBlock(): DocBlock
+    {
+        return $this->docBlock;
     }
 }

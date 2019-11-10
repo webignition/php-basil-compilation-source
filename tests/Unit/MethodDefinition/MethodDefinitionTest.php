@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace webignition\BasilCompilationSource\Tests\Unit\MethodDefinition;
 
 use webignition\BasilCompilationSource\Block\ClassDependencyCollection;
+use webignition\BasilCompilationSource\Block\DocBlock;
 use webignition\BasilCompilationSource\Line\ClassDependency;
 use webignition\BasilCompilationSource\Line\Comment;
 use webignition\BasilCompilationSource\Line\EmptyLine;
@@ -217,5 +218,18 @@ class MethodDefinitionTest extends \PHPUnit\Framework\TestCase
             ],
             $method->getLines()
         );
+    }
+
+    public function testGetSetDocBlock()
+    {
+        $method = new MethodDefinition('methodName', new Block());
+        $this->assertEquals(new DocBlock(), $method->getDocBlock());
+
+        $docBlock = new DocBlock([
+            new Comment('comment'),
+        ]);
+
+        $method->setDocBlock($docBlock);
+        $this->assertSame($docBlock, $method->getDocBlock());
     }
 }
