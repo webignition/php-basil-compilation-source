@@ -32,7 +32,7 @@ class CodeBlock extends AbstractBlock implements CodeBlockInterface, MutableBloc
             }
         }
 
-        parent::__construct($sources);
+        parent::__construct($lines);
     }
 
 
