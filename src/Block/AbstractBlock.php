@@ -7,7 +7,6 @@ namespace webignition\BasilCompilationSource\Block;
 use webignition\BasilCompilationSource\Line\LineInterface;
 use webignition\BasilCompilationSource\Metadata\Metadata;
 use webignition\BasilCompilationSource\Metadata\MetadataInterface;
-use webignition\BasilCompilationSource\SourceInterface;
 
 abstract class AbstractBlock implements BlockInterface
 {
@@ -35,24 +34,6 @@ abstract class AbstractBlock implements BlockInterface
     {
         if ($this->canLineBeAdded($line)) {
             $this->lines[] = $line;
-        }
-    }
-
-    public function addLinesFromSource(SourceInterface $source)
-    {
-        foreach ($source->getSources() as $line) {
-            if ($line instanceof LineInterface) {
-                $this->addLine($line);
-            }
-        }
-    }
-
-    public function addLinesFromSources(array $sources)
-    {
-        foreach ($sources as $source) {
-            if ($source instanceof SourceInterface) {
-                $this->addLinesFromSource($source);
-            }
         }
     }
 

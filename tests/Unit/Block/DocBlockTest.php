@@ -75,58 +75,6 @@ class DocBlockTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider addLinesFromSourcesDataProvider
-     */
-    public function testAddLinesFromSources(DocBlock $docBlock, array $lines, array $expectedLines)
-    {
-        $docBlock->addLinesFromSources($lines);
-
-        $this->assertEquals($expectedLines, $docBlock->getLines());
-    }
-
-    public function addLinesFromSourcesDataProvider(): array
-    {
-        return [
-            'empty block, empty lines' => [
-                'block' => new DocBlock(),
-                'lines' => [],
-                'expectedLines' => [],
-            ],
-            'empty block, non-empty lines' => [
-                'block' => new DocBlock(),
-                'lines' => [
-                    new Statement('statement'),
-                    new EmptyLine(),
-                    new Comment('comment'),
-                ],
-                'expectedLines' => [
-                    new EmptyLine(),
-                    new Comment('comment'),
-                ],
-            ],
-            'non-empty block, non-empty lines' => [
-                'block' => new DocBlock([
-                    new Statement('statement1'),
-                    new EmptyLine(),
-                    new Comment('comment1'),
-                ]),
-                'lines' => [
-                    new Statement('statement2'),
-                    new EmptyLine(),
-                    new Comment('comment2'),
-                    new ClassDependency(ClassDependency::class),
-                ],
-                'expectedLines' => [
-                    new EmptyLine(),
-                    new Comment('comment1'),
-                    new EmptyLine(),
-                    new Comment('comment2'),
-                ],
-            ],
-        ];
-    }
-
-    /**
      * @dataProvider getLinesDataProvider
      */
     public function testGetLines(DocBlock $docBlock, array $expectedLines)

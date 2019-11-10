@@ -56,16 +56,6 @@ class MethodDefinition implements MethodDefinitionInterface, MutableBlockInterfa
         $this->block->addLine($statement);
     }
 
-    public function addLinesFromSource(SourceInterface $source)
-    {
-        $this->block->addLinesFromSource($source);
-    }
-
-    public function addLinesFromSources(array $sources)
-    {
-        $this->block->addLinesFromSources($sources);
-    }
-
     public function addLinesFromBlock(BlockInterface $block)
     {
         $this->block->addLinesFromBlock($block);

@@ -81,61 +81,6 @@ class BlockTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider addLinesFromSourcesDataProvider
-     */
-    public function testAddLinesFromSources(Block $block, array $lines, array $expectedLines)
-    {
-        $block->addLinesFromSources($lines);
-
-        $this->assertEquals($expectedLines, $block->getLines());
-    }
-
-    public function addLinesFromSourcesDataProvider(): array
-    {
-        return [
-            'empty block, empty lines' => [
-                'block' => new Block(),
-                'lines' => [],
-                'expectedLines' => [],
-            ],
-            'empty block, non-empty lines' => [
-                'block' => new Block(),
-                'lines' => [
-                    new Statement('statement'),
-                    new EmptyLine(),
-                    new Comment('comment'),
-                ],
-                'expectedLines' => [
-                    new Statement('statement'),
-                    new EmptyLine(),
-                    new Comment('comment'),
-                ],
-            ],
-            'non-empty block, non-empty lines' => [
-                'block' => new Block([
-                    new Statement('statement1'),
-                    new EmptyLine(),
-                    new Comment('comment1'),
-                ]),
-                'lines' => [
-                    new Statement('statement2'),
-                    new EmptyLine(),
-                    new Comment('comment2'),
-                    new ClassDependency(ClassDependency::class),
-                ],
-                'expectedLines' => [
-                    new Statement('statement1'),
-                    new EmptyLine(),
-                    new Comment('comment1'),
-                    new Statement('statement2'),
-                    new EmptyLine(),
-                    new Comment('comment2'),
-                ],
-            ],
-        ];
-    }
-
-    /**
      * @dataProvider getLinesDataProvider
      */
     public function testGetLines(Block $block, array $expectedLines)

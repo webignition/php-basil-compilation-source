@@ -59,53 +59,6 @@ class ClassDependencyCollectionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider addLinesFromSourcesDataProvider
-     */
-    public function testAddLinesFromSources(ClassDependencyCollection $collection, array $lines, array $expectedLines)
-    {
-        $collection->addLinesFromSources($lines);
-
-        $this->assertEquals($expectedLines, $collection->getLines());
-    }
-
-    public function addLinesFromSourcesDataProvider(): array
-    {
-        return [
-            'empty collection, empty lines' => [
-                'collection' => new ClassDependencyCollection(),
-                'lines' => [],
-                'expectedLines' => [],
-            ],
-            'empty collection, non-empty lines' => [
-                'collection' => new ClassDependencyCollection(),
-                'lines' => [
-                    new ClassDependency(ClassDependency::class),
-                    new ClassDependency(ClassDependencyCollection::class),
-                ],
-                'expectedLines' => [
-                    new ClassDependency(ClassDependency::class),
-                    new ClassDependency(ClassDependencyCollection::class),
-                ],
-            ],
-            'non-empty collection, non-empty lines' => [
-                'collection' => new ClassDependencyCollection([
-                    new ClassDependency(ClassDependency::class),
-                ]),
-                'lines' => [
-                    new Statement('statement2'),
-                    new EmptyLine(),
-                    new Comment('comment2'),
-                    new ClassDependency(ClassDependencyCollection::class),
-                ],
-                'expectedLines' => [
-                    new ClassDependency(ClassDependency::class),
-                    new ClassDependency(ClassDependencyCollection::class),
-                ],
-            ],
-        ];
-    }
-
-    /**
      * @dataProvider getLinesDataProvider
      */
     public function testGetLines(ClassDependencyCollection $collection, array $expectedLines)
