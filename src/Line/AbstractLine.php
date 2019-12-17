@@ -6,7 +6,7 @@ namespace webignition\BasilCompilationSource\Line;
 
 abstract class AbstractLine implements LineInterface
 {
-    protected $content;
+    private $content;
     private $type;
 
     public function __construct(string $content, string $type)
@@ -28,5 +28,10 @@ abstract class AbstractLine implements LineInterface
     public function getType(): string
     {
         return $this->type;
+    }
+
+    protected function setContent(string $content): void
+    {
+        $this->content = $content;
     }
 }
