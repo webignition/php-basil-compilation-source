@@ -8,7 +8,7 @@ use webignition\BasilCompilationSource\Line\LineInterface;
 
 interface BlockInterface
 {
-    public function addLine(LineInterface $statement);
+    public function addLine(LineInterface $statement): void;
 
     /**
      * @return LineInterface[]

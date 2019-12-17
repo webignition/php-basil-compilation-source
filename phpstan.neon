@@ -1,2 +1,4 @@
 parameters:
   inferPrivatePropertyTypeFromConstructor: true
+  # VariablePlaceholderCollection implements \Iterator, additional generic hinting needed. TBC.
+  checkGenericClassInNonGenericObjectType: false

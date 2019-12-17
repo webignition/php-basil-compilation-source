@@ -53,7 +53,7 @@ class CodeBlock extends AbstractBlock implements CodeBlockInterface
     }
 
 
-    public function addLinesFromBlock(BlockInterface $block)
+    public function addLinesFromBlock(BlockInterface $block): void
     {
         foreach ($block->getLines() as $line) {
             $this->addLine($line);
@@ -73,14 +73,14 @@ class CodeBlock extends AbstractBlock implements CodeBlockInterface
         return $metadata;
     }
 
-    public function mutateLastStatement(callable $mutator)
+    public function mutateLastStatement(callable $mutator): void
     {
         $this->mutateStatement(self::LAST_STATEMENT_INDEX, function (StatementInterface $statement) use ($mutator) {
-            return $statement->mutate($mutator);
+            $statement->mutate($mutator);
         });
     }
 
-    public function addClassDependenciesToLastStatement(ClassDependencyCollection $classDependencies)
+    public function addClassDependenciesToLastStatement(ClassDependencyCollection $classDependencies): void
     {
         $statement = $this->getStatement(self::LAST_STATEMENT_INDEX);
 
@@ -89,7 +89,7 @@ class CodeBlock extends AbstractBlock implements CodeBlockInterface
         }
     }
 
-    public function addVariableDependenciesToLastStatement(VariablePlaceholderCollection $variableDependencies)
+    public function addVariableDependenciesToLastStatement(VariablePlaceholderCollection $variableDependencies): void
     {
         $statement = $this->getStatement(self::LAST_STATEMENT_INDEX);
 
@@ -98,7 +98,7 @@ class CodeBlock extends AbstractBlock implements CodeBlockInterface
         }
     }
 
-    public function addVariableExportsToLastStatement(VariablePlaceholderCollection $variableExports)
+    public function addVariableExportsToLastStatement(VariablePlaceholderCollection $variableExports): void
     {
         $statement = $this->getStatement(self::LAST_STATEMENT_INDEX);
 
@@ -107,6 +107,11 @@ class CodeBlock extends AbstractBlock implements CodeBlockInterface
         }
     }
 
+    /**
+     * @param string[] $content
+     *
+     * @return CodeBlock
+     */
     public static function fromContent(array $content): CodeBlock
     {
         $lines = [];
@@ -147,7 +152,7 @@ class CodeBlock extends AbstractBlock implements CodeBlockInterface
         return new Statement($lineString);
     }
 
-    private function mutateStatement(int $index, callable $mutator)
+    private function mutateStatement(int $index, callable $mutator): void
     {
         $indexedStatement = $this->findIndexedStatement($index);
 
@@ -184,6 +189,9 @@ class CodeBlock extends AbstractBlock implements CodeBlockInterface
         return new IndexedStatement($statement, $index);
     }
 
+    /**
+     * @return array<int, int>
+     */
     private function createStatementToLineIndex(): array
     {
         $index = [];

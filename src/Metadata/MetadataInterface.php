@@ -17,9 +17,9 @@ interface MetadataInterface
     public function withVariableDependencies(VariablePlaceholderCollection $variableDependencies): MetadataInterface;
     public function withVariableExports(VariablePlaceholderCollection $variableExports): MetadataInterface;
 
-    public function addClassDependencies(ClassDependencyCollection $classDependencies);
-    public function addVariableDependencies(VariablePlaceholderCollection $variableDependencies);
-    public function addVariableExports(VariablePlaceholderCollection $variableExports);
+    public function addClassDependencies(ClassDependencyCollection $classDependencies): void;
+    public function addVariableDependencies(VariablePlaceholderCollection $variableDependencies): void;
+    public function addVariableExports(VariablePlaceholderCollection $variableExports): void;
 
-    public function add(MetadataInterface $metadata);
+    public function add(MetadataInterface $metadata): void;
 }

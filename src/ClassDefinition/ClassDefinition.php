@@ -17,6 +17,10 @@ class ClassDefinition implements ClassDefinitionInterface
      */
     private $methods = [];
 
+    /**
+     * @param string $name
+     * @param MethodDefinitionInterface[] $methods
+     */
     public function __construct(string $name, array $methods)
     {
         $this->name = $name;
