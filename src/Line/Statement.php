@@ -41,7 +41,7 @@ class Statement extends AbstractLine implements StatementInterface
 
     public function mutate(callable $mutator)
     {
-        $this->content = $mutator($this->content);
+        $this->setContent($mutator($this->getContent()));
     }
 
     public function addClassDependencies(ClassDependencyCollection $classDependencies)
