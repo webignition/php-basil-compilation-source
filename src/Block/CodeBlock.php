@@ -149,9 +149,11 @@ class CodeBlock extends AbstractBlock implements CodeBlockInterface
 
     private function mutateStatement(int $index, callable $mutator)
     {
-        $statementData = $this->getStatementData($index);
-        if (is_array($statementData)) {
-            list($statement, $statementIndex) = $statementData;
+        $indexedStatement = $this->findIndexedStatement($index);
+
+        if ($indexedStatement instanceof IndexedStatement) {
+            $statement = $indexedStatement->getStatement();
+            $statementIndex = $indexedStatement->getIndex();
 
             $mutator($statement);
             $statementToLineIndex = $this->createStatementToLineIndex();
@@ -161,7 +163,7 @@ class CodeBlock extends AbstractBlock implements CodeBlockInterface
         }
     }
 
-    private function getStatementData(int $index): ?array
+    private function findIndexedStatement(int $index): ?IndexedStatement
     {
         $statements = array_filter($this->lines, function (LineInterface $line) {
             return $line instanceof StatementInterface;
@@ -179,10 +181,7 @@ class CodeBlock extends AbstractBlock implements CodeBlockInterface
             return null;
         }
 
-        return [
-            $statement,
-            $index,
-        ];
+        return new IndexedStatement($statement, $index);
     }
 
     private function createStatementToLineIndex(): array
@@ -202,14 +201,10 @@ class CodeBlock extends AbstractBlock implements CodeBlockInterface
 
     private function getStatement(int $index): ?StatementInterface
     {
-        $statementData = $this->getStatementData($index);
+        $indexedStatement = $this->findIndexedStatement($index);
 
-        if (is_array($statementData)) {
-            list($statement, $statementIndex) = $statementData;
-
-            return $statement;
-        }
-
-        return null;
+        return $indexedStatement instanceof IndexedStatement
+            ? $indexedStatement->getStatement()
+            : null;
     }
 }
