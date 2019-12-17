@@ -21,6 +21,10 @@ class ClassDefinitionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider constructDataProvider
+     *
+     * @param string $name
+     * @param array<mixed> $methods
+     * @param MethodDefinitionInterface[] $expectedMethods
      */
     public function testConstruct(string $name, array $methods, array $expectedMethods)
     {

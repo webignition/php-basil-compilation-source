@@ -59,6 +59,9 @@ class ClassDependencyCollectionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider getLinesDataProvider
+     *
+     * @param ClassDependencyCollection $collection
+     * @param ClassDependency[] $expectedLines
      */
     public function testGetLines(ClassDependencyCollection $collection, array $expectedLines)
     {

@@ -8,6 +8,7 @@ use webignition\BasilCompilationSource\Block\ClassDependencyCollection;
 use webignition\BasilCompilationSource\Line\ClassDependency;
 use webignition\BasilCompilationSource\Line\Comment;
 use webignition\BasilCompilationSource\Line\EmptyLine;
+use webignition\BasilCompilationSource\Line\LineInterface;
 use webignition\BasilCompilationSource\Metadata\MetadataInterface;
 use webignition\BasilCompilationSource\Line\Statement;
 use webignition\BasilCompilationSource\Block\CodeBlock;
@@ -89,6 +90,9 @@ class CodeBlockTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider getLinesDataProvider
+     *
+     * @param CodeBlock $codeBlock
+     * @param LineInterface[] $expectedLines
      */
     public function testGetLines(CodeBlock $codeBlock, array $expectedLines)
     {
@@ -221,7 +225,7 @@ class CodeBlockTest extends \PHPUnit\Framework\TestCase
     public function testAddClassDependenciesToLastStatement(
         CodeBlock $codeBlock,
         ClassDependencyCollection $classDependencies,
-        $lastStatementIndex,
+        int $lastStatementIndex,
         ?ClassDependencyCollection $expectedCurrentClassDependencies = null,
         ?ClassDependencyCollection $expectedNewClassDependencies = null
     ) {
@@ -369,7 +373,7 @@ class CodeBlockTest extends \PHPUnit\Framework\TestCase
     public function testAddVariableDependenciesToLastStatement(
         CodeBlock $codeBlock,
         VariablePlaceholderCollection $variableDependencies,
-        $lastStatementIndex,
+        int $lastStatementIndex,
         ?VariablePlaceholderCollection $expectedCurrentVariableDependencies = null,
         ?VariablePlaceholderCollection $expectedNewVariableDependencies = null
     ) {
@@ -517,7 +521,7 @@ class CodeBlockTest extends \PHPUnit\Framework\TestCase
     public function testAddVariableExportsToLastStatement(
         CodeBlock $codeBlock,
         VariablePlaceholderCollection $variableExports,
-        $lastStatementIndex,
+        int $lastStatementIndex,
         ?VariablePlaceholderCollection $expectedCurrentVariableDependencies = null,
         ?VariablePlaceholderCollection $expectedNewVariableDependencies = null
     ) {
@@ -650,6 +654,9 @@ class CodeBlockTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider mutateToLastStatementForEmptyBlockDataProvider
+     *
+     * @param CodeBlock $codeBlock
+     * @param LineInterface[] $expectedLines
      */
     public function testMutateToLastStatementForEmptyBlock(CodeBlock $codeBlock, array $expectedLines)
     {
@@ -686,7 +693,7 @@ class CodeBlockTest extends \PHPUnit\Framework\TestCase
     public function testMutateLastStatement(
         CodeBlock $codeBlock,
         callable $mutator,
-        $lastStatementIndex,
+        int $lastStatementIndex,
         string $expectedCurrentContent,
         string $expectedNewContent
     ) {
@@ -775,6 +782,9 @@ class CodeBlockTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider fromContentDataProvider
+     *
+     * @param string[] $content
+     * @param CodeBlock $expectedBlock
      */
     public function testFromContent(array $content, CodeBlock $expectedBlock)
     {

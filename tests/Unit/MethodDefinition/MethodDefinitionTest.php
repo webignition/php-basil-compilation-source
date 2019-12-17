@@ -18,11 +18,16 @@ class MethodDefinitionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider constructDataProvider
+     *
+     * @param string $name
+     * @param CodeBlock $content
+     * @param string[]|null $arguments
+     * @param string[] $expectedArguments
      */
     public function testConstruct(
         string $name,
         CodeBlock $content,
-        $arguments,
+        ?array $arguments,
         array $expectedArguments
     ) {
         $methodDefinition = new MethodDefinition($name, $content, $arguments);
