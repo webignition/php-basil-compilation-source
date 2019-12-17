@@ -60,24 +60,24 @@ class Metadata implements MetadataInterface
         return $new;
     }
 
-    public function addClassDependencies(ClassDependencyCollection $classDependencies)
+    public function addClassDependencies(ClassDependencyCollection $classDependencies): void
     {
         foreach ($classDependencies->getLines() as $classDependency) {
             $this->classDependencies->addLine($classDependency);
         }
     }
 
-    public function addVariableDependencies(VariablePlaceholderCollection $variableDependencies)
+    public function addVariableDependencies(VariablePlaceholderCollection $variableDependencies): void
     {
         $this->variableDependencies->merge([$variableDependencies]);
     }
 
-    public function addVariableExports(VariablePlaceholderCollection $variableExports)
+    public function addVariableExports(VariablePlaceholderCollection $variableExports): void
     {
         $this->variableExports->merge([$variableExports]);
     }
 
-    public function add(MetadataInterface $metadata)
+    public function add(MetadataInterface $metadata): void
     {
         $this->addClassDependencies($metadata->getClassDependencies());
         $this->addVariableDependencies($metadata->getVariableDependencies());

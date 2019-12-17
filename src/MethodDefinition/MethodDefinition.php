@@ -19,18 +19,34 @@ class MethodDefinition implements MethodDefinitionInterface
     public const VISIBILITY_PRIVATE = 'private';
 
     private $visibility = self::VISIBILITY_PUBLIC;
+
+    /**
+     * @var string|null
+     */
     private $returnType = null;
     private $name;
     private $block;
+
+    /**
+     * @var array<string>|null
+     */
     private $arguments = [];
     private $isStatic = false;
     private $docBlock;
 
+    /**
+     * @param string $name
+     * @param CodeBlockInterface $block
+     * @param array<string>|null $arguments
+     */
     public function __construct(string $name, CodeBlockInterface $block, ?array $arguments = null)
     {
+        $this->visibility = self::VISIBILITY_PUBLIC;
+        $this->returnType = null;
         $this->name = $name;
         $this->block = $block;
         $this->arguments = $arguments ?? [];
+        $this->isStatic = false;
         $this->docBlock = new DocBlock();
     }
 
@@ -39,17 +55,20 @@ class MethodDefinition implements MethodDefinitionInterface
         return $this->name;
     }
 
+    /**
+     * @return array<string>
+     */
     public function getArguments(): array
     {
         return $this->arguments;
     }
 
-    public function addLine(LineInterface $statement)
+    public function addLine(LineInterface $statement): void
     {
         $this->block->addLine($statement);
     }
 
-    public function addLinesFromBlock(BlockInterface $block)
+    public function addLinesFromBlock(BlockInterface $block): void
     {
         $this->block->addLinesFromBlock($block);
     }
@@ -67,37 +86,37 @@ class MethodDefinition implements MethodDefinitionInterface
         return $this->block->getMetadata();
     }
 
-    public function mutateLastStatement(callable $mutator)
+    public function mutateLastStatement(callable $mutator): void
     {
         $this->block->mutateLastStatement($mutator);
     }
 
-    public function addClassDependenciesToLastStatement(ClassDependencyCollection $classDependencies)
+    public function addClassDependenciesToLastStatement(ClassDependencyCollection $classDependencies): void
     {
         $this->block->addClassDependenciesToLastStatement($classDependencies);
     }
 
-    public function addVariableDependenciesToLastStatement(VariablePlaceholderCollection $variableDependencies)
+    public function addVariableDependenciesToLastStatement(VariablePlaceholderCollection $variableDependencies): void
     {
         $this->block->addVariableDependenciesToLastStatement($variableDependencies);
     }
 
-    public function addVariableExportsToLastStatement(VariablePlaceholderCollection $variableExports)
+    public function addVariableExportsToLastStatement(VariablePlaceholderCollection $variableExports): void
     {
         $this->block->addVariableExportsToLastStatement($variableExports);
     }
 
-    public function setPublic()
+    public function setPublic(): void
     {
         $this->visibility = self::VISIBILITY_PUBLIC;
     }
 
-    public function setProtected()
+    public function setProtected(): void
     {
         $this->visibility = self::VISIBILITY_PROTECTED;
     }
 
-    public function setPrivate()
+    public function setPrivate(): void
     {
         $this->visibility = self::VISIBILITY_PRIVATE;
     }
@@ -122,7 +141,7 @@ class MethodDefinition implements MethodDefinitionInterface
         return $this->returnType;
     }
 
-    public function setReturnType(string $returnType)
+    public function setReturnType(string $returnType): void
     {
         $this->returnType = $returnType;
     }
@@ -142,7 +161,7 @@ class MethodDefinition implements MethodDefinitionInterface
         return $this->visibility;
     }
 
-    public function setDocBlock(DocBlock $docBlock)
+    public function setDocBlock(DocBlock $docBlock): void
     {
         $this->docBlock = $docBlock;
     }

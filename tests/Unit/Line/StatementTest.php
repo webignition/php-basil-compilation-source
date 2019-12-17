@@ -17,7 +17,7 @@ class StatementTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider constructDataProvider
      */
-    public function testConstruct(string $content, $metadata, MetadataInterface $expectedMetadata)
+    public function testConstruct(string $content, ?MetadataInterface $metadata, MetadataInterface $expectedMetadata)
     {
         $statement = new Statement($content, $metadata);
 

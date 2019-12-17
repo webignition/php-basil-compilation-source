@@ -14,13 +14,24 @@ class VariablePlaceholderCollection implements \Iterator, \Countable
     private $iteratorIndex = [];
     private $iteratorPosition = 0;
 
+    /**
+     * @param VariablePlaceholder[] $items
+     */
     public function __construct(array $items = [])
     {
+        $this->iteratorIndex = [];
+        $this->iteratorPosition = 0;
+
         foreach ($items as $item) {
             $this->add($item);
         }
     }
 
+    /**
+     * @param string[] $names
+     *
+     * @return VariablePlaceholderCollection
+     */
     public static function createCollection(array $names): VariablePlaceholderCollection
     {
         $collection = new VariablePlaceholderCollection();
@@ -46,7 +57,10 @@ class VariablePlaceholderCollection implements \Iterator, \Countable
         return $variablePlaceholder;
     }
 
-    public function merge(array $collections)
+    /**
+     * @param VariablePlaceholderCollection[] $collections
+     */
+    public function merge(array $collections): void
     {
         foreach ($collections as $collection) {
             if ($collection instanceof VariablePlaceholderCollection) {
@@ -59,7 +73,7 @@ class VariablePlaceholderCollection implements \Iterator, \Countable
         }
     }
 
-    public function add(VariablePlaceholder $variablePlaceholder)
+    public function add(VariablePlaceholder $variablePlaceholder): void
     {
         $name = $variablePlaceholder->getName();
 
@@ -78,7 +92,7 @@ class VariablePlaceholderCollection implements \Iterator, \Countable
 
     // Iterator methods
 
-    public function rewind()
+    public function rewind(): void
     {
         $this->iteratorPosition = 0;
     }
@@ -95,7 +109,7 @@ class VariablePlaceholderCollection implements \Iterator, \Countable
         return $this->iteratorIndex[$this->iteratorPosition];
     }
 
-    public function next()
+    public function next(): void
     {
         ++$this->iteratorPosition;
     }

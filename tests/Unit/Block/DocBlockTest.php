@@ -8,6 +8,7 @@ use webignition\BasilCompilationSource\Block\DocBlock;
 use webignition\BasilCompilationSource\Line\ClassDependency;
 use webignition\BasilCompilationSource\Line\Comment;
 use webignition\BasilCompilationSource\Line\EmptyLine;
+use webignition\BasilCompilationSource\Line\LineInterface;
 use webignition\BasilCompilationSource\Line\Statement;
 
 class DocBlockTest extends \PHPUnit\Framework\TestCase
@@ -75,6 +76,9 @@ class DocBlockTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider getLinesDataProvider
+     *
+     * @param DocBlock $docBlock
+     * @param LineInterface[] $expectedLines
      */
     public function testGetLines(DocBlock $docBlock, array $expectedLines)
     {

@@ -10,5 +10,5 @@ use webignition\BasilCompilationSource\MutableBlockInterface;
 interface CodeBlockInterface extends BlockInterface, MutableBlockInterface
 {
     public function getMetadata(): MetadataInterface;
-    public function addLinesFromBlock(BlockInterface $block);
+    public function addLinesFromBlock(BlockInterface $block): void;
 }

@@ -25,56 +25,56 @@ class Statement extends AbstractLine implements StatementInterface
         return $this->metadata;
     }
 
-    public function prepend(string $content)
+    public function prepend(string $content): void
     {
         $this->mutate(function (string $statement) use ($content) {
             return $content . $statement;
         });
     }
 
-    public function append(string $content)
+    public function append(string $content): void
     {
         $this->mutate(function (string $statement) use ($content) {
             return $statement . $content;
         });
     }
 
-    public function mutate(callable $mutator)
+    public function mutate(callable $mutator): void
     {
         $this->setContent($mutator($this->getContent()));
     }
 
-    public function addClassDependencies(ClassDependencyCollection $classDependencies)
+    public function addClassDependencies(ClassDependencyCollection $classDependencies): void
     {
         $this->getMetadata()->addClassDependencies($classDependencies);
     }
 
-    public function addVariableDependencies(VariablePlaceholderCollection $variableDependencies)
+    public function addVariableDependencies(VariablePlaceholderCollection $variableDependencies): void
     {
         $this->getMetadata()->addVariableDependencies($variableDependencies);
     }
 
-    public function addVariableExports(VariablePlaceholderCollection $variableExports)
+    public function addVariableExports(VariablePlaceholderCollection $variableExports): void
     {
         $this->getMetadata()->addVariableExports($variableExports);
     }
 
-    public function mutateLastStatement(callable $mutator)
+    public function mutateLastStatement(callable $mutator): void
     {
-        return $this->mutate($mutator);
+        $this->mutate($mutator);
     }
 
-    public function addClassDependenciesToLastStatement(ClassDependencyCollection $classDependencies)
+    public function addClassDependenciesToLastStatement(ClassDependencyCollection $classDependencies): void
     {
-        return $this->addClassDependencies($classDependencies);
+        $this->addClassDependencies($classDependencies);
     }
 
-    public function addVariableDependenciesToLastStatement(VariablePlaceholderCollection $variableDependencies)
+    public function addVariableDependenciesToLastStatement(VariablePlaceholderCollection $variableDependencies): void
     {
-        return $this->addVariableDependencies($variableDependencies);
+        $this->addVariableDependencies($variableDependencies);
     }
 
-    public function addVariableExportsToLastStatement(VariablePlaceholderCollection $variableExports)
+    public function addVariableExportsToLastStatement(VariablePlaceholderCollection $variableExports): void
     {
         $this->addVariableExports($variableExports);
     }

@@ -13,10 +13,14 @@ interface MethodDefinitionInterface extends CodeBlockInterface
     public function isProtected(): bool;
     public function isPrivate(): bool;
     public function getName(): string;
+
+    /**
+     * @return array<string>
+     */
     public function getArguments(): array;
     public function getReturnType(): ?string;
     public function isStatic(): bool;
     public function getVisibility(): string;
-    public function setDocBlock(DocBlock $docBlock);
+    public function setDocBlock(DocBlock $docBlock): void;
     public function getDocBlock(): DocBlock;
 }

@@ -13,6 +13,9 @@ abstract class AbstractBlock implements BlockInterface
      */
     protected $lines = [];
 
+    /**
+     * @param array<mixed> $sources
+     */
     public function __construct(array $sources = [])
     {
         foreach ($sources as $source) {
@@ -24,7 +27,7 @@ abstract class AbstractBlock implements BlockInterface
 
     abstract protected function canLineBeAdded(LineInterface $line): bool;
 
-    public function addLine(LineInterface $line)
+    public function addLine(LineInterface $line): void
     {
         if ($this->canLineBeAdded($line)) {
             $this->lines[] = $line;
