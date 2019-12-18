@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace webignition\BasilCompilationSource;
 
+/**
+ * @implements \Iterator<VariablePlaceholder>
+ */
 class VariablePlaceholderCollection implements \Iterator, \Countable
 {
     /**
