@@ -154,7 +154,7 @@ class CodeBlockTest extends \PHPUnit\Framework\TestCase
                 ]),
                 'expectedMetadata' => new Metadata(),
             ],
-            'has metadata' => [
+            'has metadata in statements' => [
                 'codeBlock' => new CodeBlock([
                     new Statement('statement1', (new Metadata())
                         ->withVariableDependencies(VariablePlaceholderCollection::createCollection([
@@ -176,6 +176,46 @@ class CodeBlockTest extends \PHPUnit\Framework\TestCase
                         ->withClassDependencies(new ClassDependencyCollection([
                             new ClassDependency('CLASS_TWO'),
                         ]))),
+                ]),
+                'expectedMetadata' => (new Metadata())
+                    ->withVariableDependencies(VariablePlaceholderCollection::createCollection([
+                        'DEPENDENCY_ONE',
+                        'DEPENDENCY_TWO',
+                    ]))
+                    ->withVariableExports(VariablePlaceholderCollection::createCollection([
+                        'EXPORT_ONE',
+                        'EXPORT_TWO',
+                    ]))
+                    ->withClassDependencies(new ClassDependencyCollection([
+                        new ClassDependency('CLASS_ONE'),
+                        new ClassDependency('CLASS_TWO'),
+                    ])),
+            ],
+            'has metadata in statement and in object method invocation' => [
+                'codeBlock' => new CodeBlock([
+                    new Statement('statement1', (new Metadata())
+                        ->withVariableDependencies(VariablePlaceholderCollection::createCollection([
+                            'DEPENDENCY_ONE',
+                        ]))
+                        ->withVariableExports(VariablePlaceholderCollection::createCollection([
+                            'EXPORT_ONE',
+                        ]))
+                        ->withClassDependencies(new ClassDependencyCollection([
+                            new ClassDependency('CLASS_ONE'),
+                        ]))),
+                    (new ObjectMethodInvocation('object', 'methodName'))
+                        ->withMetadata(
+                            (new Metadata())
+                                ->withVariableDependencies(VariablePlaceholderCollection::createCollection([
+                                    'DEPENDENCY_TWO',
+                                ]))
+                                ->withVariableExports(VariablePlaceholderCollection::createCollection([
+                                    'EXPORT_TWO',
+                                ]))
+                                ->withClassDependencies(new ClassDependencyCollection([
+                                    new ClassDependency('CLASS_TWO'),
+                                ]))
+                        ),
                 ]),
                 'expectedMetadata' => (new Metadata())
                     ->withVariableDependencies(VariablePlaceholderCollection::createCollection([

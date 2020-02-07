@@ -6,6 +6,7 @@ namespace webignition\BasilCompilationSource\Block;
 
 use webignition\BasilCompilationSource\Line\Comment;
 use webignition\BasilCompilationSource\Line\EmptyLine;
+use webignition\BasilCompilationSource\Line\HasMetadataInterface;
 use webignition\BasilCompilationSource\Line\LineInterface;
 use webignition\BasilCompilationSource\Line\MethodInvocation\ObjectMethodInvocationInterface;
 use webignition\BasilCompilationSource\Line\Statement;
@@ -70,7 +71,7 @@ class CodeBlock extends AbstractBlock implements CodeBlockInterface
         $metadata = new Metadata();
 
         foreach ($this->lines as $line) {
-            if ($line instanceof StatementInterface) {
+            if ($line instanceof HasMetadataInterface) {
                 $metadata->add($line->getMetadata());
             }
         }
