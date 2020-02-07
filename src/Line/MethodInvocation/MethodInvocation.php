@@ -53,7 +53,7 @@ class MethodInvocation extends AbstractLine implements MethodInvocationInterface
      *
      * @return string
      */
-    private function createString(string $methodName, array $arguments): string
+    protected function createString(string $methodName, array $arguments): string
     {
         return sprintf(
             self::STRING_PATTERN,
