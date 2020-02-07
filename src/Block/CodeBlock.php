@@ -7,6 +7,7 @@ namespace webignition\BasilCompilationSource\Block;
 use webignition\BasilCompilationSource\Line\Comment;
 use webignition\BasilCompilationSource\Line\EmptyLine;
 use webignition\BasilCompilationSource\Line\LineInterface;
+use webignition\BasilCompilationSource\Line\MethodInvocation\ObjectMethodInvocationInterface;
 use webignition\BasilCompilationSource\Line\Statement;
 use webignition\BasilCompilationSource\Line\StatementInterface;
 use webignition\BasilCompilationSource\Metadata\Metadata;
@@ -46,6 +47,10 @@ class CodeBlock extends AbstractBlock implements CodeBlockInterface
         }
 
         if ($line instanceof Statement) {
+            return true;
+        }
+
+        if ($line instanceof ObjectMethodInvocationInterface) {
             return true;
         }
 
