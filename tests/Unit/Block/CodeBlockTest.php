@@ -9,6 +9,7 @@ use webignition\BasilCompilationSource\Line\ClassDependency;
 use webignition\BasilCompilationSource\Line\Comment;
 use webignition\BasilCompilationSource\Line\EmptyLine;
 use webignition\BasilCompilationSource\Line\LineInterface;
+use webignition\BasilCompilationSource\Line\MethodInvocation\ObjectMethodInvocation;
 use webignition\BasilCompilationSource\Metadata\MetadataInterface;
 use webignition\BasilCompilationSource\Line\Statement;
 use webignition\BasilCompilationSource\Block\CodeBlock;
@@ -28,6 +29,7 @@ class CodeBlockTest extends \PHPUnit\Framework\TestCase
             new CodeBlock([
                 new Statement('statement2'),
             ]),
+            new ObjectMethodInvocation('object', 'methodName'),
         ]);
 
         $this->assertEquals(
@@ -36,6 +38,7 @@ class CodeBlockTest extends \PHPUnit\Framework\TestCase
                 new EmptyLine(),
                 new Comment('comment'),
                 new Statement('statement2'),
+                new ObjectMethodInvocation('object', 'methodName'),
             ],
             $codeBlock->getLines()
         );
@@ -806,13 +809,15 @@ class CodeBlockTest extends \PHPUnit\Framework\TestCase
                     '',
                     '$x = $y',
                     'use Foo',
+                    '$object->methodName($arg, $arg2)',
                 ],
                 'expectedBlock' => new CodeBlock([
                     new Comment('comment without leading whitespace'),
                     new Comment('comment with single leading whitespace'),
                     new Comment('comment with multiple leading whitespace'),
                     new EmptyLine(),
-                    new Statement('$x = $y')
+                    new Statement('$x = $y'),
+                    new Statement('$object->methodName($arg, $arg2)'),
                 ]),
             ],
         ];
