@@ -7,8 +7,9 @@ namespace webignition\BasilCompilationSource\Tests\Unit\Line;
 use webignition\BasilCompilationSource\Line\LineTypes;
 use webignition\BasilCompilationSource\Line\MethodInvocation\ArgumentFormats;
 use webignition\BasilCompilationSource\Line\MethodInvocation\MethodInvocation;
+use webignition\BasilCompilationSource\Line\MethodInvocation\ObjectMethodInvocation;
 
-class MethodInvocationTest extends \PHPUnit\Framework\TestCase
+class ObjectMethodInvocationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider createDataProvider
@@ -19,13 +20,15 @@ class MethodInvocationTest extends \PHPUnit\Framework\TestCase
      * @param string $expectedStringRepresentation
      */
     public function testCreate(
+        string $object,
         string $methodName,
         array $arguments,
         int $argumentFormat,
         string $expectedStringRepresentation
     ) {
-        $invocation = new MethodInvocation($methodName, $arguments, $argumentFormat);
+        $invocation = new ObjectMethodInvocation($object, $methodName, $arguments, $argumentFormat);
 
+        $this->assertSame($object, $invocation->getObject());
         $this->assertSame($methodName, $invocation->getMethodName());
         $this->assertSame($arguments, $invocation->getArguments());
         $this->assertSame($argumentFormat, $invocation->getArgumentFormat());
@@ -38,20 +41,23 @@ class MethodInvocationTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'no arguments' => [
+                'objectName' => 'object',
                 'methodName' => 'method',
                 'arguments' => [],
                 'argumentFormat' => ArgumentFormats::INLINE,
-                'expectedStringRepresentation' => 'method()'
+                'expectedStringRepresentation' => 'object->method()'
             ],
             'single argument' => [
+                'objectName' => 'object',
                 'methodName' => 'method',
                 'arguments' => [
                     1,
                 ],
                 'argumentFormat' => ArgumentFormats::INLINE,
-                'expectedStringRepresentation' => 'method(1)'
+                'expectedStringRepresentation' => 'object->method(1)'
             ],
             'multiple arguments, inline' => [
+                'objectName' => 'object',
                 'methodName' => 'method',
                 'arguments' => [
                     2,
@@ -59,9 +65,10 @@ class MethodInvocationTest extends \PHPUnit\Framework\TestCase
                     '"double-quoted value"'
                 ],
                 'argumentFormat' => ArgumentFormats::INLINE,
-                'expectedStringRepresentation' => 'method(2, \'single-quoted value\', "double-quoted value")'
+                'expectedStringRepresentation' => 'object->method(2, \'single-quoted value\', "double-quoted value")'
             ],
             'multiple arguments, stacked' => [
+                'objectName' => 'object',
                 'methodName' => 'method',
                 'arguments' => [
                     2,
@@ -69,7 +76,7 @@ class MethodInvocationTest extends \PHPUnit\Framework\TestCase
                     '"double-quoted value"'
                 ],
                 'argumentFormat' => ArgumentFormats::STACKED,
-                'expectedStringRepresentation' => 'method(2, \'single-quoted value\', "double-quoted value")'
+                'expectedStringRepresentation' => 'object->method(2, \'single-quoted value\', "double-quoted value")'
             ],
         ];
     }
