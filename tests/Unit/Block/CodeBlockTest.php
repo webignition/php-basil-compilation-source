@@ -823,46 +823,6 @@ class CodeBlockTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @dataProvider fromContentDataProvider
-     *
-     * @param string[] $content
-     * @param CodeBlock $expectedBlock
-     */
-    public function testFromContent(array $content, CodeBlock $expectedBlock)
-    {
-        $this->assertEquals($expectedBlock, CodeBlock::fromContent($content));
-    }
-
-    public function fromContentDataProvider(): array
-    {
-        return [
-            'empty' => [
-                'content' => [],
-                'expectedBlock' => new CodeBlock(),
-            ],
-            'non-empty' => [
-                'content' => [
-                    '//comment without leading whitespace',
-                    '// comment with single leading whitespace',
-                    '//       comment with multiple leading whitespace',
-                    '',
-                    '$x = $y',
-                    'use Foo',
-                    '$object->methodName($arg, $arg2)',
-                ],
-                'expectedBlock' => new CodeBlock([
-                    new Comment('comment without leading whitespace'),
-                    new Comment('comment with single leading whitespace'),
-                    new Comment('comment with multiple leading whitespace'),
-                    new EmptyLine(),
-                    new Statement('$x = $y'),
-                    new Statement('$object->methodName($arg, $arg2)'),
-                ]),
-            ],
-        ];
-    }
-
     public function testAddLinesFromBlock()
     {
         $block1 = new CodeBlock();
