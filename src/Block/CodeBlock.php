@@ -113,51 +113,6 @@ class CodeBlock extends AbstractBlock implements CodeBlockInterface
         }
     }
 
-    /**
-     * @param string[] $content
-     *
-     * @return CodeBlock
-     */
-    public static function fromContent(array $content): CodeBlock
-    {
-        $lines = [];
-
-        foreach ($content as $string) {
-            $line = self::createLineObjectFromLineString($string);
-
-            if ($line instanceof LineInterface) {
-                $lines[] = self::createLineObjectFromLineString($string);
-            }
-        }
-
-        return new CodeBlock($lines);
-    }
-
-    private static function createLineObjectFromLineString(string $lineString): ?LineInterface
-    {
-        if ('' === trim($lineString)) {
-            return new EmptyLine();
-        }
-
-        $lineLength = strlen($lineString);
-
-        if ($lineLength > 2 && '//' === substr($lineString, 0, 2)) {
-            return new Comment(ltrim($lineString, '/ '));
-        }
-
-        $useStatementPrefix = 'use ';
-        $useStatementPrefixLength = strlen($useStatementPrefix);
-
-        if (
-            $lineLength >= $useStatementPrefixLength &&
-            $useStatementPrefix === substr($lineString, 0, $useStatementPrefixLength)
-        ) {
-            return null;
-        }
-
-        return new Statement($lineString);
-    }
-
     private function mutateStatement(int $index, callable $mutator): void
     {
         $indexedStatement = $this->findIndexedStatement($index);
