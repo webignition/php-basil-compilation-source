@@ -7,10 +7,14 @@ namespace webignition\BasilCompilationSource\Block;
 use webignition\BasilCompilationSource\Line\Comment;
 use webignition\BasilCompilationSource\Line\EmptyLine;
 use webignition\BasilCompilationSource\Line\LineInterface;
+use webignition\BasilCompilationSource\Line\MethodInvocation\MethodInvocationInterface;
+use webignition\BasilCompilationSource\Line\MethodInvocation\ObjectMethodInvocation;
 use webignition\BasilCompilationSource\Line\Statement;
 
 class CodeBlockFactory
 {
+    private const INLINE_METHOD_INVOCATION_PATTERN = '/^.+->.+\(.+\)$/s';
+
     public static function createFactory(): CodeBlockFactory
     {
         return new CodeBlockFactory();
@@ -29,7 +33,7 @@ class CodeBlockFactory
             $line = $this->createLineObjectFromLineString($string);
 
             if ($line instanceof LineInterface) {
-                $lines[] = $this->createLineObjectFromLineString($string);
+                $lines[] = $line;
             }
         }
 
@@ -58,6 +62,27 @@ class CodeBlockFactory
             return null;
         }
 
-        return new Statement($lineString);
+        if (0 === preg_match(self::INLINE_METHOD_INVOCATION_PATTERN, $lineString)) {
+            return new Statement($lineString);
+        }
+
+        return $this->createObjectMethodInvocation($lineString);
+    }
+
+    private function createObjectMethodInvocation(string $lineString): MethodInvocationInterface
+    {
+        $firstBracketPosition = (int) strpos($lineString, '(');
+        $objectAndMethodNamePart = substr($lineString, 0, $firstBracketPosition);
+        $objectAndMethodName = explode('->', $objectAndMethodNamePart);
+        list($object, $methodName) = $objectAndMethodName;
+
+        $argumentsString = substr($lineString, $firstBracketPosition + 1, -1);
+        $arguments = explode(', ', $argumentsString);
+        if (substr_count($argumentsString, "\n") > 0) {
+            $arguments = explode(',' . "\n", $argumentsString);
+            $arguments = array_map('trim', $arguments);
+        }
+
+        return new ObjectMethodInvocation($object, $methodName, $arguments);
     }
 }
