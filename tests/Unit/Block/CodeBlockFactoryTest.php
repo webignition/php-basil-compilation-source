@@ -7,6 +7,7 @@ namespace webignition\BasilCompilationSource\Tests\Unit\Block;
 use webignition\BasilCompilationSource\Block\CodeBlockFactory;
 use webignition\BasilCompilationSource\Line\Comment;
 use webignition\BasilCompilationSource\Line\EmptyLine;
+use webignition\BasilCompilationSource\Line\MethodInvocation\ObjectMethodInvocation;
 use webignition\BasilCompilationSource\Line\Statement;
 use webignition\BasilCompilationSource\Block\CodeBlock;
 
@@ -40,7 +41,6 @@ class CodeBlockFactoryTest extends \PHPUnit\Framework\TestCase
                     '',
                     '$x = $y',
                     'use Foo',
-                    '$object->methodName($arg, $arg2)',
                 ],
                 'expectedBlock' => new CodeBlock([
                     new Comment('comment without leading whitespace'),
@@ -48,7 +48,39 @@ class CodeBlockFactoryTest extends \PHPUnit\Framework\TestCase
                     new Comment('comment with multiple leading whitespace'),
                     new EmptyLine(),
                     new Statement('$x = $y'),
-                    new Statement('$object->methodName($arg, $arg2)'),
+                ]),
+            ],
+            'inline method invocation' => [
+                'content' => [
+                    '$object->methodName($arg, $arg2)',
+                ],
+                'expectedBlock' => new CodeBlock([
+                    new ObjectMethodInvocation(
+                        '$object',
+                        'methodName',
+                        [
+                            '$arg',
+                            '$arg2',
+                        ]
+                    ),
+                ]),
+            ],
+            'multi-line method invocation' => [
+                'content' => [
+                    '$object->methodName(' . "\n" .
+                    '    $arg,' . "\n" .
+                    '    $arg2' . "\n" .
+                    ')',
+                ],
+                'expectedBlock' => new CodeBlock([
+                    new ObjectMethodInvocation(
+                        '$object',
+                        'methodName',
+                        [
+                            '$arg',
+                            '$arg2',
+                        ]
+                    ),
                 ]),
             ],
         ];
