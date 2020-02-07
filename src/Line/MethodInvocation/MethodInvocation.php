@@ -6,6 +6,8 @@ namespace webignition\BasilCompilationSource\Line\MethodInvocation;
 
 use webignition\BasilCompilationSource\Line\AbstractLine;
 use webignition\BasilCompilationSource\Line\LineTypes;
+use webignition\BasilCompilationSource\Metadata\Metadata;
+use webignition\BasilCompilationSource\Metadata\MetadataInterface;
 
 class MethodInvocation extends AbstractLine implements MethodInvocationInterface
 {
@@ -14,6 +16,11 @@ class MethodInvocation extends AbstractLine implements MethodInvocationInterface
     private $methodName;
     private $arguments = [];
     private $argumentFormat;
+
+    /**
+     * @var MetadataInterface
+     */
+    private $metadata;
 
     /**
      * @param string $methodName
@@ -30,6 +37,7 @@ class MethodInvocation extends AbstractLine implements MethodInvocationInterface
         $this->methodName = $methodName;
         $this->arguments = $arguments;
         $this->argumentFormat = $argumentFormat;
+        $this->metadata = new Metadata();
     }
 
     public function getMethodName(): string
@@ -45,6 +53,19 @@ class MethodInvocation extends AbstractLine implements MethodInvocationInterface
     public function getArgumentFormat(): int
     {
         return $this->argumentFormat;
+    }
+
+    public function withMetadata(MetadataInterface $metadata): MethodInvocationInterface
+    {
+        $new = clone $this;
+        $new->metadata = $metadata;
+
+        return $new;
+    }
+
+    public function getMetadata(): MetadataInterface
+    {
+        return $this->metadata;
     }
 
     /**

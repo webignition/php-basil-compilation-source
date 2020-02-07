@@ -2,14 +2,15 @@
 
 declare(strict_types=1);
 
-namespace webignition\BasilCompilationSource\Tests\Unit\Line;
+namespace webignition\BasilCompilationSource\Tests\Unit\Line\MethodInvocation;
 
 use webignition\BasilCompilationSource\Line\LineTypes;
 use webignition\BasilCompilationSource\Line\MethodInvocation\ArgumentFormats;
 use webignition\BasilCompilationSource\Line\MethodInvocation\MethodInvocation;
-use webignition\BasilCompilationSource\Line\MethodInvocation\ObjectMethodInvocation;
+use webignition\BasilCompilationSource\Metadata\Metadata;
+use webignition\BasilCompilationSource\VariablePlaceholderCollection;
 
-class ObjectMethodInvocationTest extends \PHPUnit\Framework\TestCase
+class MethodInvocationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider createDataProvider
@@ -20,44 +21,40 @@ class ObjectMethodInvocationTest extends \PHPUnit\Framework\TestCase
      * @param string $expectedStringRepresentation
      */
     public function testCreate(
-        string $object,
         string $methodName,
         array $arguments,
         int $argumentFormat,
         string $expectedStringRepresentation
     ) {
-        $invocation = new ObjectMethodInvocation($object, $methodName, $arguments, $argumentFormat);
+        $invocation = new MethodInvocation($methodName, $arguments, $argumentFormat);
 
-        $this->assertSame($object, $invocation->getObject());
         $this->assertSame($methodName, $invocation->getMethodName());
         $this->assertSame($arguments, $invocation->getArguments());
         $this->assertSame($argumentFormat, $invocation->getArgumentFormat());
         $this->assertSame(LineTypes::METHOD_INVOCATION, $invocation->getType());
         $this->assertSame($expectedStringRepresentation, $invocation->getContent());
         $this->assertSame($expectedStringRepresentation, $invocation->__toString());
+        $this->assertEquals(new Metadata(), $invocation->getMetadata());
     }
 
     public function createDataProvider(): array
     {
         return [
             'no arguments' => [
-                'objectName' => 'object',
                 'methodName' => 'method',
                 'arguments' => [],
                 'argumentFormat' => ArgumentFormats::INLINE,
-                'expectedStringRepresentation' => 'object->method()'
+                'expectedStringRepresentation' => 'method()'
             ],
             'single argument' => [
-                'objectName' => 'object',
                 'methodName' => 'method',
                 'arguments' => [
                     1,
                 ],
                 'argumentFormat' => ArgumentFormats::INLINE,
-                'expectedStringRepresentation' => 'object->method(1)'
+                'expectedStringRepresentation' => 'method(1)'
             ],
             'multiple arguments, inline' => [
-                'objectName' => 'object',
                 'methodName' => 'method',
                 'arguments' => [
                     2,
@@ -65,10 +62,9 @@ class ObjectMethodInvocationTest extends \PHPUnit\Framework\TestCase
                     '"double-quoted value"'
                 ],
                 'argumentFormat' => ArgumentFormats::INLINE,
-                'expectedStringRepresentation' => 'object->method(2, \'single-quoted value\', "double-quoted value")'
+                'expectedStringRepresentation' => 'method(2, \'single-quoted value\', "double-quoted value")'
             ],
             'multiple arguments, stacked' => [
-                'objectName' => 'object',
                 'methodName' => 'method',
                 'arguments' => [
                     2,
@@ -76,8 +72,24 @@ class ObjectMethodInvocationTest extends \PHPUnit\Framework\TestCase
                     '"double-quoted value"'
                 ],
                 'argumentFormat' => ArgumentFormats::STACKED,
-                'expectedStringRepresentation' => 'object->method(2, \'single-quoted value\', "double-quoted value")'
+                'expectedStringRepresentation' => 'method(2, \'single-quoted value\', "double-quoted value")'
             ],
         ];
+    }
+
+    public function testWithMetadata()
+    {
+        $metadata = (new Metadata())
+            ->withVariableDependencies(VariablePlaceholderCollection::createCollection([
+                'variableDependencyOne',
+                'variableDependencyTwo',
+            ]));
+
+        $invocation = new MethodInvocation('methodName');
+        $this->assertEquals(new Metadata(), $invocation->getMetadata());
+
+        $mutatedInvocation = $invocation->withMetadata($metadata);
+        $this->assertSame($metadata, $mutatedInvocation->getMetadata());
+        $this->assertNotEquals($metadata, $invocation->getMetadata());
     }
 }
